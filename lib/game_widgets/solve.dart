@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:phrasewalk/game_widgets/interaction.dart';
-import 'package:phrasewalk/state.dart';
-import 'package:provider/provider.dart';
+import '../game_widgets/interaction.dart';
+import '../game_widgets/walls.dart';
+import '../state.dart';
+import '../utility/style.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/grid.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GuesserSolveGrid extends StatelessWidget {
   const GuesserSolveGrid(
@@ -22,6 +24,8 @@ class GuesserSolveGrid extends StatelessWidget {
     return Card(
       elevation: 4,
       clipBehavior: Clip.antiAlias,
+      shape: Style.cardShape(
+          Theme.of(context).colorScheme.surfaceContainerHigh, 8),
       child: Stack(
         children: [
           GuesserWordGrid(
@@ -57,51 +61,5 @@ class GuesserSolveGrid extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class GuesserTileOverlay extends StatelessWidget {
-  const GuesserTileOverlay({
-    required this.data,
-    super.key,
-  });
-
-  final TileData data;
-
-  @override
-  Widget build(BuildContext context) {
-    final highlightColor = Theme.of(context).colorScheme.surfaceContainerLowest;
-    const borderWidth = 4.0;
-    final borderSide = BorderSide(color: highlightColor, width: borderWidth);
-
-    final fillColor =
-        data == TileData.filled ? highlightColor : Colors.transparent;
-    final rightBorder = data == TileData.wallRight || data == TileData.wallBoth
-        ? borderSide
-        : BorderSide.none;
-    final downBorder = data == TileData.wallDown || data == TileData.wallBoth
-        ? borderSide
-        : BorderSide.none;
-    final border = data == TileData.filled
-        ? Border.fromBorderSide(
-            borderSide.copyWith(strokeAlign: BorderSide.strokeAlignCenter))
-        : Border(
-            right: rightBorder,
-            bottom: downBorder,
-          );
-
-    final offset = data == TileData.filled
-        ? Offset.zero
-        : const Offset(borderWidth / 2, borderWidth / 2);
-
-    return IgnorePointer(
-        child: Transform.translate(
-      offset: offset,
-      child: Card(
-          color: fillColor,
-          shadowColor: Colors.transparent,
-          margin: EdgeInsets.zero,
-          shape: border),
-    ));
   }
 }

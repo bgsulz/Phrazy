@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:flutter/services.dart';
 import 'package:phrasewalk/data/puzzle.dart';
 import 'package:phrasewalk/utility/ext.dart';
 import 'package:yaml/yaml.dart';
@@ -29,7 +28,7 @@ class Load {
 
   static int get totalDailies => endDate.difference(startDate).inDays + 1;
 
-  static String path = 'assets/phrases.yaml';
+  static String path = 'phrases.yaml';
   static Map<String, List<PhraseTail>> _allPhrases = {};
 
   static bool checkFirstTime() {
@@ -43,23 +42,23 @@ class Load {
 
   static Future<PhraseMap> _loadAllPhrases() async {
     print("loading all phrases");
-    // final yamlString = await File(path).readAsString();
-    // final yamlMap = loadYaml(yamlString) as Map<String, dynamic>;
+    final yamlString = await rootBundle.loadString(path);
+    final yamlMap = loadYaml(yamlString) as Map;
     final PhraseMap phraseMap = {};
-    // for (final entry in yamlMap.entries) {
-    //   final phrases = <PhraseTail>[];
-    //   for (final phrase in entry.value as List<dynamic>) {
-    //     phrases.add(PhraseTail(
-    //         phrase['connector'] as String, phrase['tail'] as String));
-    //   }
-    //   phraseMap[entry.key] = phrases;
-    // }
+    for (final entry in yamlMap.entries) {
+      final phrases = <PhraseTail>[];
+      for (final phrase in entry.value as List<dynamic>) {
+        phrases.add(PhraseTail(
+            phrase['connector'] as String, phrase['tail'] as String));
+      }
+      phraseMap[entry.key] = phrases;
+    }
     return phraseMap;
   }
 
   static Future<Puzzle> puzzleForDate(DateTime date) async {
     _allPhrases = await _loadAllPhrases();
-    return Puzzle.demo();
+    return Puzzle.demoHard();
   }
 
   static PhraseTail isValidPhrase(String a, String b) {

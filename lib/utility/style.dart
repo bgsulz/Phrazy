@@ -91,10 +91,13 @@ class Style {
 
   static TextStyle get labelSmall => labelLarge;
 
-  static cardShape(Color color) => RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(1),
-      side: BorderSide(
-          color: color, width: 1, strokeAlign: BorderSide.strokeAlignCenter));
+  static RoundedRectangleBorder cardShape(Color color, [double? radius]) =>
+      RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius ?? 1),
+          side: BorderSide(
+              color: color,
+              width: 1,
+              strokeAlign: BorderSide.strokeAlignCenter));
 }
 
 class GuesserThemeData {

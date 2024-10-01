@@ -26,6 +26,31 @@ class Puzzle {
     );
   }
 
+  factory Puzzle.demoHard() {
+    const grid = "000ff 0f0ff 00000 ff0f0 ff000";
+    return Puzzle(
+      words: [
+        'lemon',
+        'head',
+        'count',
+        'bar',
+        'out',
+        'fly',
+        'wheel',
+        'house',
+        'cat',
+        'call',
+        'time',
+        'off',
+        'party',
+        'line',
+        'dance'
+      ],
+      columns: 5,
+      grid: _parseGrid(grid),
+    );
+  }
+
   factory Puzzle.fromFirebase(Map<String, dynamic> data) {
     final gridData = data['grid'].split(',');
     return Puzzle(
@@ -36,7 +61,7 @@ class Puzzle {
   }
 
   static List<TileData> _parseGrid(String gridString) {
-    return gridString.split('').map((e) {
+    return gridString.replaceAll(' ', '').split('').map((e) {
       switch (e) {
         case '0':
           return TileData.empty;
