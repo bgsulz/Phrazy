@@ -51,6 +51,10 @@ Widget _buildPage(BuildContext context) {
           ),
         ),
         const SizedBox(height: 16),
+        // Align(alignment: Alignment.centerRight, child: PuzzleTimer()
+        //     // child: Text((ModalRoute.of(context)?.isCurrent != true).toString()),
+        //     ),
+        const SizedBox(height: 16),
         Consumer<GameState>(builder: (context, value, child) {
           return value.isSolved
               ? Text(
