@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
+import 'sound.dart';
 import 'state.dart';
 import 'screen.dart';
 import 'screens/archive.dart';
@@ -22,6 +23,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await loadSounds();
+
   runApp(const PhrasewalkApp());
 }
 

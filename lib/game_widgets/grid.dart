@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:phrasewalk/data/puzzle.dart';
 import 'package:phrasewalk/game_widgets/cards.dart';
+import 'package:phrasewalk/sound.dart';
 import 'package:phrasewalk/state.dart';
 import 'package:provider/provider.dart';
 
@@ -83,7 +84,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
               if (res) {
                 setState(() {
                   if (!_aboutToAcceptDrop) {
-                    state.playSound("rollover");
+                    playSound("rollover");
                   }
                   _aboutToAcceptDrop = true;
                 });
@@ -99,7 +100,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                   ? _buildEmptyCard(context, widget.position.index)
                   : Draggable(
                       onDragStarted: () {
-                        state.playSound("click");
+                        playSound("click");
                       },
                       maxSimultaneousDrags: state.isSolved ? 0 : null,
                       data: CardDropData(
