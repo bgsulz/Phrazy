@@ -19,7 +19,7 @@ class GuesserSolveGrid extends StatelessWidget {
     final gameState = Provider.of<GameState>(context, listen: false);
 
     final columnCount = gameState.loadedPuzzle.columns;
-    final itemHeight = 240 / columnCount;
+    final itemHeight = 320 / columnCount;
 
     return Card(
       elevation: 4,

@@ -50,8 +50,8 @@ class GuesserInteractionKnob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const width = 40.0;
-    const height = 30.0;
+    const width = 80.0;
+    const height = 60.0;
 
     var offset = direction == InteractionDirection.down
         ? Offset(constraints.maxWidth / 2, constraints.maxHeight)
@@ -63,31 +63,31 @@ class GuesserInteractionKnob extends StatelessWidget {
     if (connector.isEmpty) connector = '...';
 
     return Transform.translate(
-        offset: offset.translate(-width / 2, -height / 2),
-        child: SizedBox(
-          width: width,
-          height: height,
-          child: Card(
-            elevation: 4,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(128),
-              ),
+      offset: offset.translate(-width / 2, -height / 2),
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: Card(
+          elevation: 4,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(128),
             ),
-            color: Theme.of(context).colorScheme.onSurface,
-            child: Center(
-              child: SelectionContainer.disabled(
-                child: Text(
-                  connector,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.surface,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
+          ),
+          color: Theme.of(context).colorScheme.onSurface,
+          child: Center(
+            child: SelectionContainer.disabled(
+              child: Text(
+                connector,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.surface,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

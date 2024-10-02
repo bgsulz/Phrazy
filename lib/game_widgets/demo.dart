@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phrasewalk/utility/style.dart';
 
 class Demo extends StatelessWidget {
-  static const double cardWidth = 80, cardHeight = 40;
+  static const double cardWidth = 160, cardHeight = 80;
 
   const Demo({required this.type});
   final int type;
@@ -108,7 +108,7 @@ class DemoCard extends StatelessWidget {
       height: Demo.cardHeight,
       child: Card(
         margin: EdgeInsets.zero,
-        shape: Style.cardShape(Colors.white),
+        shape: Style.cardShape(Theme.of(context).colorScheme.onSurface),
         elevation: 0,
         child: Center(
           child: SelectionContainer.disabled(
@@ -128,10 +128,10 @@ class DemoKnob extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: Demo.cardWidth / 2.25,
-      height: Demo.cardHeight / 1.75,
+      height: Demo.cardHeight / 2,
       child: Card(
         margin: EdgeInsets.zero,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onSurface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(128)),
         child: Center(
           child: SelectionContainer.disabled(
@@ -139,7 +139,6 @@ class DemoKnob extends StatelessWidget {
               text,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.surfaceContainer,
-                fontSize: 10,
                 fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.visible,

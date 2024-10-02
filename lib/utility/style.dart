@@ -19,12 +19,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
+      fontSize: 48,
     );
   }
 
-  static TextStyle get displayMedium => displayLarge;
+  static TextStyle get displayMedium => displayLarge.copyWith(fontSize: 36);
 
-  static TextStyle get displaySmall => displayLarge;
+  static TextStyle get displaySmall => displayLarge.copyWith(fontSize: 24);
 
   static TextStyle get headlineLarge {
     return const TextStyle(
@@ -34,12 +35,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
+      fontSize: 48,
     );
   }
 
-  static TextStyle get headlineMedium => headlineLarge;
+  static TextStyle get headlineMedium => headlineLarge.copyWith(fontSize: 36);
 
-  static TextStyle get headlineSmall => headlineLarge;
+  static TextStyle get headlineSmall => headlineLarge.copyWith(fontSize: 24);
 
   static TextStyle get titleLarge {
     return const TextStyle(
@@ -49,16 +51,16 @@ class Style {
           FontVariation("wonk", 1),
           FontVariation("soft", 100),
         ],
-        fontSize: 40);
+        fontSize: 48);
   }
 
   static TextStyle get titleMedium => titleLarge.copyWith(
-        fontSize: 24,
+        fontSize: 36,
         // letterSpacing: 2.0,
       );
 
   static TextStyle get titleSmall => titleLarge.copyWith(
-        fontSize: 14,
+        fontSize: 24,
         // letterSpacing: 2.0,
       );
 
@@ -70,12 +72,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
+      fontSize: 24,
     );
   }
 
-  static TextStyle get bodyMedium => bodyLarge;
+  static TextStyle get bodyMedium => bodyLarge.copyWith(fontSize: 20);
 
-  static TextStyle get bodySmall => bodyLarge;
+  static TextStyle get bodySmall => bodyLarge.copyWith(fontSize: 18);
 
   static TextStyle get labelLarge {
     return const TextStyle(
@@ -85,6 +88,7 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
+      fontSize: 18,
     );
   }
 

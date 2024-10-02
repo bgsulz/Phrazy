@@ -20,7 +20,7 @@ class GuesserWordbank extends StatelessWidget {
       child: GuesserWordGrid(
         itemCount: gameState.loadedPuzzle.words.length,
         columnCount: 5,
-        itemHeight: 240 / 5,
+        itemHeight: 320 / 5,
         builder: (index) {
           return GuesserGridTile(
               data: TileData.empty,

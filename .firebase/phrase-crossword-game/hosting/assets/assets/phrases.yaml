@@ -1,0 +1,70 @@
+lemon:
+  - connector: '-'
+    tail: head
+  - connector: ''
+    tail: bar
+head:
+  - connector: ''
+    tail: count
+  - connector: ''
+    tail: out
+  - connector: ''
+    tail: house
+count:
+  - connector: ''
+    tail: out
+out:
+  - connector: '-'
+    tail: house
+  - connector: '-'
+    tail: bar
+  - connector: 'of'
+    tail: time
+bar:
+  - connector: '-'
+    tail: fly
+fly:
+  - connector: '-'
+    tail: wheel
+  - connector: '-'
+    tail: out
+  - connector: ''
+    tail: off
+wheel:
+  - connector: '-'
+    tail: house
+house:
+  - connector: ''
+    tail: party
+  - connector: ''
+    tail: cat
+cat:
+  - connector: '-'
+    tail: house
+  - connector: '-'
+    tail: call
+call:
+  - connector: ''
+    tail: time
+  - connector: '-'
+    tail: out
+  - connector: ''
+    tail: off
+time:
+  - connector: ''
+    tail: off
+  - connector: '-'
+    tail: out
+  - connector: ''
+    tail: call
+party:
+  - connector: ''
+    tail: line
+line:
+  - connector: ''
+    tail: dance
+dance:
+  - connector: '-'
+    tail: off
+  - connector: ''
+    tail: party

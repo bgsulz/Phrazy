@@ -65,7 +65,7 @@ class GuesserAppBar extends StatelessWidget {
                 style: TextButton.styleFrom(
                   backgroundColor:
                       Theme.of(context).colorScheme.primaryContainer,
-                  foregroundColor: Colors.white,
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
                 ),
                 onPressed: () {
                   context.pop();
