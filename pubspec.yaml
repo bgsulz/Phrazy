@@ -1,7 +1,7 @@
 name: phrasewalk
-description: "A new Flutter project."
+description: "A crossword-like game about phrases."
 publish_to: 'none'
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ^3.5.3
