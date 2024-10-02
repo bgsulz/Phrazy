@@ -8,6 +8,9 @@ class Style {
   static const String rules2 =
       "Pairs of words can be joined by one or more of the following common words:\n"
       "a, of, an, to, in, the, for";
+  static const String info =
+      "Phrasewalk was created and programmed by Ben Sulzinsky.\n"
+      "So far, he has also designed all the daily puzzles.";
 
   static const fontFamily = 'Fraunces';
 

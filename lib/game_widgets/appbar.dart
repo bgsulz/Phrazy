@@ -24,6 +24,10 @@ class GuesserAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           IconButton(
+            icon: const Icon(Icons.info),
+            onPressed: () => _showInfo(context),
+          ),
+          IconButton(
             icon: const Icon(Icons.help),
             onPressed: () => _showHelp(context),
           ),
@@ -72,6 +76,29 @@ class GuesserAppBar extends StatelessWidget {
                 },
                 child: const Text("Let's play!"),
               ),
+            ],
+          ),
+        ]);
+      },
+    );
+  }
+
+  void _showInfo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return GuesserDialog(title: "Credits", children: [
+          const Text(Style.info),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  _launchUrl(Uri.parse("https://bgsulz.com"));
+                },
+                child: const Text("More of my work"),
+              ),
+              const SizedBox(width: 16),
             ],
           ),
         ]);
