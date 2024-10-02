@@ -37,13 +37,13 @@ final _router = GoRouter(
         routes: [
           GoRoute(
             redirect: (context, state) {
-              var date = state.pathParameters['date']?.fromYMD();
+              var date = state.pathParameters['date']?.fromYMD;
               if (date?.isToday ?? false) return "/";
               return null;
             },
             path: ':date',
             builder: (context, state) {
-              var date = state.pathParameters['date']?.fromYMD();
+              var date = state.pathParameters['date']?.fromYMD;
               return GuesserScreen(child: Game(date: date));
             },
           ),

@@ -37,8 +37,15 @@ class GameState extends ChangeNotifier {
 
   StopWatchTimer timer = StopWatchTimer();
 
-  void recordTime() =>
-      Load.saveTimeForDate(timer.rawTime.value, loadedDate.toYMD());
+  void recordTime() {
+    Load.saveTimeForDate(
+      TimerState(
+        time: timer.rawTime.value,
+        isSolved: isSolved,
+      ),
+      loadedDate.toYMD,
+    );
+  }
 
   String wordOn(GridPosition position) {
     if (position.isWordBank) {
@@ -63,16 +70,18 @@ class GameState extends ChangeNotifier {
         List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.none);
     isSolved = false;
 
-    var state = Load.loadStateForDate(loadedDate.toYMD());
+    var state = Load.loadBoardForDate(loadedDate.toYMD);
     if (state != null) {
       _gridState = state.grid;
       _wordBankState = state.wordBank;
-      isSolved = state.isSolved;
     }
 
     timer.onResetTimer();
-    var time = Load.loadTimeForDate(loadedDate.toYMD());
-    if (time != null) timer.setPresetTime(mSec: time, add: false);
+    var time = Load.loadTimeForDate(loadedDate.toYMD);
+    if (time != null) {
+      timer.setPresetTime(mSec: time.time, add: false);
+      isSolved = time.isSolved;
+    }
     if (!isSolved) timer.onStartTimer();
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i));
@@ -94,10 +103,10 @@ class GameState extends ChangeNotifier {
       if (!source.isWordBank) source.index
     }.toList());
 
-    Load.saveStateForDate(
-      SavedState(
-          wordBank: _wordBankState, grid: _gridState, isSolved: isSolved),
-      loadedDate.toYMD(),
+    recordTime();
+    Load.saveBoardForDate(
+      BoardState(wordBank: _wordBankState, grid: _gridState),
+      loadedDate.toYMD,
     );
   }
 

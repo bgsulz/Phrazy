@@ -69,10 +69,10 @@ class Load {
 
     try {
       final dailiesCollection = firestore.collection("dailies");
-      final dailyDocRef = dailiesCollection.doc(date.toYMD());
+      final dailyDocRef = dailiesCollection.doc(date.toYMD);
       final dailyDocSnap = await dailyDocRef.get();
       if (!dailyDocSnap.exists) {
-        throw Exception("Today's daily (${date.toYMD()}) does not exist.");
+        throw Exception("Today's daily (${date.toYMD}) does not exist.");
       }
 
       final dailyData = dailyDocSnap.data() as Map<String, dynamic>;
@@ -111,13 +111,13 @@ class Load {
         orElse: () => PhraseTail.none);
   }
 
-  static void saveStateForDate(SavedState state, String date) {
+  static void saveBoardForDate(BoardState state, String date) {
     debug("Saving state for $date");
     final historyString = state.toJson();
     _localStorage[date] = historyString;
   }
 
-  static SavedState? loadStateForDate(String date) {
+  static BoardState? loadBoardForDate(String date) {
     debug("Loading state for $date");
     final historyString = _localStorage[date];
 
@@ -128,7 +128,7 @@ class Load {
       try {
         // debug('attempting json');
         Map<String, dynamic> history = jsonDecode(historyString);
-        return SavedState.fromJson(history);
+        return BoardState.fromJson(history);
       } on Exception catch (e) {
         debug('Failed to load state from $date: $e');
         _localStorage[date] = '';
@@ -137,42 +137,47 @@ class Load {
     }
   }
 
-  static void saveTimeForDate(int time, String date) {
-    debug("Saving time $time for $date");
-    final timeString = time.toString();
-    _localStorage["${date}_time"] = timeString;
+  static void saveTimeForDate(TimerState state, String date) {
+    debug("Saving state $state for $date");
+    final stateString = state.toJson();
+    _localStorage["${date}_time"] = stateString;
   }
 
-  static int? loadTimeForDate(String date) {
-    final timeString = _localStorage["${date}_time"];
+  static TimerState? loadTimeForDate(String date) {
+    final stateString = _localStorage["${date}_time"];
 
-    if (timeString == null) {
+    if (stateString == null) {
       debug("No saved time for $date");
       return null;
     } else {
-      var res = int.parse(timeString);
-      debug("Loading time $res for $date");
-      return res;
+      try {
+        // debug('attempting json');
+        Map<String, dynamic> state = jsonDecode(stateString);
+        var res = TimerState.fromJson(state);
+        debug("Loading time $res for $date");
+        return res;
+      } on Exception catch (e) {
+        debug('Failed to load state from $date: $e');
+        _localStorage["${date}_time"] = '';
+        return null;
+      }
     }
   }
 }
 
-class SavedState {
+class BoardState {
   final List<String> wordBank;
   final List<String> grid;
-  final bool isSolved;
 
-  SavedState({
+  BoardState({
     required this.wordBank,
     required this.grid,
-    required this.isSolved,
   });
 
-  factory SavedState.fromJson(Map<String, dynamic> json) {
-    return SavedState(
+  factory BoardState.fromJson(Map<String, dynamic> json) {
+    return BoardState(
       wordBank: (json['wordBank'] as List<dynamic>).cast<String>(),
       grid: (json['grid'] as List<dynamic>).cast<String>(),
-      isSolved: json['isSolved'] as bool,
     );
   }
 
@@ -180,7 +185,35 @@ class SavedState {
     return jsonEncode({
       'wordBank': wordBank,
       'grid': grid,
+    });
+  }
+}
+
+class TimerState {
+  final int time;
+  final bool isSolved;
+
+  TimerState({
+    required this.time,
+    required this.isSolved,
+  });
+
+  factory TimerState.fromJson(Map<String, dynamic> json) {
+    return TimerState(
+      time: json['time'] as int,
+      isSolved: json['isSolved'] as bool,
+    );
+  }
+
+  String toJson() {
+    return jsonEncode({
+      'time': time,
       'isSolved': isSolved,
     });
+  }
+
+  @override
+  String toString() {
+    return "${time.toDisplayTime}${isSolved ? "" : "+"}";
   }
 }

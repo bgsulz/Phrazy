@@ -68,10 +68,6 @@ class PuzzleCard extends StatelessWidget {
 
   final DateTime date;
 
-  String _getText() {
-    return "${date.month}/${date.day}/${date.year}";
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -86,25 +82,22 @@ class PuzzleCard extends StatelessWidget {
             color: Theme.of(context).colorScheme.surfaceContainer,
             child: InkWell(
               onTap: () {
-                context.go('/games/${date.toYMD()}');
+                context.go('/games/${date.toYMD}');
               },
               child: Container(
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     Text(
-                      _getText(),
+                      date.toDisplayDate,
                       maxLines: null,
                       textAlign: TextAlign.left,
                     ),
                     const Spacer(),
-                    const Text(
-                      // context.mounted
-                      //     ? GuessInfo.summarize(
-                      //         Load.guessesForDate(date.toYMD()),
-                      //         isBlackAndWhite: true)
-                      //     : "",
-                      "",
+                    Text(
+                      context.mounted
+                          ? Load.loadTimeForDate(date.toYMD)?.toString() ?? ""
+                          : "",
                       maxLines: null,
                       textAlign: TextAlign.right,
                     )
