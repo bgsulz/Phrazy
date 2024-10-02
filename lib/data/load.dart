@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:phrasewalk/data/puzzle.dart';
 import 'package:phrasewalk/utility/debug.dart';
@@ -107,5 +109,38 @@ class Load {
     if (!_allPhrases.containsKey(head)) return PhraseTail.none;
     return _allPhrases[head]!.firstWhere((t) => t.tail.equalsIgnoreCase(tail),
         orElse: () => PhraseTail.none);
+  }
+
+  static void saveStateForDate(
+      List<String> wordBank, List<String> grid, String date) {
+    debug("Saving state for $date");
+    final state = {
+      "wordBank": wordBank,
+      "grid": grid,
+    };
+    _localStorage[date] = jsonEncode(state);
+  }
+
+  static (List<String> wordBank, List<String> grid) loadStateForDate(
+      String date) {
+    debug("Loading state for $date");
+    final historyString = _localStorage[date];
+
+    if (historyString == null) {
+      debug("No saved state for $date");
+      return (<String>[], <String>[]);
+    } else {
+      try {
+        // debug('attempting json');
+        Map<String, dynamic> history = jsonDecode(historyString);
+        final wordBank = (history['wordBank'] as List<dynamic>).cast<String>();
+        final grid = (history['grid'] as List<dynamic>).cast<String>();
+        return (wordBank, grid);
+      } on Exception catch (e) {
+        debug('Failed to load state from $date: $e');
+        _localStorage[date] = '';
+        return (<String>[], <String>[]);
+      }
+    }
   }
 }
