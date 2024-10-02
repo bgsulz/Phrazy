@@ -20,7 +20,10 @@ extension ToYMD on DateTime {
 
 extension IsToday on DateTime {
   bool get isToday {
-    var now = DateTime.now();
-    return now.day == day && now.month == month && now.year == year;
+    return isSameDayAs(DateTime.now());
+  }
+
+  bool isSameDayAs(DateTime other) {
+    return other.day == day && other.month == month && other.year == year;
   }
 }

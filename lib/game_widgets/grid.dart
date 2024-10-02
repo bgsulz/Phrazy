@@ -78,6 +78,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
               });
             },
             onWillAcceptWithDetails: (data) {
+              if (state.isSolved) return false;
               var res = widget.data != TileData.filled;
               if (res) {
                 setState(() {
@@ -94,6 +95,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
               return word.isEmpty
                   ? _buildEmptyCard(context, widget.position.index)
                   : Draggable(
+                      maxSimultaneousDrags: state.isSolved ? 0 : null,
                       data: CardDropData(
                         size: Size(
                           constraints.maxWidth,

@@ -17,8 +17,6 @@ class GuesserSolveGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameState = Provider.of<GameState>(context, listen: false);
-
-    final columnCount = gameState.loadedPuzzle.columns;
     final itemHeight = 320 / columnCount;
 
     return Card(

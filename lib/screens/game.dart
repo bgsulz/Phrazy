@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phrasewalk/game_widgets/appbar.dart';
 import 'package:phrasewalk/game_widgets/solve.dart';
 import 'package:phrasewalk/game_widgets/wordbank.dart';
+import 'package:phrasewalk/screens/timer.dart';
 import 'package:phrasewalk/state.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,8 @@ Widget _buildPage(BuildContext context) {
         Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 16),
         Consumer<GameState>(
-          builder: (context, value, child) => const GuesserWordbank(),
+          builder: (context, value, child) =>
+              GuesserWordbank(bank: value.loadedPuzzle.words),
         ),
         const SizedBox(height: 16),
         Consumer<GameState>(
@@ -51,9 +53,11 @@ Widget _buildPage(BuildContext context) {
           ),
         ),
         const SizedBox(height: 16),
-        // Align(alignment: Alignment.centerRight, child: PuzzleTimer()
-        //     // child: Text((ModalRoute.of(context)?.isCurrent != true).toString()),
-        //     ),
+        const Align(
+          alignment: Alignment.centerRight,
+          child: PuzzleTimer(),
+          // child: Text((ModalRoute.of(context)?.isCurrent != true).toString()),
+        ),
         const SizedBox(height: 16),
         Consumer<GameState>(builder: (context, value, child) {
           return value.isSolved

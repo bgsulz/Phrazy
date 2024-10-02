@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phrasewalk/data/load.dart';
 import 'package:phrasewalk/game_widgets/grid.dart';
 import 'package:phrasewalk/utility/ext.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../data/puzzle.dart';
 
 enum SolutionState { unsolved, solved, failed }
@@ -34,6 +35,11 @@ class GameState extends ChangeNotifier {
   List<PhraseInteraction> interactionState = [];
   bool isSolved = false;
 
+  StopWatchTimer timer = StopWatchTimer();
+
+  void recordTime() =>
+      Load.saveTimeForDate(timer.rawTime.value, loadedDate.toYMD());
+
   String wordOn(GridPosition position) {
     if (position.isWordBank) {
       return _wordBankState[position.index];
@@ -55,18 +61,27 @@ class GameState extends ChangeNotifier {
     _gridState = List.generate(loadedPuzzle.grid.length, (_) => '');
     interactionState =
         List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.none);
+    isSolved = false;
 
-    var (loadedBank, loadedGrid) = Load.loadStateForDate(loadedDate.toYMD());
-    if (loadedBank.isNotEmpty && loadedGrid.isNotEmpty) {
-      _gridState = loadedGrid;
-      _wordBankState = loadedBank;
+    var state = Load.loadStateForDate(loadedDate.toYMD());
+    if (state != null) {
+      _gridState = state.grid;
+      _wordBankState = state.wordBank;
+      isSolved = state.isSolved;
     }
+
+    timer.onResetTimer();
+    var time = Load.loadTimeForDate(loadedDate.toYMD());
+    if (time != null) timer.setPresetTime(mSec: time, add: false);
+    if (!isSolved) timer.onStartTimer();
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i));
     notifyListeners();
   }
 
   void reportDrop(GridPosition destination, GridPosition source) {
+    if (isSolved) return;
+
     var sourceList = source.isWordBank ? _wordBankState : _gridState;
     var destinationList = destination.isWordBank ? _wordBankState : _gridState;
 
@@ -79,7 +94,11 @@ class GameState extends ChangeNotifier {
       if (!source.isWordBank) source.index
     }.toList());
 
-    Load.saveStateForDate(_wordBankState, _gridState, loadedDate.toYMD());
+    Load.saveStateForDate(
+      SavedState(
+          wordBank: _wordBankState, grid: _gridState, isSolved: isSolved),
+      loadedDate.toYMD(),
+    );
   }
 
   void reportClicked(GridPosition source) {
@@ -143,6 +162,8 @@ class GameState extends ChangeNotifier {
         return false;
       }
     }
+
+    timer.onStopTimer();
     return true;
   }
 }

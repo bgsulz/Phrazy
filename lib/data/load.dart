@@ -111,36 +111,76 @@ class Load {
         orElse: () => PhraseTail.none);
   }
 
-  static void saveStateForDate(
-      List<String> wordBank, List<String> grid, String date) {
+  static void saveStateForDate(SavedState state, String date) {
     debug("Saving state for $date");
-    final state = {
-      "wordBank": wordBank,
-      "grid": grid,
-    };
-    _localStorage[date] = jsonEncode(state);
+    final historyString = state.toJson();
+    _localStorage[date] = historyString;
   }
 
-  static (List<String> wordBank, List<String> grid) loadStateForDate(
-      String date) {
+  static SavedState? loadStateForDate(String date) {
     debug("Loading state for $date");
     final historyString = _localStorage[date];
 
     if (historyString == null) {
       debug("No saved state for $date");
-      return (<String>[], <String>[]);
+      return null;
     } else {
       try {
         // debug('attempting json');
         Map<String, dynamic> history = jsonDecode(historyString);
-        final wordBank = (history['wordBank'] as List<dynamic>).cast<String>();
-        final grid = (history['grid'] as List<dynamic>).cast<String>();
-        return (wordBank, grid);
+        return SavedState.fromJson(history);
       } on Exception catch (e) {
         debug('Failed to load state from $date: $e');
         _localStorage[date] = '';
-        return (<String>[], <String>[]);
+        return null;
       }
     }
+  }
+
+  static void saveTimeForDate(int time, String date) {
+    debug("Saving time $time for $date");
+    final timeString = time.toString();
+    _localStorage["${date}_time"] = timeString;
+  }
+
+  static int? loadTimeForDate(String date) {
+    final timeString = _localStorage["${date}_time"];
+
+    if (timeString == null) {
+      debug("No saved time for $date");
+      return null;
+    } else {
+      var res = int.parse(timeString);
+      debug("Loading time $res for $date");
+      return res;
+    }
+  }
+}
+
+class SavedState {
+  final List<String> wordBank;
+  final List<String> grid;
+  final bool isSolved;
+
+  SavedState({
+    required this.wordBank,
+    required this.grid,
+    required this.isSolved,
+  });
+
+  factory SavedState.fromJson(Map<String, dynamic> json) {
+    return SavedState(
+      wordBank: (json['wordBank'] as List<dynamic>).cast<String>(),
+      grid: (json['grid'] as List<dynamic>).cast<String>(),
+      isSolved: json['isSolved'] as bool,
+    );
+  }
+
+  String toJson() {
+    return jsonEncode({
+      'wordBank': wordBank,
+      'grid': grid,
+      'isSolved': isSolved,
+    });
   }
 }
