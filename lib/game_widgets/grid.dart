@@ -82,6 +82,9 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
               var res = widget.data != TileData.filled;
               if (res) {
                 setState(() {
+                  if (!_aboutToAcceptDrop) {
+                    state.playSound("rollover");
+                  }
                   _aboutToAcceptDrop = true;
                 });
               }
@@ -95,6 +98,9 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
               return word.isEmpty
                   ? _buildEmptyCard(context, widget.position.index)
                   : Draggable(
+                      onDragStarted: () {
+                        state.playSound("click");
+                      },
                       maxSimultaneousDrags: state.isSolved ? 0 : null,
                       data: CardDropData(
                         size: Size(

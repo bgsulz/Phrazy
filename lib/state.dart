@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:phrasewalk/data/load.dart';
 import 'package:phrasewalk/game_widgets/grid.dart';
@@ -36,6 +37,7 @@ class GameState extends ChangeNotifier {
   bool isSolved = false;
 
   StopWatchTimer timer = StopWatchTimer();
+  AudioPlayer audio = AudioPlayer();
 
   void recordTime() {
     Load.saveTimeForDate(
@@ -45,6 +47,30 @@ class GameState extends ChangeNotifier {
       ),
       loadedDate.toYMD,
     );
+  }
+
+  final click = AssetSource("click_003.ogg");
+  final drop = AssetSource("click1.ogg");
+  final win = AssetSource("confirmation_001.ogg");
+  final rollover = AssetSource("rollover4.ogg");
+
+  Future playSound(String name) async {
+    // try {
+    //   if (audio.state == PlayerState.playing) return;
+    //   await audio.stop();
+    //   final sound = switch (name.toLowerCase().trim()) {
+    //     "click" => click,
+    //     "drop" => drop,
+    //     "win" => win,
+    //     "rollover" => rollover,
+    //     _ => null,
+    //   };
+    //   if (sound != null) {
+    //     await audio.play(sound);
+    //   }
+    // } on Exception catch (e) {
+    //   print("Error playing sound $name: $e");
+    // }
   }
 
   String wordOn(GridPosition position) {
@@ -102,6 +128,8 @@ class GameState extends ChangeNotifier {
       if (!destination.isWordBank) destination.index,
       if (!source.isWordBank) source.index
     }.toList());
+
+    playSound("drop");
 
     recordTime();
     Load.saveBoardForDate(
@@ -173,6 +201,7 @@ class GameState extends ChangeNotifier {
     }
 
     timer.onStopTimer();
+    playSound("win");
     return true;
   }
 }
