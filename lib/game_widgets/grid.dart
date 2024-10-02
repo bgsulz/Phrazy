@@ -48,7 +48,7 @@ class GridPosition {
   });
 }
 
-class GuesserGridTile extends StatelessWidget {
+class GuesserGridTile extends StatefulWidget {
   const GuesserGridTile({
     super.key,
     required this.data,
@@ -59,21 +59,48 @@ class GuesserGridTile extends StatelessWidget {
   final GridPosition position;
 
   @override
+  State<GuesserGridTile> createState() => _GuesserGridTileState();
+}
+
+class _GuesserGridTileState extends State<GuesserGridTile> {
+  bool _aboutToAcceptDrop = false;
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       return Consumer<GameState>(
         builder: (context, state, child) {
-          final word = state.wordOn(position);
+          final word = state.wordOn(widget.position);
           return DragTarget(
-            onWillAcceptWithDetails: (data) => this.data != TileData.filled,
+            onLeave: (data) {
+              setState(() {
+                _aboutToAcceptDrop = false;
+              });
+            },
+            onWillAcceptWithDetails: (data) {
+              var res = widget.data != TileData.filled;
+              if (res) {
+                setState(() {
+                  _aboutToAcceptDrop = true;
+                });
+              }
+              return res;
+            },
             onAcceptWithDetails: (data) {
-              state.reportDrop(position, data.data as GridPosition);
+              state.reportDrop(
+                  widget.position, (data.data as CardDropData).position);
             },
             builder: (context, candidateData, rejectedData) {
               return word.isEmpty
-                  ? _buildEmptyCard(context, position.index)
+                  ? _buildEmptyCard(context, widget.position.index)
                   : Draggable(
-                      data: position,
+                      data: CardDropData(
+                        size: Size(
+                          constraints.maxWidth,
+                          constraints.maxHeight,
+                        ),
+                        position: widget.position,
+                      ),
                       feedback: WordCard(
                         word: word,
                         size: Size(
@@ -82,12 +109,12 @@ class GuesserGridTile extends StatelessWidget {
                         ),
                       ),
                       childWhenDragging:
-                          _buildEmptyCard(context, position.index),
+                          _buildEmptyCard(context, widget.position.index),
                       child: GestureDetector(
                         onTap: () {
                           final appState =
                               Provider.of<GameState>(context, listen: false);
-                          appState.reportClicked(position);
+                          appState.reportClicked(widget.position);
                         },
                         child: WordCard(word: word),
                       ),
@@ -100,12 +127,24 @@ class GuesserGridTile extends StatelessWidget {
   }
 
   Widget _buildEmptyCard(BuildContext context, int index) {
-    if (position.isWordBank) {
+    if (widget.position.isWordBank) {
       return EmptyCard(
-        color: Theme.of(context).colorScheme.surface,
+        color: _aboutToAcceptDrop
+            ? Theme.of(context).colorScheme.surfaceContainer
+            : Theme.of(context).colorScheme.surface,
         outlineColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       );
     }
-    return const EmptyCard();
+    return EmptyCard(
+      color:
+          _aboutToAcceptDrop ? Theme.of(context).colorScheme.onSurface : null,
+    );
   }
+}
+
+class CardDropData {
+  final Size size;
+  final GridPosition position;
+
+  const CardDropData({required this.size, required this.position});
 }
