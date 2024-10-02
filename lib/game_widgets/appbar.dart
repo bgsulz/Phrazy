@@ -54,13 +54,13 @@ class GuesserAppBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(
-                onPressed: () {
-                  _launchUrl(Uri.parse("https://bgsulz.com"));
-                },
-                child: const Text("More of my work"),
-              ),
-              const SizedBox(width: 16),
+              // TextButton(
+              //   onPressed: () {
+              //     _launchUrl(Uri.parse("https://bgsulz.com"));
+              //   },
+              //   child: const Text("More of my work"),
+              // ),
+              // const SizedBox(width: 16),
               TextButton(
                 style: TextButton.styleFrom(
                   backgroundColor:

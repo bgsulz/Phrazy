@@ -9,91 +9,103 @@ class Demo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (type == 1) {
-      return Stack(
-        children: [
-          const Column(
-            children: [
-              Row(
-                children: [
-                  DemoCard(text: "hello"),
-                  DemoCard(text: "world"),
-                  DemoCard(text: "map"),
-                ],
-              ),
-              Row(
-                children: [
-                  DemoCard(text: "dolly"),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            width: Demo.cardWidth * 3,
-            height: Demo.cardHeight * 2,
-            child: Center(
-              child: Stack(
-                children: [
-                  Transform.translate(
-                    offset: const Offset(-Demo.cardWidth, 0),
-                    child: const DemoKnob(text: "..."),
-                  ),
-                  Transform.translate(
-                    offset:
-                        const Offset(-Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                    child: const DemoKnob(text: "..."),
-                  ),
-                  Transform.translate(
-                    offset:
-                        const Offset(Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                    child: const DemoKnob(text: "..."),
-                  ),
-                ],
-              ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: type == 1
+          ? _demo1()
+          : type == 2
+              ? _demo2()
+              : const SizedBox.shrink(),
+    );
+  }
+
+  Stack _demo1() {
+    return Stack(
+      children: [
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                DemoCard(text: "hello"),
+                DemoCard(text: "world"),
+                DemoCard(text: "map"),
+              ],
             ),
-          )
-        ],
-      );
-    } else if (type == 2) {
-      return Stack(
-        children: [
-          const Column(
-            children: [
-              Row(
-                children: [
-                  DemoCard(text: "order"),
-                  DemoCard(text: "court"),
-                ],
-              ),
-              Row(
-                children: [
-                  DemoCard(text: "meal"),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            width: Demo.cardWidth * 2,
-            height: Demo.cardHeight * 2,
-            child: Center(
-              child: Stack(
-                children: [
-                  Transform.translate(
-                    offset: const Offset(0, -Demo.cardHeight / 2),
-                    child: const DemoKnob(text: "in the"),
-                  ),
-                  Transform.translate(
-                    offset: const Offset(-Demo.cardWidth / 2, 0),
-                    child: const DemoKnob(text: "a"),
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                DemoCard(text: "dolly"),
+              ],
             ),
-          )
-        ],
-      );
-    }
-    return const SizedBox.shrink();
+          ],
+        ),
+        SizedBox(
+          width: Demo.cardWidth * 3,
+          height: Demo.cardHeight * 2,
+          child: Center(
+            child: Stack(
+              children: [
+                Transform.translate(
+                  offset: const Offset(-Demo.cardWidth, 0),
+                  child: const DemoKnob(text: "..."),
+                ),
+                Transform.translate(
+                  offset:
+                      const Offset(-Demo.cardWidth / 2, -Demo.cardHeight / 2),
+                  child: const DemoKnob(text: "..."),
+                ),
+                Transform.translate(
+                  offset:
+                      const Offset(Demo.cardWidth / 2, -Demo.cardHeight / 2),
+                  child: const DemoKnob(text: "..."),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Stack _demo2() {
+    return Stack(
+      children: [
+        const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                DemoCard(text: "order"),
+                DemoCard(text: "court"),
+              ],
+            ),
+            Row(
+              children: [
+                DemoCard(text: "meal"),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(
+          width: Demo.cardWidth * 2,
+          height: Demo.cardHeight * 2,
+          child: Center(
+            child: Stack(
+              children: [
+                Transform.translate(
+                  offset: const Offset(0, -Demo.cardHeight / 2),
+                  child: const DemoKnob(text: "in the"),
+                ),
+                Transform.translate(
+                  offset: const Offset(-Demo.cardWidth / 2, 0),
+                  child: const DemoKnob(text: "a"),
+                ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
   }
 }
 
