@@ -4,7 +4,7 @@ import 'package:phrasewalk/utility/style.dart';
 class Demo extends StatelessWidget {
   static const double cardWidth = 160, cardHeight = 80;
 
-  const Demo({required this.type});
+  const Demo({super.key, required this.type});
   final int type;
 
   @override
