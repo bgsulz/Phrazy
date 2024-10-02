@@ -55,7 +55,7 @@ Widget _buildPage(BuildContext context) {
           return value.isSolved
               ? Text(
                   "You did it!",
-                  style: Theme.of(context).textTheme.displaySmall,
+                  style: Theme.of(context).textTheme.titleMedium,
                 )
               : const SizedBox.shrink();
         }),

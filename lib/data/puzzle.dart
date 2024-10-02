@@ -20,7 +20,16 @@ class Puzzle {
   factory Puzzle.demo() {
     const grid = "0000f0000";
     return Puzzle(
-      words: ['lemon', 'head', 'count', 'bar', 'out', 'fly', 'wheel', 'house'],
+      words: [
+        'lemon',
+        'head',
+        'count',
+        'bar',
+        'out',
+        'fly',
+        'wheel',
+        'house',
+      ],
       columns: 3,
       grid: _parseGrid(grid),
     );

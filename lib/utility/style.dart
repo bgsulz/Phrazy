@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 class Style {
   static const String title = 'Phrasewalk';
   static const String subtitle = 'Assemble the words into phrases!';
-  static const String howToPlay =
-      "Try to figure out which song the shown lyrics are from.\n"
-      "Lyric excerpts might not be in order!\n"
-      "You have 5 guesses.";
+  static const String rules1 = "Drag and drop the words into the grid.\n"
+      "All adjacent pairs of words (vertical and horizontal) must form phrases or compound words.";
+  static const String rules2 =
+      "Pairs of words can be joined by one or more of the following common words:\n"
+      "a, of, an, to, in, the, for";
 
   static const fontFamily = 'Fraunces';
 

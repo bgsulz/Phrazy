@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phrasewalk/data/load.dart';
 import 'package:phrasewalk/game_widgets/grid.dart';
+import 'package:phrasewalk/utility/debug.dart';
 import '../data/puzzle.dart';
 
 enum SolutionState { unsolved, solved, failed }
@@ -41,10 +42,14 @@ class GameState extends ChangeNotifier {
   }
 
   Future<void> prepare([DateTime? date]) async {
+    debug("Preparing for $date");
     loadedDate = date ?? DateTime.now();
+    debug("Loading puzzle for $loadedDate");
     loadedPuzzle = await Load.puzzleForDate(loadedDate);
+    debug("Loaded puzzle $loadedPuzzle");
     _wordBankState = loadedPuzzle.words;
     _wordBankState.shuffle();
+    debug("Shuffled words: $_wordBankState");
     _gridState = List.generate(loadedPuzzle.grid.length, (_) => '');
     interactionState =
         List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.none);

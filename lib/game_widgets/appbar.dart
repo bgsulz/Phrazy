@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phrasewalk/game_widgets/demo.dart';
 import '../game_widgets/dialog.dart';
 import 'package:phrasewalk/data/load.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -42,9 +43,13 @@ class GuesserAppBar extends StatelessWidget {
       context: context,
       builder: (context) {
         return GuesserDialog(title: "How to play", children: [
-          const Text(
-            Style.howToPlay,
-          ),
+          const Text(Style.rules1),
+          const SizedBox(height: 16),
+          const Demo(type: 1),
+          const SizedBox(height: 16),
+          const Text(Style.rules2),
+          const SizedBox(height: 16),
+          const Demo(type: 2),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

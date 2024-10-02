@@ -11,7 +11,6 @@ class Archive extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // debug("building archive screen.");
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
