@@ -19,13 +19,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
-      fontSize: 48,
+      fontSize: 44,
     );
   }
 
-  static TextStyle get displayMedium => displayLarge.copyWith(fontSize: 36);
+  static TextStyle get displayMedium => displayLarge.copyWith(fontSize: 32);
 
-  static TextStyle get displaySmall => displayLarge.copyWith(fontSize: 24);
+  static TextStyle get displaySmall => displayLarge.copyWith(fontSize: 20);
 
   static TextStyle get headlineLarge {
     return const TextStyle(
@@ -35,13 +35,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
-      fontSize: 48,
+      fontSize: 44,
     );
   }
 
-  static TextStyle get headlineMedium => headlineLarge.copyWith(fontSize: 36);
+  static TextStyle get headlineMedium => headlineLarge.copyWith(fontSize: 32);
 
-  static TextStyle get headlineSmall => headlineLarge.copyWith(fontSize: 24);
+  static TextStyle get headlineSmall => headlineLarge.copyWith(fontSize: 20);
 
   static TextStyle get titleLarge {
     return const TextStyle(
@@ -51,16 +51,16 @@ class Style {
           FontVariation("wonk", 1),
           FontVariation("soft", 100),
         ],
-        fontSize: 48);
+        fontSize: 44);
   }
 
   static TextStyle get titleMedium => titleLarge.copyWith(
-        fontSize: 36,
+        fontSize: 32,
         // letterSpacing: 2.0,
       );
 
   static TextStyle get titleSmall => titleLarge.copyWith(
-        fontSize: 24,
+        fontSize: 20,
         // letterSpacing: 2.0,
       );
 
@@ -72,13 +72,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
-      fontSize: 24,
+      fontSize: 20,
     );
   }
 
-  static TextStyle get bodyMedium => bodyLarge.copyWith(fontSize: 20);
+  static TextStyle get bodyMedium => bodyLarge.copyWith(fontSize: 18);
 
-  static TextStyle get bodySmall => bodyLarge.copyWith(fontSize: 18);
+  static TextStyle get bodySmall => bodyLarge.copyWith(fontSize: 16);
 
   static TextStyle get labelLarge {
     return const TextStyle(
@@ -88,13 +88,13 @@ class Style {
         FontVariation("wonk", 1),
         FontVariation("soft", 100),
       ],
-      fontSize: 18,
+      fontSize: 16,
     );
   }
 
-  static TextStyle get labelMedium => labelLarge;
+  static TextStyle get labelMedium => labelLarge.copyWith(fontSize: 17);
 
-  static TextStyle get labelSmall => labelLarge;
+  static TextStyle get labelSmall => labelLarge.copyWith(fontSize: 15);
 
   static RoundedRectangleBorder cardShape(Color color, [double? radius]) =>
       RoundedRectangleBorder(
