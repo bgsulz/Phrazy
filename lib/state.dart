@@ -87,6 +87,8 @@ class GameState extends ChangeNotifier {
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i));
     notifyListeners();
+
+    await loadSounds();
   }
 
   void reportDrop(GridPosition destination, GridPosition source) {
