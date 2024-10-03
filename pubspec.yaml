@@ -36,8 +36,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  assets:
-    - assets/
+  # assets:
+  #   - assets/
 
   fonts:
     - family: Fraunces
