@@ -24,18 +24,20 @@ class GuesserWordGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final rows = (itemCount / columnCount).ceil();
 
-    return SizedBox(
-      height: rows * itemHeight,
-      child: LayoutGrid(
-        columnSizes: repeat(columnCount, [1.fr]),
-        rowSizes: repeat(rows, [1.fr]),
-        children: List.generate(
-            itemCount,
-            (i) => SizedBox.expand(
-                  child: builder(i),
-                )),
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return SizedBox(
+        height: rows * itemHeight * ((1 + (constraints.maxWidth / 600)) / 2),
+        child: LayoutGrid(
+          columnSizes: repeat(columnCount, [1.fr]),
+          rowSizes: repeat(rows, [1.fr]),
+          children: List.generate(
+              itemCount,
+              (i) => SizedBox.expand(
+                    child: builder(i),
+                  )),
+        ),
+      );
+    });
   }
 }
 

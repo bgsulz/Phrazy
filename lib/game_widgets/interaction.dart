@@ -50,8 +50,8 @@ class GuesserInteractionKnob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const width = 60.0;
-    const height = 40.0;
+    final width = constraints.maxWidth / 2.5;
+    final height = constraints.maxHeight / 2.5;
 
     var offset = direction == InteractionDirection.down
         ? Offset(constraints.maxWidth / 2, constraints.maxHeight)
@@ -77,12 +77,17 @@ class GuesserInteractionKnob extends StatelessWidget {
           color: Theme.of(context).colorScheme.onSurface,
           child: Center(
             child: SelectionContainer.disabled(
-              child: Text(
-                connector,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.surface,
-                      fontWeight: FontWeight.bold,
-                    ),
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    connector,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.surface,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
               ),
             ),
           ),

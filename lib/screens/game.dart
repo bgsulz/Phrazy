@@ -39,7 +39,7 @@ Widget _buildPage(BuildContext context) {
       children: [
         const GuesserAppBar(),
         const SizedBox(height: 16),
-        Text(Style.title, style: Theme.of(context).textTheme.titleLarge),
+        FittedBox(child: Text(Style.title, style: Theme.of(context).textTheme.titleLarge)),
         const SizedBox(height: 8),
         Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 16),

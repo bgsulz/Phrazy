@@ -24,14 +24,17 @@ class GuesserScreen extends StatelessWidget {
 
   Scaffold _buildScaffold() {
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-            child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 640),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: child,
-                ))));
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 640),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: child,
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _gradientBackground(BuildContext context) {
