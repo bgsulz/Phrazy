@@ -96,6 +96,9 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
             onAcceptWithDetails: (data) {
               state.reportDrop(
                   widget.position, (data.data as CardDropData).position);
+              setState(() {
+                _aboutToAcceptDrop = false;
+              });
             },
             builder: (context, candidateData, rejectedData) {
               return word.isEmpty
@@ -113,7 +116,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                         position: widget.position,
                       ),
                       feedback: WordCard(
-                        word: word,
+                        word: state.isPaused ? "" : word,
                         size: Size(
                           constraints.maxWidth,
                           constraints.maxHeight,
@@ -127,7 +130,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                               Provider.of<GameState>(context, listen: false);
                           appState.reportClicked(widget.position);
                         },
-                        child: WordCard(word: word),
+                        child: WordCard(word: state.isPaused ? "" : word),
                       ),
                     );
             },

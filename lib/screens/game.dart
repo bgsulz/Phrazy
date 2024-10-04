@@ -39,7 +39,9 @@ Widget _buildPage(BuildContext context) {
       children: [
         const GuesserAppBar(),
         const SizedBox(height: 16),
-        FittedBox(child: Text(Style.title, style: Theme.of(context).textTheme.titleLarge)),
+        FittedBox(
+            child: Text(Style.title,
+                style: Theme.of(context).textTheme.titleLarge)),
         const SizedBox(height: 8),
         Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 16),
@@ -67,7 +69,7 @@ Widget _buildPage(BuildContext context) {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'You solved the Phrasewalk for ${value.loadedDate.toDisplayDate} '
+                        'You solved the ${Style.gameName} for ${value.loadedDate.toDisplayDate} '
                         'in ${value.timer.rawTime.value.toDisplayTime}.',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
@@ -99,7 +101,7 @@ Widget _buildPage(BuildContext context) {
 }
 
 void _copyResults(GameState value) {
-  final text = 'Phrasewalk ${value.loadedDate.toDisplayDate}\n'
+  final text = '${Style.gameName} ${value.loadedDate.toDisplayDate}\n'
       '${value.timer.rawTime.value.toDisplayTime}';
   Clipboard.setData(ClipboardData(text: text));
 }

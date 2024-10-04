@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phrasewalk/game_widgets/demo.dart';
+import 'package:phrasewalk/state.dart';
+import 'package:provider/provider.dart';
 import '../game_widgets/dialog.dart';
 import 'package:phrasewalk/data/load.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,8 +41,52 @@ class GuesserAppBar extends StatelessWidget {
               context.push('/games');
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.pause),
+            onPressed: () {
+              _showPause(context);
+            },
+          ),
         ],
       ),
+    );
+  }
+
+  void _showPause(BuildContext context) {
+    final appState = Provider.of<GameState>(context, listen: false);
+    appState.togglePause(true);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Paused"),
+          actionsAlignment: MainAxisAlignment.end,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                [
+                  "You're doing great!",
+                  "Keep up the good work!",
+                  "You've got this one!"
+                ][Random().nextInt(3)],
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                appState.togglePause(false);
+              },
+              child: const Text("Resume"),
+            )
+          ],
+        );
+      },
     );
   }
 
@@ -55,28 +103,18 @@ class GuesserAppBar extends StatelessWidget {
           const SizedBox(height: 16),
           const Demo(type: 2),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // TextButton(
-              //   onPressed: () {
-              //     _launchUrl(Uri.parse("https://bgsulz.com"));
-              //   },
-              //   child: const Text("More of my work"),
-              // ),
-              // const SizedBox(width: 16),
-              TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primaryContainer,
-                  foregroundColor: Theme.of(context).colorScheme.onSurface,
-                ),
-                onPressed: () {
-                  context.pop();
-                },
-                child: const Text("Let's play!"),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
               ),
-            ],
+              onPressed: () {
+                context.pop();
+              },
+              child: const Text("Let's play!"),
+            ),
           ),
         ]);
       },

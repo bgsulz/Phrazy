@@ -36,6 +36,9 @@ class GameState extends ChangeNotifier {
   List<PhraseInteraction> interactionState = [];
   bool isSolved = false;
 
+  bool _isPaused = false;
+  bool get isPaused => _isPaused;
+
   StopWatchTimer timer = StopWatchTimer();
 
   void recordTime() {
@@ -53,6 +56,11 @@ class GameState extends ChangeNotifier {
       return _wordBankState[position.index];
     }
     return _gridState[position.index];
+  }
+
+  void togglePause(bool value) {
+    _isPaused = value;
+    notifyListeners();
   }
 
   Future<void> prepare([DateTime? date]) async {

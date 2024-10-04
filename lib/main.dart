@@ -22,7 +22,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const PhrasewalkApp());
+  runApp(const PhraseApp());
 }
 
 final _router = GoRouter(
@@ -52,8 +52,8 @@ final _router = GoRouter(
   errorBuilder: (context, state) => const GuesserScreen(child: Invalid()),
 );
 
-class PhrasewalkApp extends StatelessWidget {
-  const PhrasewalkApp({super.key});
+class PhraseApp extends StatelessWidget {
+  const PhraseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
