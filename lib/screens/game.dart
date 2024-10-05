@@ -102,6 +102,7 @@ Widget _buildPage(BuildContext context) {
 
 void _copyResults(GameState value) {
   final text = '${Style.gameName} ${value.loadedDate.toDisplayDate}\n'
-      '${value.timer.rawTime.value.toDisplayTime}';
+      '${value.timer.rawTime.value.toDisplayTime}\n'
+      'https://phrazy.fun';
   Clipboard.setData(ClipboardData(text: text));
 }

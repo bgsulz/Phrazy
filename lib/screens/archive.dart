@@ -39,15 +39,31 @@ class Archive extends StatelessWidget {
   }
 }
 
-class PuzzlesList extends StatelessWidget {
+class PuzzlesList extends StatefulWidget {
   const PuzzlesList({
     super.key,
   });
 
   @override
+  State<PuzzlesList> createState() => _PuzzlesListState();
+}
+
+class _PuzzlesListState extends State<PuzzlesList> {
+  final ScrollController _controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _controller.jumpTo(_controller.position.maxScrollExtent);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
+      controller: _controller,
       itemCount: Load.totalDailies,
       itemBuilder: (context, index) {
         return Consumer<GameState>(
