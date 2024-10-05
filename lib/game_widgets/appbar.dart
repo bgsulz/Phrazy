@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../game_widgets/demo.dart';
@@ -56,7 +57,10 @@ class GuesserAppBar extends StatelessWidget {
     final appState = Provider.of<GameState>(context, listen: false);
     appState.togglePause(true);
 
-    showDialog(
+    showDialogSuper(
+      onDismissed: (e) {
+        appState.togglePause(false);
+      },
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -80,7 +84,6 @@ class GuesserAppBar extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                appState.togglePause(false);
               },
               child: const Text("Resume"),
             )

@@ -46,16 +46,17 @@ class GuesserSolveGrid extends StatelessWidget {
               );
             },
           ),
-          GuesserWordGrid(
-            itemCount: grid.length,
-            columnCount: columnCount,
-            itemHeight: itemHeight,
-            builder: (index) {
-              return GuesserInteractionOverlay(
-                interaction: gameState.interactionState[index],
-              );
-            },
-          ),
+          if (!gameState.isPaused)
+            GuesserWordGrid(
+              itemCount: grid.length,
+              columnCount: columnCount,
+              itemHeight: itemHeight,
+              builder: (index) {
+                return GuesserInteractionOverlay(
+                  interaction: gameState.interactionState[index],
+                );
+              },
+            ),
         ],
       ),
     );
