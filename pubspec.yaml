@@ -1,4 +1,4 @@
-name: phrasewalk
+name: phrazy
 description: "A crossword-like game about phrases."
 publish_to: 'none'
 version: 0.1.1

@@ -2,11 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phrasewalk/game_widgets/demo.dart';
-import 'package:phrasewalk/state.dart';
+import '../game_widgets/demo.dart';
+import '../state.dart';
 import 'package:provider/provider.dart';
 import '../game_widgets/dialog.dart';
-import 'package:phrasewalk/data/load.dart';
+import '../data/load.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utility/style.dart';

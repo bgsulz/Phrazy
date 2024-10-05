@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:phrasewalk/data/puzzle.dart';
-import 'package:phrasewalk/utility/debug.dart';
-import 'package:phrasewalk/utility/ext.dart';
+import '../data/puzzle.dart';
+import '../utility/debug.dart';
+import '../utility/ext.dart';
 import 'package:web/web.dart' as web;
 
 typedef PhraseMap = Map<String, List<PhraseTail>>;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phrasewalk/state.dart';
+import '../state.dart';
 
 class GuesserInteractionOverlay extends StatelessWidget {
   const GuesserInteractionOverlay({super.key, required this.interaction});
@@ -60,7 +60,7 @@ class GuesserInteractionKnob extends StatelessWidget {
     var connector = direction == InteractionDirection.down
         ? interaction.tailDown.connector
         : interaction.tailRight.connector;
-    if (connector.isEmpty) connector = '...';
+    if (connector.isEmpty) connector = "+";
 
     return Transform.translate(
       offset: offset.translate(-width / 2, -height / 2),

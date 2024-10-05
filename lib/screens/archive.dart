@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phrasewalk/data/load.dart';
-import 'package:phrasewalk/screens/hover.dart';
-import 'package:phrasewalk/state.dart';
+import '../data/load.dart';
+import '../screens/hover.dart';
+import '../state.dart';
 import 'package:provider/provider.dart';
 import '../utility/ext.dart';
 

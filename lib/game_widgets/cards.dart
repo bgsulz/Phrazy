@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phrasewalk/utility/style.dart';
+import '../utility/style.dart';
 
 class EmptyCard extends StatelessWidget {
   final Color? color;

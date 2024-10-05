@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:phrasewalk/data/load.dart';
-import 'package:phrasewalk/game_widgets/grid.dart';
-import 'package:phrasewalk/sound.dart';
-import 'package:phrasewalk/utility/ext.dart';
+import '../data/load.dart';
+import '../game_widgets/grid.dart';
+import '../sound.dart';
+import '../utility/ext.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../data/puzzle.dart';
 

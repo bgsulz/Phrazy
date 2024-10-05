@@ -1,4 +1,4 @@
-package com.example.phrasewalk
+package com.bgs.phrazy
 
 import io.flutter.embedding.android.FlutterActivity
 

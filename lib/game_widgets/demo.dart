@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phrasewalk/utility/style.dart';
+import '../utility/style.dart';
 
 class Demo extends StatelessWidget {
   static const double cardWidth = 160, cardHeight = 80;
@@ -47,17 +47,17 @@ class Demo extends StatelessWidget {
               children: [
                 Transform.translate(
                   offset: const Offset(-Demo.cardWidth, 0),
-                  child: const DemoKnob(text: "..."),
+                  child: const DemoKnob(text: "+"),
                 ),
                 Transform.translate(
                   offset:
                       const Offset(-Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                  child: const DemoKnob(text: "..."),
+                  child: const DemoKnob(text: "+"),
                 ),
                 Transform.translate(
                   offset:
                       const Offset(Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                  child: const DemoKnob(text: "..."),
+                  child: const DemoKnob(text: "+"),
                 ),
               ],
             ),

@@ -1,6 +1,6 @@
-# Phrasewalk
+# Phrazy
 
-Phrasewalk is a word-based puzzle game. Drag and drop words into a grid such that all adjacent pairs of words form phrases or compound words.
+Phrazy is a word-based puzzle game. Drag and drop words into a grid such that all adjacent pairs of words form phrases or compound words.
 
 ## Rules
 
@@ -10,6 +10,6 @@ Phrasewalk is a word-based puzzle game. Drag and drop words into a grid such tha
 
 ## About
 
-Phrasewalk was created and programmed by me, Ben Sulzinsky. So far, he has also designed all the daily puzzles.
+Phrazy was created and programmed by me, Ben Sulzinsky. So far, he has also designed all the daily puzzles.
 
 You can find more [on my website: https://bgsulz.com](https://bgsulz.com)

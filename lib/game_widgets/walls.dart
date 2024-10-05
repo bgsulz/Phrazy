@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phrasewalk/data/puzzle.dart';
+import '../data/puzzle.dart';
 
 class GuesserTileOverlay extends StatelessWidget {
   const GuesserTileOverlay({

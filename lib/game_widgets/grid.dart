@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
-import 'package:phrasewalk/data/puzzle.dart';
-import 'package:phrasewalk/game_widgets/cards.dart';
-import 'package:phrasewalk/sound.dart';
-import 'package:phrasewalk/state.dart';
+import '../data/puzzle.dart';
+import '../game_widgets/cards.dart';
+import '../sound.dart';
+import '../state.dart';
 import 'package:provider/provider.dart';
 
 class GuesserWordGrid extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:phrasewalk/data/puzzle.dart';
-import 'package:phrasewalk/game_widgets/grid.dart';
-import 'package:phrasewalk/utility/style.dart';
+import '../data/puzzle.dart';
+import '../game_widgets/grid.dart';
+import '../utility/style.dart';
 
 class GuesserWordbank extends StatelessWidget {
   const GuesserWordbank({
