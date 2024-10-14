@@ -17,14 +17,22 @@ class GuesserInteractionOverlay extends StatelessWidget {
                 interaction: interaction,
                 context: context,
                 constraints: constraints,
-              ),
+              )
+            else if (interaction.tailDown.isFail)
+              GuesserX(
+                  direction: InteractionDirection.down,
+                  constraints: constraints),
             if (interaction.interactsRight)
               GuesserInteractionKnob(
                 direction: InteractionDirection.right,
                 interaction: interaction,
                 context: context,
                 constraints: constraints,
-              ),
+              )
+            else if (interaction.tailRight.isFail)
+              GuesserX(
+                  direction: InteractionDirection.right,
+                  constraints: constraints),
           ],
         );
       }),
@@ -74,7 +82,7 @@ class GuesserInteractionKnob extends StatelessWidget {
               Radius.circular(128),
             ),
           ),
-          color: Theme.of(context).colorScheme.onSurface,
+          color: Colors.greenAccent,
           child: Center(
             child: SelectionContainer.disabled(
               child: FittedBox(
@@ -91,6 +99,39 @@ class GuesserInteractionKnob extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class GuesserX extends StatelessWidget {
+  const GuesserX({
+    super.key,
+    required this.direction,
+    required this.constraints,
+  });
+
+  final InteractionDirection direction;
+  final BoxConstraints constraints;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = constraints.maxWidth / 2.5;
+    final height = constraints.maxHeight / 2.5;
+
+    var offset = direction == InteractionDirection.down
+        ? Offset(constraints.maxWidth / 2, constraints.maxHeight)
+        : Offset(constraints.maxWidth, constraints.maxHeight / 2);
+
+    return Transform.translate(
+      offset: offset.translate(-width / 2, -height / 2),
+      child: SizedBox(
+        width: width,
+        height: height,
+        child: const Icon(
+          Icons.cancel,
+          color: Colors.redAccent,
         ),
       ),
     );

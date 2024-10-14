@@ -14,8 +14,12 @@ class PhraseTail {
 
   const PhraseTail(this.connector, this.tail);
 
-  static PhraseTail get none => const PhraseTail('', '');
-  bool get isEmpty => tail.isEmpty;
+  static PhraseTail get empty => const PhraseTail('<empty>', '');
+  static PhraseTail get fail => const PhraseTail('<fail>', '');
+
+  bool get isEmpty => connector == '<empty>';
+  bool get isFail => connector == '<fail>';
+  bool get isValid => !isEmpty && !isFail;
 
   @override
   String toString() => isEmpty ? 'Empty' : '$connector $tail';
@@ -102,13 +106,13 @@ class Load {
   }
 
   static PhraseTail isValidPhrase(String a, String b) {
-    if (a.isEmpty || b.isEmpty) return PhraseTail.none;
+    if (a.isEmpty || b.isEmpty) return PhraseTail.empty;
     var head = a.toLowerCase().trim();
     var tail = b.toLowerCase().trim();
 
-    if (!_allPhrases.containsKey(head)) return PhraseTail.none;
+    if (!_allPhrases.containsKey(head)) return PhraseTail.fail;
     return _allPhrases[head]!.firstWhere((t) => t.tail.equalsIgnoreCase(tail),
-        orElse: () => PhraseTail.none);
+        orElse: () => PhraseTail.fail);
   }
 
   static void saveBoardForDate(BoardState state, String date) {

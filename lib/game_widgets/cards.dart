@@ -18,7 +18,7 @@ class EmptyCard extends StatelessWidget {
       margin: EdgeInsets.zero,
       color: color ?? Theme.of(context).colorScheme.onSurfaceVariant,
       shape: Style.cardShape(
-        outlineColor ?? Theme.of(context).colorScheme.surfaceContainerHigh,
+        outlineColor ?? Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
@@ -36,9 +36,9 @@ class WordCard extends StatelessWidget {
       elevation: size == null ? 2 : 16,
       margin: EdgeInsets.zero,
       shape: Style.cardShape(
-        Theme.of(context).colorScheme.surfaceContainerHighest,
+        Theme.of(context).colorScheme.onSurfaceVariant,
       ),
-      color: Theme.of(context).colorScheme.surfaceBright,
+      color: Theme.of(context).colorScheme.onSurface,
       child: Center(
         child: FittedBox(
           child: Padding(
@@ -48,6 +48,9 @@ class WordCard extends StatelessWidget {
               word,
               maxLines: 1,
               overflow: TextOverflow.visible,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.surface,
+              ),
             )),
           ),
         ),

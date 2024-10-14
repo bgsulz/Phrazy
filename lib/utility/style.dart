@@ -114,7 +114,7 @@ class GuesserThemeData {
   static ThemeData get instance => ThemeData(
         shadowColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.pink, brightness: Brightness.dark),
+            seedColor: Colors.blueGrey, brightness: Brightness.dark),
         useMaterial3: true,
         textTheme: TextTheme(
           displayLarge: Style.displayLarge,

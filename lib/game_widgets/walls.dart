@@ -12,17 +12,16 @@ class GuesserTileOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final highlightColor = Theme.of(context).colorScheme.surfaceContainerLowest;
-    const borderWidth = 4.0;
+    const borderWidth = 6.0;
     final borderSide = BorderSide(color: highlightColor, width: borderWidth);
+
+    final isRight = data == TileData.wallRight || data == TileData.wallBoth;
+    final isDown = data == TileData.wallDown || data == TileData.wallBoth;
 
     final fillColor =
         data == TileData.filled ? highlightColor : Colors.transparent;
-    final rightBorder = data == TileData.wallRight || data == TileData.wallBoth
-        ? borderSide
-        : BorderSide.none;
-    final downBorder = data == TileData.wallDown || data == TileData.wallBoth
-        ? borderSide
-        : BorderSide.none;
+    final rightBorder = isRight ? borderSide : BorderSide.none;
+    final downBorder = isDown ? borderSide : BorderSide.none;
     final border = data == TileData.filled
         ? Border.fromBorderSide(
             borderSide.copyWith(strokeAlign: BorderSide.strokeAlignCenter))
@@ -33,7 +32,7 @@ class GuesserTileOverlay extends StatelessWidget {
 
     final offset = data == TileData.filled
         ? Offset.zero
-        : const Offset(borderWidth / 2, borderWidth / 2);
+        : Offset(isRight ? borderWidth / 2 : 0, isDown ? borderWidth / 2 : 0);
 
     return IgnorePointer(
         child: Transform.translate(

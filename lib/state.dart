@@ -17,11 +17,11 @@ class PhraseInteraction {
   PhraseTail tailDown;
   PhraseTail tailRight;
 
-  bool get interactsDown => !tailDown.isEmpty;
-  bool get interactsRight => !tailRight.isEmpty;
+  bool get interactsDown => tailDown.isValid;
+  bool get interactsRight => tailRight.isValid;
 
-  static PhraseInteraction get none =>
-      PhraseInteraction(tailDown: PhraseTail.none, tailRight: PhraseTail.none);
+  static PhraseInteraction get empty => PhraseInteraction(
+      tailDown: PhraseTail.empty, tailRight: PhraseTail.empty);
 
   @override
   String toString() => '(down: $tailDown, right: $tailRight)';
@@ -76,7 +76,7 @@ class GameState extends ChangeNotifier {
 
     _gridState = List.generate(loadedPuzzle.grid.length, (_) => '');
     interactionState =
-        List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.none);
+        List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.empty);
     isSolved = false;
 
     var state = Load.loadBoardForDate(loadedDate.toYMD);
@@ -90,15 +90,14 @@ class GameState extends ChangeNotifier {
     if (time != null) {
       timer.setPresetTime(mSec: time.time, add: false);
       isSolved = time.isSolved;
-    }
-    else
-    {
+    } else {
       timer.setPresetTime(mSec: 0, add: false);
       isSolved = false;
     }
     if (!isSolved) timer.onStartTimer();
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i));
+    checkWin();
     notifyListeners();
 
     await loadSounds();
