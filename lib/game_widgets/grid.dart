@@ -117,6 +117,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                       ),
                       feedback: WordCard(
                         word: state.isPaused ? "" : word,
+                        hasMargins: !widget.position.isWordBank,
                         size: Size(
                           constraints.maxWidth,
                           constraints.maxHeight,
@@ -130,7 +131,10 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                               Provider.of<GameState>(context, listen: false);
                           appState.reportClicked(widget.position);
                         },
-                        child: WordCard(word: state.isPaused ? "" : word),
+                        child: WordCard(
+                          word: state.isPaused ? "" : word,
+                          hasMargins: !widget.position.isWordBank,
+                        ),
                       ),
                     );
             },

@@ -61,8 +61,8 @@ class GuesserInteractionKnob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = min(constraints.maxWidth / 2.5, 48.0);
-    final height = min(constraints.maxHeight / 2.5, 32.0);
+    final width = min(constraints.maxWidth / 2.5, 36.0);
+    final height = min(constraints.maxHeight / 2.5, 24.0);
 
     var offset = direction == InteractionDirection.down
         ? Offset(constraints.maxWidth / 2, constraints.maxHeight)

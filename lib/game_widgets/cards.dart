@@ -27,8 +27,14 @@ class EmptyCard extends StatelessWidget {
 class WordCard extends StatelessWidget {
   final String word;
   final Size? size;
+  final bool hasMargins;
 
-  const WordCard({required this.word, super.key, this.size});
+  const WordCard({
+    required this.word,
+    this.hasMargins = true,
+    this.size,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +47,9 @@ class WordCard extends StatelessWidget {
       color: Theme.of(context).colorScheme.onSurface,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: hasMargins
+              ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
+              : const EdgeInsets.all(4.0),
           child: SelectionContainer.disabled(
             child: FittedBox(
               child: Text(
