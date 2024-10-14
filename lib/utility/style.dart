@@ -13,6 +13,7 @@ class Style {
       "${Style.gameName} was created and programmed by me, Ben Sulzinsky.\n"
       "Thanks to my brother for helping with the design of the game.\n"
       "Thanks to Kenney for the sound effects.\n";
+  static const String defaultConnector = '___';
 
   static const fontFamily = 'Fraunces';
 

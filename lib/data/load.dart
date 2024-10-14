@@ -1,29 +1,13 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:phrazy/data/tail.dart';
 import '../data/puzzle.dart';
 import '../utility/debug.dart';
 import '../utility/ext.dart';
 import 'package:web/web.dart' as web;
 
 typedef PhraseMap = Map<String, List<PhraseTail>>;
-
-class PhraseTail {
-  final String connector;
-  final String tail;
-
-  const PhraseTail(this.connector, this.tail);
-
-  static PhraseTail get empty => const PhraseTail('<empty>', '');
-  static PhraseTail get fail => const PhraseTail('<fail>', '');
-
-  bool get isEmpty => connector == '<empty>';
-  bool get isFail => connector == '<fail>';
-  bool get isValid => !isEmpty && !isFail;
-
-  @override
-  String toString() => isEmpty ? 'Empty' : '$connector $tail';
-}
 
 class Load {
   static final _localStorage = web.window.localStorage;

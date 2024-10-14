@@ -40,18 +40,18 @@ class WordCard extends StatelessWidget {
       ),
       color: Theme.of(context).colorScheme.onSurface,
       child: Center(
-        child: FittedBox(
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: SelectionContainer.disabled(
-                child: Text(
-              word,
-              maxLines: 1,
-              overflow: TextOverflow.visible,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.surface,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          child: SelectionContainer.disabled(
+            child: FittedBox(
+              child: Text(
+                word,
+                maxLines: 1,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.surface,
+                ),
               ),
-            )),
+            ),
           ),
         ),
       ),

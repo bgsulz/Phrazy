@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:phrazy/utility/style.dart';
 import '../state.dart';
 
 class GuesserInteractionOverlay extends StatelessWidget {
@@ -58,8 +61,8 @@ class GuesserInteractionKnob extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = constraints.maxWidth / 2.5;
-    final height = constraints.maxHeight / 2.5;
+    final width = min(constraints.maxWidth / 2.5, 48.0);
+    final height = min(constraints.maxHeight / 2.5, 32.0);
 
     var offset = direction == InteractionDirection.down
         ? Offset(constraints.maxWidth / 2, constraints.maxHeight)
@@ -68,7 +71,7 @@ class GuesserInteractionKnob extends StatelessWidget {
     var connector = direction == InteractionDirection.down
         ? interaction.tailDown.connector
         : interaction.tailRight.connector;
-    if (connector.isEmpty) connector = "+";
+    if (connector.isEmpty) connector = Style.defaultConnector;
 
     return Transform.translate(
       offset: offset.translate(-width / 2, -height / 2),
@@ -77,6 +80,7 @@ class GuesserInteractionKnob extends StatelessWidget {
         height: height,
         child: Card(
           elevation: 4,
+          margin: EdgeInsets.zero,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(128),

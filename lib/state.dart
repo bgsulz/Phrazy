@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phrazy/data/tail.dart';
 import '../data/load.dart';
 import '../game_widgets/grid.dart';
 import '../sound.dart';
@@ -35,6 +36,7 @@ class GameState extends ChangeNotifier {
   List<String> _gridState = [];
   List<PhraseInteraction> interactionState = [];
   bool isSolved = false;
+  bool shouldCelebrateWin = false;
 
   bool _isPaused = false;
   bool get isPaused => _isPaused;
@@ -97,7 +99,9 @@ class GameState extends ChangeNotifier {
     if (!isSolved) timer.onStartTimer();
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i));
-    checkWin();
+
+    shouldCelebrateWin = false;
+    isSolved = checkWin();
     notifyListeners();
 
     await loadSounds();
@@ -144,7 +148,7 @@ class GameState extends ChangeNotifier {
   void updateState(List<int> modifiedIndices) {
     recalculateInteractions(modifiedIndices);
 
-    isSolved = checkWin();
+    isSolved = checkWin(shouldCelebrate: true);
     notifyListeners();
   }
 
@@ -170,7 +174,7 @@ class GameState extends ChangeNotifier {
   PhraseTail doesInteract(int a, int b) =>
       Load.isValidPhrase(_gridState[a], _gridState[b]);
 
-  bool checkWin() {
+  bool checkWin({bool shouldCelebrate = false}) {
     if (_wordBankState.any((s) => s.isNotEmpty)) {
       return false;
     }
@@ -190,7 +194,11 @@ class GameState extends ChangeNotifier {
     }
 
     timer.onStopTimer();
-    playSound("win");
+
+    if (shouldCelebrate) {
+      playSound("win");
+      shouldCelebrateWin = true;
+    }
     return true;
   }
 }

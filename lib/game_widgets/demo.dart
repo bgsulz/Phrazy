@@ -47,17 +47,17 @@ class Demo extends StatelessWidget {
               children: [
                 Transform.translate(
                   offset: const Offset(-Demo.cardWidth, 0),
-                  child: const DemoKnob(text: "+"),
+                  child: const DemoKnob(text: Style.defaultConnector),
                 ),
                 Transform.translate(
                   offset:
                       const Offset(-Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                  child: const DemoKnob(text: "+"),
+                  child: const DemoKnob(text: Style.defaultConnector),
                 ),
                 Transform.translate(
                   offset:
                       const Offset(Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                  child: const DemoKnob(text: "+"),
+                  child: const DemoKnob(text: Style.defaultConnector),
                 ),
               ],
             ),

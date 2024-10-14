@@ -42,12 +42,19 @@ class GuesserAppBar extends StatelessWidget {
               context.push('/games');
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.pause),
-            onPressed: () {
-              _showPause(context);
+          Consumer<GameState>(
+            builder: (context, value, child) {
+              if (!value.isSolved) {
+                return IconButton(
+                  icon: const Icon(Icons.pause),
+                  onPressed: () {
+                    _showPause(context);
+                  },
+                );
+              }
+              return const SizedBox.shrink();
             },
-          ),
+          )
         ],
       ),
     );

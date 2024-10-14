@@ -1,3 +1,5 @@
+import 'package:phrazy/game_widgets/dialog.dart';
+
 import '../state.dart';
 import '../screens/timer.dart';
 import '../game_widgets/appbar.dart';
@@ -19,8 +21,10 @@ class Game extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = Provider.of<GameState>(context, listen: false);
+
     return FutureBuilder(
-      future: Provider.of<GameState>(context, listen: false).prepare(date),
+      future: state.prepare(date),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SelectionArea(child: _buildPage(context));
@@ -30,79 +34,124 @@ class Game extends StatelessWidget {
       },
     );
   }
-}
 
-Widget _buildPage(BuildContext context) {
-  return SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const GuesserAppBar(),
-        const SizedBox(height: 16),
-        FittedBox(
-            child: Text(Style.title,
-                style: Theme.of(context).textTheme.titleLarge)),
-        const SizedBox(height: 8),
-        Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
-        const SizedBox(height: 16),
-        Consumer<GameState>(
-          builder: (context, value, child) =>
-              GuesserWordbank(bank: value.loadedPuzzle.words),
-        ),
-        const SizedBox(height: 16),
-        Consumer<GameState>(
-          builder: (context, value, child) => GuesserSolveGrid(
-            columnCount: value.loadedPuzzle.columns,
-            grid: value.loadedPuzzle.grid,
+  Widget _buildPage(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Consumer<GameState>(
+            builder: (context, value, child) {
+              // Hack city
+              if (value.shouldCelebrateWin) {
+                Future.delayed(const Duration(milliseconds: 0), () {
+                  if (context.mounted) _showCelebration(context, value);
+                });
+              }
+              return const SizedBox.shrink();
+            },
           ),
-        ),
-        const SizedBox(height: 16),
-        Consumer<GameState>(
-          builder: (context, value, child) {
-            return value.isSolved
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Solved!",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'You solved the ${Style.gameName} for ${value.loadedDate.toDisplayDate} '
-                        'in ${value.timer.rawTime.value.toDisplayTime}.',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                      const SizedBox(height: 16),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            _copyResults(value);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Copied to clipboard')),
-                            );
-                          },
-                          child: const Text('Copy Results'),
+          const GuesserAppBar(),
+          const SizedBox(height: 16),
+          FittedBox(
+              child: Text(Style.title,
+                  style: Theme.of(context).textTheme.titleLarge)),
+          const SizedBox(height: 8),
+          Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Consumer<GameState>(
+            builder: (context, value, child) =>
+                GuesserWordbank(bank: value.loadedPuzzle.words),
+          ),
+          const SizedBox(height: 16),
+          Consumer<GameState>(
+            builder: (context, value, child) => GuesserSolveGrid(
+              columnCount: value.loadedPuzzle.columns,
+              grid: value.loadedPuzzle.grid,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Consumer<GameState>(
+            builder: (context, value, child) {
+              return value.isSolved
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 16),
+                        Text('Solved!',
+                            style: Theme.of(context).textTheme.displayMedium),
+                        const SizedBox(height: 16),
+                        _buildCelebrationText(context, value),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {
+                              _copyResults(context, value);
+                            },
+                            child: const Text('Copy Results'),
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                : const Align(
-                    alignment: Alignment.centerRight,
-                    child: PuzzleTimer(),
-                  );
-          },
-        ),
-      ],
-    ),
-  );
-}
+                      ],
+                    )
+                  : const Align(
+                      alignment: Alignment.centerRight,
+                      child: PuzzleTimer(),
+                    );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
-void _copyResults(GameState value) {
-  final text = '${Style.gameName} ${value.loadedDate.toDisplayDate}\n'
-      '${value.timer.rawTime.value.toDisplayTime}\n'
-      'https://phrazy.fun';
-  Clipboard.setData(ClipboardData(text: text));
+  Widget _buildCelebrationText(BuildContext context, GameState value) {
+    return Text(
+      'You solved the ${Style.gameName} for ${value.loadedDate.toDisplayDate} '
+      'in ${value.timer.rawTime.value.toDisplayTime}.',
+      style: Theme.of(context).textTheme.bodyMedium,
+    );
+  }
+
+  void _copyResults(BuildContext context, GameState value) {
+    final text = '${Style.gameName} ${value.loadedDate.toDisplayDate}\n'
+        '${value.timer.rawTime.value.toDisplayTime}\n'
+        'https://phrazy.fun';
+    Clipboard.setData(ClipboardData(text: text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Copied to clipboard')),
+    );
+  }
+
+  void _showCelebration(BuildContext context, GameState state) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return GuesserDialog(
+          title: "Solved!",
+          children: [
+            _buildCelebrationText(context, state),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    _copyResults(context, state);
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Copy results"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Resume"),
+                )
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
