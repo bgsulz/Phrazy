@@ -91,8 +91,8 @@ class Load {
 
   static PhraseTail isValidPhrase(String a, String b) {
     if (a.isEmpty || b.isEmpty) return PhraseTail.empty;
-    var head = a.toLowerCase().trim();
-    var tail = b.toLowerCase().trim();
+    var head = a.trim();
+    var tail = b.trim();
 
     if (!_allPhrases.containsKey(head)) return PhraseTail.fail;
     return _allPhrases[head]!.firstWhere((t) => t.tail.equalsIgnoreCase(tail),
