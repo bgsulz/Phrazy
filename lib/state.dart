@@ -83,7 +83,7 @@ class GameState extends ChangeNotifier {
 
     var state = Load.loadBoardForDate(loadedDate.toYMD);
     final wordsChanged =
-        state == null ? false : state.allWords().isSameAs(loadedPuzzle.words);
+        state == null ? false : !state.allWords().isSameAs(loadedPuzzle.words);
     if (state != null && !wordsChanged) {
       _gridState = state.grid;
       _wordBankState = state.wordBank;

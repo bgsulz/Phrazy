@@ -58,11 +58,12 @@ class PhraseApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => GameState(),
-        child: MaterialApp.router(
-          title: Style.title,
-          theme: GuesserThemeData.instance,
-          routerConfig: _router,
-        ));
+      create: (context) => GameState(),
+      child: MaterialApp.router(
+        title: Style.title,
+        theme: GuesserThemeData.instance,
+        routerConfig: _router,
+      ),
+    );
   }
 }

@@ -50,12 +50,17 @@ extension DisplayTime on int {
 }
 
 extension SameList<T> on List<T> {
-  bool isSameAs(List<T> other) {
-    final sorted1 = [...this]..sort();
-    final sorted2 = [...other]..sort();
-    if (sorted1.length != sorted2.length) return false;
-    for (int i = 0; i < sorted1.length; i++) {
-      if (sorted1[i] != sorted2[i]) return false;
+  bool isSameAs(List<T> other, {bool Function(T, T)? equals}) {
+    final thisSorted = [...this];
+    final otherSorted = [...other];
+    thisSorted.sort();
+    otherSorted.sort();
+    if (otherSorted.length != thisSorted.length) return false;
+    for (int i = 0; i < thisSorted.length; i++) {
+      if (equals?.call(thisSorted[i], otherSorted[i]) != true &&
+          thisSorted[i] != otherSorted[i]) {
+        return false;
+      }
     }
     return true;
   }
