@@ -175,6 +175,9 @@ class BoardState {
       'grid': grid,
     });
   }
+
+  List<String> allWords() =>
+      [...wordBank, ...grid].where((element) => element.isNotEmpty).toList();
 }
 
 class TimerState {

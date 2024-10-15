@@ -48,3 +48,15 @@ extension DisplayTime on int {
 
   String get toDisplayTimeFromSeconds => (this * 1000).toDisplayTime;
 }
+
+extension SameList<T> on List<T> {
+  bool isSameAs(List<T> other) {
+    final sorted1 = [...this]..sort();
+    final sorted2 = [...other]..sort();
+    if (sorted1.length != sorted2.length) return false;
+    for (int i = 0; i < sorted1.length; i++) {
+      if (sorted1[i] != sorted2[i]) return false;
+    }
+    return true;
+  }
+}
