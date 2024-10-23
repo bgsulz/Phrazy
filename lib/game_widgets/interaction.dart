@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:phrazy/utility/style.dart';
 import '../state.dart';
 
 class GuesserInteractionOverlay extends StatelessWidget {
@@ -71,7 +69,7 @@ class GuesserInteractionKnob extends StatelessWidget {
     var connector = direction == InteractionDirection.down
         ? interaction.tailDown.connector
         : interaction.tailRight.connector;
-    if (connector.isEmpty) connector = Style.defaultConnector;
+    var shouldUseIcon = connector.isEmpty || connector == '-';
 
     return Transform.translate(
       offset: offset.translate(-width / 2, -height / 2),
@@ -92,13 +90,21 @@ class GuesserInteractionKnob extends StatelessWidget {
               child: FittedBox(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text(
-                    connector,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.surface,
-                          fontWeight: FontWeight.bold,
+                  child: shouldUseIcon
+                      ? Icon(
+                          Icons.link,
+                          color: Theme.of(context).colorScheme.surfaceContainer,
+                        )
+                      : Text(
+                          connector,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                color: Theme.of(context).colorScheme.surface,
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
-                  ),
                 ),
               ),
             ),
@@ -133,9 +139,14 @@ class GuesserX extends StatelessWidget {
       child: SizedBox(
         width: width,
         height: height,
-        child: const Icon(
-          Icons.cancel,
-          color: Colors.redAccent,
+        child: const FittedBox(
+          child: Padding(
+            padding: EdgeInsets.all(4),
+            child: Icon(
+              Icons.cancel,
+              color: Colors.redAccent,
+            ),
+          ),
         ),
       ),
     );

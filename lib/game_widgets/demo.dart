@@ -47,17 +47,17 @@ class Demo extends StatelessWidget {
               children: [
                 Transform.translate(
                   offset: const Offset(-Demo.cardWidth, 0),
-                  child: const DemoKnob(text: Style.defaultConnector),
+                  child: const DemoKnob(),
                 ),
                 Transform.translate(
                   offset:
                       const Offset(-Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                  child: const DemoKnob(text: Style.defaultConnector),
+                  child: const DemoKnob(),
                 ),
                 Transform.translate(
                   offset:
                       const Offset(Demo.cardWidth / 2, -Demo.cardHeight / 2),
-                  child: const DemoKnob(text: Style.defaultConnector),
+                  child: const DemoKnob(),
                 ),
               ],
             ),
@@ -133,7 +133,7 @@ class DemoCard extends StatelessWidget {
 }
 
 class DemoKnob extends StatelessWidget {
-  const DemoKnob({super.key, required this.text});
+  const DemoKnob({super.key, this.text = ''});
   final String text;
 
   @override
@@ -147,14 +147,19 @@ class DemoKnob extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(128)),
         child: Center(
           child: SelectionContainer.disabled(
-            child: Text(
-              text,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.surfaceContainer,
-                fontWeight: FontWeight.bold,
-              ),
-              overflow: TextOverflow.visible,
-            ),
+            child: text.isEmpty
+                ? Icon(
+                    Icons.link,
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                  )
+                : Text(
+                    text,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.surfaceContainer,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.visible,
+                  ),
           ),
         ),
       ),
