@@ -1,7 +1,7 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:phrazy/data/tail.dart';
-import 'package:phrazy/utility/debug.dart';
 import '../data/load.dart';
 import '../game_widgets/grid.dart';
 import '../sound.dart';
@@ -31,6 +31,9 @@ class PhraseInteraction {
 }
 
 class GameState extends ChangeNotifier {
+  final ConfettiController confetti =
+      ConfettiController(duration: Durations.long1);
+
   DateTime loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
   Puzzle loadedPuzzle = Puzzle.empty();
 
@@ -68,6 +71,8 @@ class GameState extends ChangeNotifier {
   }
 
   Future<void> prepare([DateTime? date]) async {
+    await loadSounds();
+
     if (kDebugMode) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
       await Future.delayed(Durations.medium1);
@@ -117,8 +122,6 @@ class GameState extends ChangeNotifier {
     shouldCelebrateWin = false;
     isSolved = checkWin();
     notifyListeners();
-
-    await loadSounds();
   }
 
   void reportDrop(GridPosition destination, GridPosition source) {
@@ -167,21 +170,34 @@ class GameState extends ChangeNotifier {
   }
 
   void recalculateInteractions(List<int> modifiedIndices) {
+    bool playLinkSound = false;
     for (var index in modifiedIndices) {
       var (up, left, right, down) = loadedPuzzle.getSurrounding(index);
 
       if (right >= 0) {
-        interactionState[index].tailRight = doesInteract(index, right);
+        var interaction = doesInteract(index, right);
+        interactionState[index].tailRight = interaction;
+        playLinkSound = playLinkSound || interaction.isValid;
       }
       if (down >= 0) {
-        interactionState[index].tailDown = doesInteract(index, down);
+        var interaction = doesInteract(index, down);
+        interactionState[index].tailDown = interaction;
+        playLinkSound = playLinkSound || interaction.isValid;
       }
       if (left >= 0) {
-        interactionState[left].tailRight = doesInteract(left, index);
+        var interaction = doesInteract(left, index);
+        interactionState[left].tailRight = interaction;
+        playLinkSound = playLinkSound || interaction.isValid;
       }
       if (up >= 0) {
-        interactionState[up].tailDown = doesInteract(up, index);
+        var interaction = doesInteract(up, index);
+        interactionState[up].tailDown = interaction;
+        playLinkSound = playLinkSound || interaction.isValid;
       }
+    }
+
+    if (playLinkSound) {
+      playSound("link");
     }
   }
 
@@ -211,6 +227,7 @@ class GameState extends ChangeNotifier {
 
     if (shouldCelebrate) {
       playSound("win");
+      confetti.play();
       shouldCelebrateWin = true;
     }
     return true;

@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:phrazy/game_widgets/dialog.dart';
 
 import '../state.dart';
@@ -28,7 +29,7 @@ class Game extends StatelessWidget {
       future: state.prepare(date),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return SelectionArea(child: _buildPage(context));
+          return SelectionArea(child: _buildPage(state, context));
         } else {
           return const Center(child: CircularProgressIndicator());
         }
@@ -36,71 +37,98 @@ class Game extends StatelessWidget {
     );
   }
 
-  Widget _buildPage(BuildContext context) {
-    return SingleChildScrollView(
-      clipBehavior: Clip.none,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Consumer<GameState>(
-            builder: (context, value, child) {
-              // Hack city
-              if (value.shouldCelebrateWin) {
-                Future.delayed(const Duration(milliseconds: 0), () {
-                  if (context.mounted) _showCelebration(context, value);
-                });
-              }
-              return const SizedBox.shrink();
-            },
+  Widget _buildPage(GameState state, BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        SingleChildScrollView(
+          clipBehavior: Clip.none,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Consumer<GameState>(
+                builder: (context, value, child) {
+                  // Hack city
+                  if (value.shouldCelebrateWin) {
+                    Future.delayed(const Duration(milliseconds: 0), () {
+                      if (context.mounted) _showCelebration(context, value);
+                    });
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+              const TitleText(),
+              const SizedBox(height: 16),
+              const GuesserAppBar(),
+              // const SizedBox(height: 8),
+              // Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 16),
+              Consumer<GameState>(
+                builder: (context, value, child) =>
+                    GuesserWordbank(bank: value.loadedPuzzle.words),
+              ),
+              const SizedBox(height: 16),
+              Consumer<GameState>(
+                builder: (context, value, child) => GuesserSolveGrid(
+                  columnCount: value.loadedPuzzle.columns,
+                  grid: value.loadedPuzzle.grid,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Consumer<GameState>(
+                builder: (context, value, child) {
+                  return value.isSolved
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 16),
+                            Text('Solved!',
+                                style:
+                                    Theme.of(context).textTheme.displayMedium),
+                            const SizedBox(height: 16),
+                            _buildCelebrationText(context, value),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: () {
+                                  _copyResults(context, value);
+                                },
+                                child: const Text('Copy Results'),
+                              ),
+                            ),
+                          ],
+                        )
+                      : const Align(
+                          alignment: Alignment.centerRight,
+                          child: PuzzleTimer(),
+                        );
+                },
+              ),
+            ],
           ),
-          const TitleText(),
-          const SizedBox(height: 16),
-          const GuesserAppBar(),
-          // const SizedBox(height: 8),
-          // Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 16),
-          Consumer<GameState>(
-            builder: (context, value, child) =>
-                GuesserWordbank(bank: value.loadedPuzzle.words),
-          ),
-          const SizedBox(height: 16),
-          Consumer<GameState>(
-            builder: (context, value, child) => GuesserSolveGrid(
-              columnCount: value.loadedPuzzle.columns,
-              grid: value.loadedPuzzle.grid,
+        ),
+        IgnorePointer(
+          child: SizedBox.expand(
+            child: Center(
+              child: ConfettiWidget(
+                numberOfParticles: 200,
+                minBlastForce: 20,
+                maxBlastForce: 100,
+                blastDirectionality: BlastDirectionality.explosive,
+                confettiController: state.confetti,
+                colors: const [
+                  Style.yesColor,
+                  Style.noColor,
+                  Style.cardColor,
+                  Style.backgroundColor,
+                  Style.textColor,
+                  Style.backgroundColorLight,
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 16),
-          Consumer<GameState>(
-            builder: (context, value, child) {
-              return value.isSolved
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 16),
-                        Text('Solved!',
-                            style: Theme.of(context).textTheme.displayMedium),
-                        const SizedBox(height: 16),
-                        _buildCelebrationText(context, value),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              _copyResults(context, value);
-                            },
-                            child: const Text('Copy Results'),
-                          ),
-                        ),
-                      ],
-                    )
-                  : const Align(
-                      alignment: Alignment.centerRight,
-                      child: PuzzleTimer(),
-                    );
-            },
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
