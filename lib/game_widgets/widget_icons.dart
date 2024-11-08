@@ -1,23 +1,20 @@
-import 'dart:math';
-
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phrazy/data/web_storage.dart';
+import 'package:phrazy/utility/copy.dart';
 import '../game_widgets/demo.dart';
 import '../state.dart';
 import 'package:provider/provider.dart';
-import '../game_widgets/dialog.dart';
-import '../data/load.dart';
+import 'phrazy_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../utility/style.dart';
-
-class GuesserAppBar extends StatelessWidget {
-  const GuesserAppBar({super.key});
+class PhrazyIcons extends StatelessWidget {
+  const PhrazyIcons({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (Load.checkFirstTime()) {
+    if (WebStorage.isFirstTime) {
       Future.delayed(Duration.zero, () {
         if (context.mounted) _showHelp(context);
       });
@@ -39,65 +36,11 @@ class GuesserAppBar extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.history),
-            onPressed: () {
-              context.push('/games');
-            },
+            onPressed: () => context.push('/games'),
           ),
-          Consumer<GameState>(
-            builder: (context, value, child) {
-              if (!value.isSolved) {
-                return IconButton(
-                  icon: const Icon(Icons.pause),
-                  onPressed: () {
-                    _showPause(context);
-                  },
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
+          const PauseIcon(),
         ],
       ),
-    );
-  }
-
-  void _showPause(BuildContext context) {
-    final appState = Provider.of<GameState>(context, listen: false);
-    appState.togglePause(true);
-
-    showDialogSuper(
-      onDismissed: (e) {
-        appState.togglePause(false);
-      },
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Paused"),
-          actionsAlignment: MainAxisAlignment.end,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                [
-                  "You're doing great!",
-                  "Keep up the good work!",
-                  "You've got this one!"
-                ][Random().nextInt(3)],
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Resume"),
-            )
-          ],
-        );
-      },
     );
   }
 
@@ -105,12 +48,12 @@ class GuesserAppBar extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return GuesserDialog(title: "How to play", children: [
-          const Text(Style.rules1),
+        return PhrazyDialog(title: "How to play", children: [
+          const Text(Copy.rules1),
           const SizedBox(height: 16),
           const Demo(type: 1),
           const SizedBox(height: 16),
-          const Text(Style.rules2),
+          const Text(Copy.rules2),
           const SizedBox(height: 16),
           const Demo(type: 2),
           const SizedBox(height: 16),
@@ -136,8 +79,8 @@ class GuesserAppBar extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return GuesserDialog(title: "Credits", children: [
-          const Text(Style.info),
+        return PhrazyDialog(title: "Credits", children: [
+          const Text(Copy.info),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -162,6 +105,61 @@ class GuesserAppBar extends StatelessWidget {
   }
 }
 
+class PauseIcon extends StatelessWidget {
+  const PauseIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GameState>(
+      builder: (context, value, child) {
+        if (!value.isSolved) {
+          return IconButton(
+            icon: const Icon(Icons.pause),
+            onPressed: () {
+              _showPause(context);
+            },
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+  void _showPause(BuildContext context) {
+    final gameState = Provider.of<GameState>(context, listen: false);
+    gameState.togglePause(true);
+
+    showDialogSuper(
+      onDismissed: (e) {
+        gameState.togglePause(false);
+      },
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Paused"),
+          actionsAlignment: MainAxisAlignment.end,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(Copy.motivation),
+              const SizedBox(height: 16),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Resume"),
+            )
+          ],
+        );
+      },
+    );
+  }
+}
+
 class MuteIcon extends StatefulWidget {
   const MuteIcon({super.key});
 
@@ -173,11 +171,11 @@ class _MuteIconState extends State<MuteIcon> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Load.isMuted
+      icon: WebStorage.isMuted
           ? const Icon(Icons.volume_off)
           : const Icon(Icons.volume_up),
       onPressed: () {
-        Load.toggleMute();
+        WebStorage.toggleMute();
         setState(() {});
       },
     );

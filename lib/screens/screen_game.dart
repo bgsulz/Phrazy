@@ -1,22 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:phrazy/utility/copy.dart';
+import 'package:provider/provider.dart';
+import 'package:vector_math/vector_math_64.dart';
 import 'package:confetti/confetti.dart';
-import 'package:phrazy/game_widgets/dialog.dart';
 
+import '../game_widgets/phrazy_dialog.dart';
 import '../state.dart';
-import '../screens/timer.dart';
-import '../game_widgets/appbar.dart';
-import '../game_widgets/solve.dart';
-import '../game_widgets/wordbank.dart';
+import '../game_widgets/widget_timer.dart';
+import '../game_widgets/widget_icons.dart';
+import '../game_widgets/widget_solvegrid.dart';
+import '../game_widgets/widget_wordbankgrid.dart';
 import '../utility/ext.dart';
 import '../utility/style.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:vector_math/vector_math_64.dart';
-
-class Game extends StatelessWidget {
+class GameScreen extends StatelessWidget {
   final DateTime? date;
-  const Game({
+  const GameScreen({
     super.key,
     this.date,
   });
@@ -59,17 +59,17 @@ class Game extends StatelessWidget {
               ),
               const TitleText(),
               const SizedBox(height: 16),
-              const GuesserAppBar(),
+              const PhrazyIcons(),
               // const SizedBox(height: 8),
               // Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 16),
               Consumer<GameState>(
                 builder: (context, value, child) =>
-                    GuesserWordbank(bank: value.loadedPuzzle.words),
+                    PhrazyWordbank(bank: value.loadedPuzzle.words),
               ),
               const SizedBox(height: 16),
               Consumer<GameState>(
-                builder: (context, value, child) => GuesserSolveGrid(
+                builder: (context, value, child) => PhrazySolveGrid(
                   columnCount: value.loadedPuzzle.columns,
                   grid: value.loadedPuzzle.grid,
                 ),
@@ -134,14 +134,14 @@ class Game extends StatelessWidget {
 
   Widget _buildCelebrationText(BuildContext context, GameState value) {
     return Text(
-      'You solved the ${Style.gameName} for ${value.loadedDate.toDisplayDate} '
+      'You solved the ${Copy.gameName} for ${value.loadedDate.toDisplayDate} '
       'in ${value.timer.rawTime.value.toDisplayTime}.',
       style: Theme.of(context).textTheme.bodyMedium,
     );
   }
 
   void _copyResults(BuildContext context, GameState value) {
-    final text = '${Style.gameName} ${value.loadedDate.toDisplayDate}\n'
+    final text = '${Copy.gameName} ${value.loadedDate.toDisplayDate}\n'
         '${value.timer.rawTime.value.toDisplayTime}\n'
         'https://phrazy.fun';
     Clipboard.setData(ClipboardData(text: text));
@@ -154,7 +154,7 @@ class Game extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return GuesserDialog(
+        return PhrazyDialog(
           title: "Solved!",
           children: [
             _buildCelebrationText(context, state),
@@ -201,7 +201,7 @@ class TitleText extends StatelessWidget {
             child: Center(
               child: SelectionContainer.disabled(
                 child: Text(
-                  Style.title,
+                  Copy.title,
                   style: TextStyle(
                     color: Style.textColor,
                     fontSize: 999,

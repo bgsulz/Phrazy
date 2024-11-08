@@ -1,15 +1,14 @@
-// import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-
 import 'package:flutter/foundation.dart';
+import 'package:phrazy/utility/copy.dart';
 
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'state.dart';
-import 'screen.dart';
-import 'screens/archive.dart';
-import 'screens/game.dart';
-import 'screens/invalid.dart';
+import 'screens/screen.dart';
+import 'screens/screen_archive.dart';
+import 'screens/screen_game.dart';
+import 'screens/screen_invalid.dart';
 import 'utility/style.dart';
 import 'utility/ext.dart';
 
@@ -19,7 +18,6 @@ import 'package:go_router/go_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // setUrlStrategy(PathUrlStrategy());
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   if (kDebugMode) {
@@ -34,11 +32,11 @@ final _router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const GuesserScreen(child: Game()),
+      builder: (context, state) => const PhrazyScreen(child: GameScreen()),
     ),
     GoRoute(
         path: '/games',
-        builder: (context, state) => const GuesserScreen(child: Archive()),
+        builder: (context, state) => const PhrazyScreen(child: ArchiveScreen()),
         routes: [
           GoRoute(
             redirect: (context, state) {
@@ -49,12 +47,12 @@ final _router = GoRouter(
             path: ':date',
             builder: (context, state) {
               var date = state.pathParameters['date']?.fromYMD;
-              return GuesserScreen(child: Game(date: date));
+              return PhrazyScreen(child: GameScreen(date: date));
             },
           ),
         ]),
   ],
-  errorBuilder: (context, state) => const GuesserScreen(child: Invalid()),
+  errorBuilder: (context, state) => const PhrazyScreen(child: InvalidScreen()),
 );
 
 class PhraseApp extends StatelessWidget {
@@ -65,7 +63,7 @@ class PhraseApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => GameState(),
       child: MaterialApp.router(
-        title: Style.title,
+        title: Copy.title,
         theme: GuesserThemeData.instance,
         routerConfig: _router,
       ),

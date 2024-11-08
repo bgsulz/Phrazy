@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/utility/style.dart';
 
-class PhrazyCard extends StatelessWidget {
-  const PhrazyCard({
+class PhrazyBox extends StatelessWidget {
+  const PhrazyBox({
     super.key,
     this.elevation,
     this.rounded,

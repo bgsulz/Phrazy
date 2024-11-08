@@ -1,12 +1,14 @@
-import 'package:confetti/confetti.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:phrazy/data/tail.dart';
+import 'package:phrazy/data/web_storage.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:confetti/confetti.dart';
+
+import '../data/phrasetail.dart';
+import '../game_widgets/grid_position.dart';
 import '../data/load.dart';
-import '../game_widgets/grid.dart';
 import '../sound.dart';
 import '../utility/ext.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
 import '../data/puzzle.dart';
 
 enum SolutionState { unsolved, solved, failed }
@@ -49,7 +51,7 @@ class GameState extends ChangeNotifier {
   StopWatchTimer timer = StopWatchTimer();
 
   void recordTime() {
-    Load.saveTimeForDate(
+    WebStorage.saveTimeForDate(
       TimerState(
         time: timer.rawTime.value,
         isSolved: isSolved,
@@ -58,7 +60,7 @@ class GameState extends ChangeNotifier {
     );
   }
 
-  String wordOn(GridPosition position) {
+  String wordAtPosition(GridPosition position) {
     if (position.isWordBank) {
       return _wordBankState[position.index];
     }
@@ -96,7 +98,7 @@ class GameState extends ChangeNotifier {
     if (kDebugMode) {
       state = null;
     } else {
-      state = Load.loadBoardForDate(loadedDate.toYMD);
+      state = WebStorage.loadBoardForDate(loadedDate.toYMD);
     }
 
     final wordsChanged =
@@ -107,7 +109,7 @@ class GameState extends ChangeNotifier {
     }
 
     timer.onResetTimer();
-    var time = Load.loadTimeForDate(loadedDate.toYMD);
+    var time = WebStorage.loadTimeForDate(loadedDate.toYMD);
     if (time != null && !wordsChanged) {
       timer.setPresetTime(mSec: time.time, add: false);
       isSolved = time.isSolved;
@@ -142,7 +144,7 @@ class GameState extends ChangeNotifier {
     playSound("drop");
 
     recordTime();
-    Load.saveBoardForDate(
+    WebStorage.saveBoardForDate(
       BoardState(wordBank: _wordBankState, grid: _gridState),
       loadedDate.toYMD,
     );

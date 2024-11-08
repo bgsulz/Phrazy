@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mesh_gradient/mesh_gradient.dart';
 import 'package:phrazy/utility/style.dart';
 
-class GuesserScreen extends StatelessWidget {
-  const GuesserScreen({
+class PhrazyScreen extends StatelessWidget {
+  const PhrazyScreen({
     super.key,
     required this.child,
   });

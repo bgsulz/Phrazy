@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class GuesserDialog extends StatelessWidget {
-  const GuesserDialog({
+class PhrazyDialog extends StatelessWidget {
+  const PhrazyDialog({
     super.key,
     required this.title,
     required this.children,

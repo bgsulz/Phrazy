@@ -8,13 +8,13 @@ class PuzzleTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(builder: (context, appState, child) {
+    return Consumer<GameState>(builder: (context, gameState, child) {
       return StreamBuilder<int>(
-        stream: appState.timer.secondTime,
+        stream: gameState.timer.secondTime,
         initialData: 0,
         builder: (context, snap) {
           final value = snap.data;
-          _recordTimeIfCurrentRoute(appState, context);
+          _recordTimeIfCurrentRoute(gameState, context);
 
           return Text(
             value!.toDisplayTimeFromSeconds,
@@ -24,11 +24,11 @@ class PuzzleTimer extends StatelessWidget {
     });
   }
 
-  void _recordTimeIfCurrentRoute(GameState appState, BuildContext context) {
-    if (appState.isSolved) return;
+  void _recordTimeIfCurrentRoute(GameState gameState, BuildContext context) {
+    if (gameState.isSolved) return;
 
     final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
-    final timer = appState.timer;
+    final timer = gameState.timer;
 
     if (!isCurrent) {
       timer.onStopTimer();
@@ -36,6 +36,6 @@ class PuzzleTimer extends StatelessWidget {
     }
 
     timer.onStartTimer();
-    appState.recordTime();
+    gameState.recordTime();
   }
 }

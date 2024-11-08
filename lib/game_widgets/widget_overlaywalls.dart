@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../data/puzzle.dart';
 
-class GuesserTileOverlay extends StatelessWidget {
-  const GuesserTileOverlay({
+class PhrazyWallOverlay extends StatelessWidget {
+  const PhrazyWallOverlay({
     required this.data,
     super.key,
   });

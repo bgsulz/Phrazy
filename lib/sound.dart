@@ -1,4 +1,4 @@
-import 'package:phrazy/data/load.dart';
+import 'package:phrazy/data/web_storage.dart';
 import 'package:soundpool/soundpool.dart';
 
 Soundpool pool = Soundpool.fromOptions();
@@ -16,13 +16,13 @@ Future<void> loadSounds() async {
     pool.setVolume(soundId: soundIds['rollover'], volume: 0.125);
     pool.setVolume(soundId: soundIds['win'], volume: 1.25);
   } catch (e) {
-    print(e);
+    // print(e);
     rethrow;
   }
 }
 
 void playSound(String key) {
-  if (Load.isMuted) {
+  if (WebStorage.isMuted) {
     return;
   }
   playSoundAsync(key);

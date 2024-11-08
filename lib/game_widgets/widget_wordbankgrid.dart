@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/game_widgets/card_style.dart';
+import 'package:phrazy/game_widgets/grid_position.dart';
+import 'package:phrazy/game_widgets/phrazy_box.dart';
+import 'package:phrazy/game_widgets/grid/phrazy_tile.dart';
 import 'package:phrazy/utility/style.dart';
 import '../data/puzzle.dart';
-import '../game_widgets/grid.dart';
+import 'grid/phrazy_grid.dart';
 
-class GuesserWordbank extends StatelessWidget {
-  const GuesserWordbank({
+class PhrazyWordbank extends StatelessWidget {
+  const PhrazyWordbank({
     super.key,
     required this.bank,
   });
@@ -14,14 +16,14 @@ class GuesserWordbank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PhrazyCard(
+    return PhrazyBox(
       color: Style.textColor,
-      child: GuesserWordGrid(
+      child: PhrazyGrid(
         itemCount: bank.length,
         columnCount: 5,
         itemHeight: 320 / 5,
         builder: (index) {
-          return GuesserGridTile(
+          return PhrazyTile(
               data: TileData.empty,
               position: GridPosition(
                 index: index,

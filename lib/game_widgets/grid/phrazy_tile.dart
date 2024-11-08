@@ -1,60 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:phrazy/data/puzzle.dart';
+import 'package:phrazy/game_widgets/grid_position.dart';
+import 'package:phrazy/game_widgets/widget_emptycard.dart';
+import 'package:phrazy/game_widgets/widget_wordcard.dart';
+import 'package:phrazy/sound.dart';
+import 'package:phrazy/state.dart';
 import 'package:phrazy/utility/style.dart';
-import '../data/puzzle.dart';
-import '../game_widgets/cards.dart';
-import '../sound.dart';
-import '../state.dart';
 import 'package:provider/provider.dart';
 
-class GuesserWordGrid extends StatelessWidget {
-  const GuesserWordGrid({
-    required this.itemCount,
-    required this.columnCount,
-    required this.itemHeight,
-    required this.builder,
-    super.key,
-  });
-
-  final int itemCount;
-  final int columnCount;
-  final double itemHeight;
-  final Widget Function(int) builder;
-
-  @override
-  Widget build(BuildContext context) {
-    print("itemCount: $itemCount / columnCount: $columnCount");
-    final rows = (itemCount / columnCount).ceil();
-
-    return LayoutBuilder(builder: (context, constraints) {
-      return SizedBox(
-        height: rows * itemHeight * ((1 + (constraints.maxWidth / 600)) / 2),
-        child: LayoutGrid(
-          columnSizes: repeat(columnCount, [1.fr]),
-          rowSizes: repeat(rows, [1.fr]),
-          children: List.generate(
-              itemCount,
-              (i) => SizedBox.expand(
-                    child: builder(i),
-                  )),
-        ),
-      );
-    });
-  }
-}
-
-class GridPosition {
-  final int index;
-  final bool isWordBank;
-
-  const GridPosition({
-    required this.index,
-    required this.isWordBank,
-  });
-}
-
-class GuesserGridTile extends StatefulWidget {
-  const GuesserGridTile({
+class PhrazyTile extends StatefulWidget {
+  const PhrazyTile({
     super.key,
     required this.data,
     required this.position,
@@ -64,10 +19,10 @@ class GuesserGridTile extends StatefulWidget {
   final GridPosition position;
 
   @override
-  State<GuesserGridTile> createState() => _GuesserGridTileState();
+  State<PhrazyTile> createState() => _PhrazyTileState();
 }
 
-class _GuesserGridTileState extends State<GuesserGridTile> {
+class _PhrazyTileState extends State<PhrazyTile> {
   bool _aboutToAcceptDrop = false;
 
   @override
@@ -75,7 +30,7 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
     return LayoutBuilder(builder: (context, constraints) {
       return Consumer<GameState>(
         builder: (context, state, child) {
-          final word = state.wordOn(widget.position);
+          final word = state.wordAtPosition(widget.position);
           return DragTarget(
             onLeave: (data) {
               setState(() {
@@ -132,9 +87,9 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                           _buildEmptyCard(context, widget.position.index),
                       child: GestureDetector(
                         onTap: () {
-                          final appState =
+                          final gameState =
                               Provider.of<GameState>(context, listen: false);
-                          appState.reportClicked(widget.position);
+                          gameState.reportClicked(widget.position);
                         },
                         child: WordCard(
                           word: state.isPaused ? "" : word,

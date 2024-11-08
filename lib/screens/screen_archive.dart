@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:phrazy/data/web_storage.dart';
 import '../data/load.dart';
-import '../screens/hover.dart';
+import '../utility/hover.dart';
 import '../state.dart';
 import 'package:provider/provider.dart';
 import '../utility/ext.dart';
 
-class Archive extends StatelessWidget {
-  const Archive({super.key});
+class ArchiveScreen extends StatelessWidget {
+  const ArchiveScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +113,9 @@ class PuzzleCard extends StatelessWidget {
                     const Spacer(),
                     Text(
                       context.mounted
-                          ? Load.loadTimeForDate(date.toYMD)?.toString() ?? ""
+                          ? WebStorage.loadTimeForDate(date.toYMD)
+                                  ?.toString() ??
+                              ""
                           : "",
                       maxLines: null,
                       textAlign: TextAlign.right,

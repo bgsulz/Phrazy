@@ -3,49 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:phrazy/utility/style.dart';
 import '../state.dart';
 
-class GuesserInteractionOverlay extends StatelessWidget {
-  const GuesserInteractionOverlay({super.key, required this.interaction});
-  final PhraseInteraction interaction;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Stack(
-          children: [
-            if (interaction.interactsDown)
-              GuesserInteractionKnob(
-                direction: InteractionDirection.down,
-                interaction: interaction,
-                context: context,
-                constraints: constraints,
-              )
-            else if (interaction.tailDown.isFail)
-              GuesserX(
-                  direction: InteractionDirection.down,
-                  constraints: constraints),
-            if (interaction.interactsRight)
-              GuesserInteractionKnob(
-                direction: InteractionDirection.right,
-                interaction: interaction,
-                context: context,
-                constraints: constraints,
-              )
-            else if (interaction.tailRight.isFail)
-              GuesserX(
-                  direction: InteractionDirection.right,
-                  constraints: constraints),
-          ],
-        );
-      }),
-    );
-  }
-}
-
 enum InteractionDirection { right, down }
 
-class GuesserInteractionKnob extends StatelessWidget {
-  const GuesserInteractionKnob({
+class PhrazyKnob extends StatelessWidget {
+  const PhrazyKnob({
     super.key,
     required this.direction,
     required this.interaction,
