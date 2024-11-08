@@ -23,6 +23,7 @@ class GuesserWordGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("itemCount: $itemCount / columnCount: $columnCount");
     final rows = (itemCount / columnCount).ceil();
 
     return LayoutBuilder(builder: (context, constraints) {
