@@ -156,27 +156,24 @@ class GameScreen extends StatelessWidget {
       builder: (context) {
         return PhrazyDialog(
           title: "Solved!",
+          buttons: [
+            ButtonData(
+              text: "Copy results",
+              onPressed: () {
+                _copyResults(context, state);
+                Navigator.of(context).pop();
+              },
+            ),
+            ButtonData(
+              text: "Resume",
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
           children: [
             _buildCelebrationText(context, state),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    _copyResults(context, state);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Copy results"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Resume"),
-                )
-              ],
-            ),
           ],
         );
       },

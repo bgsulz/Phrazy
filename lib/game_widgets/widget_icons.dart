@@ -48,28 +48,21 @@ class PhrazyIcons extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return PhrazyDialog(title: "How to play", children: [
-          const Text(Copy.rules1),
-          const SizedBox(height: 16),
-          const Demo(type: 1),
-          const SizedBox(height: 16),
-          const Text(Copy.rules2),
-          const SizedBox(height: 16),
-          const Demo(type: 2),
-          const SizedBox(height: 16),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                foregroundColor: Theme.of(context).colorScheme.onSurface,
-              ),
+        return PhrazyDialog(title: "How to play", buttons: [
+          ButtonData(
+              text: "Let's play!",
               onPressed: () {
                 context.pop();
-              },
-              child: const Text("Let's play!"),
-            ),
-          ),
+              })
+        ], children: const [
+          Text(Copy.rules1),
+          SizedBox(height: 16),
+          Demo(type: 1),
+          SizedBox(height: 16),
+          Text(Copy.rules2),
+          SizedBox(height: 16),
+          Demo(type: 2),
+          SizedBox(height: 16),
         ]);
       },
     );
@@ -79,20 +72,12 @@ class PhrazyIcons extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) {
-        return PhrazyDialog(title: "Credits", children: [
-          const Text(Copy.info),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {
-                  _launchUrl(Uri.parse("https://bgsulz.com"));
-                },
-                child: const Text("More of my work"),
-              ),
-              const SizedBox(width: 16),
-            ],
-          ),
+        return PhrazyDialog(title: "Credits", buttons: [
+          ButtonData(
+              text: "More of my work",
+              onPressed: () => _launchUrl(Uri.parse("https://bgsulz.com"))),
+        ], children: const [
+          Text(Copy.info),
         ]);
       },
     );

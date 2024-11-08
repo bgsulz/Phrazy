@@ -115,7 +115,11 @@ class Style {
 class GuesserThemeData {
   static ThemeData get instance => ThemeData(
         shadowColor: Colors.transparent,
-        colorScheme: const ColorScheme.dark(),
+        colorScheme: ColorScheme.fromSeed(
+          brightness: Brightness.dark,
+          dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
+          seedColor: Style.backgroundColor,
+        ),
         useMaterial3: true,
         textTheme: TextTheme(
           displayLarge: Style.displayLarge,

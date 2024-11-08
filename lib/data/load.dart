@@ -88,7 +88,7 @@ class Load {
 
     if (kDebugMode) {
       if (head == "count" && tail == "out") {
-        return const PhraseTail("", "out");
+        return const PhraseTail("one", "out");
       }
     }
 
