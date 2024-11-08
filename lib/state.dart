@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:phrazy/data/tail.dart';
+import 'package:phrazy/utility/debug.dart';
 import '../data/load.dart';
 import '../game_widgets/grid.dart';
 import '../sound.dart';
@@ -66,11 +68,15 @@ class GameState extends ChangeNotifier {
   }
 
   Future<void> prepare([DateTime? date]) async {
-    // debug("Preparing for $date");
-    loadedDate = date ?? DateTime.now();
-
-    // debug("Loading puzzle for $loadedDate");
-    loadedPuzzle = await Load.puzzleForDate(loadedDate);
+    if (kDebugMode) {
+      loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
+      await Future.delayed(Durations.medium1);
+      loadedPuzzle = Puzzle.demo();
+    } else {
+      // debug("Loading puzzle for $loadedDate");
+      loadedDate = date ?? DateTime.now();
+      loadedPuzzle = await Load.puzzleForDate(loadedDate);
+    }
 
     // debug("Loaded puzzle $loadedPuzzle");
     _wordBankState = loadedPuzzle.words;
@@ -81,7 +87,13 @@ class GameState extends ChangeNotifier {
         List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.empty);
     isSolved = false;
 
-    var state = Load.loadBoardForDate(loadedDate.toYMD);
+    BoardState? state;
+    if (kDebugMode) {
+      state = null;
+    } else {
+      state = Load.loadBoardForDate(loadedDate.toYMD);
+    }
+
     final wordsChanged =
         state == null ? false : !state.allWords().isSameAs(loadedPuzzle.words);
     if (state != null && !wordsChanged) {

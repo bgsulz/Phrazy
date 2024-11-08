@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mesh_gradient/mesh_gradient.dart';
+import 'package:phrazy/utility/style.dart';
 
 class GuesserScreen extends StatelessWidget {
   const GuesserScreen({
@@ -12,22 +13,16 @@ class GuesserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
-        _gradientBackground(context),
-        // if (context.mounted)
-        //   SelectionArea(child: _buildScaffold())
-        // else
-        _buildScaffold()
-      ],
+      children: [_buildScaffold()],
     );
   }
 
   Scaffold _buildScaffold() {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Style.backgroundColor,
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 640),
+          constraints: const BoxConstraints(maxWidth: 540),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: child,

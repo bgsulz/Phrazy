@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:phrazy/utility/style.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/cards.dart';
 import '../sound.dart';
@@ -115,12 +116,15 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
                         ),
                         position: widget.position,
                       ),
-                      feedback: WordCard(
-                        word: state.isPaused ? "" : word,
-                        hasMargins: !widget.position.isWordBank,
-                        size: Size(
-                          constraints.maxWidth,
-                          constraints.maxHeight,
+                      feedback: Transform.rotate(
+                        angle: 0.1,
+                        child: WordCard(
+                          word: state.isPaused ? "" : word,
+                          hasMargins: !widget.position.isWordBank,
+                          size: Size(
+                            constraints.maxWidth,
+                            constraints.maxHeight,
+                          ),
                         ),
                       ),
                       childWhenDragging:
@@ -145,17 +149,11 @@ class _GuesserGridTileState extends State<GuesserGridTile> {
   }
 
   Widget _buildEmptyCard(BuildContext context, int index) {
-    if (widget.position.isWordBank) {
-      return EmptyCard(
-        color: _aboutToAcceptDrop
-            ? Theme.of(context).colorScheme.surfaceContainer
-            : Theme.of(context).colorScheme.surface,
-        outlineColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-      );
-    }
     return EmptyCard(
-      color:
-          _aboutToAcceptDrop ? Theme.of(context).colorScheme.onSurface : null,
+      color: _aboutToAcceptDrop
+          ? Style.backgroundColorLight
+          : Style.foregroundColorLight,
+      outlineColor: Style.backgroundColorLight,
     );
   }
 }

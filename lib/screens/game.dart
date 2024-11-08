@@ -11,6 +11,7 @@ import '../utility/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 class Game extends StatelessWidget {
   final DateTime? date;
@@ -37,6 +38,7 @@ class Game extends StatelessWidget {
 
   Widget _buildPage(BuildContext context) {
     return SingleChildScrollView(
+      clipBehavior: Clip.none,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,13 +53,11 @@ class Game extends StatelessWidget {
               return const SizedBox.shrink();
             },
           ),
-          const GuesserAppBar(),
+          const TitleText(),
           const SizedBox(height: 16),
-          FittedBox(
-              child: Text(Style.title,
-                  style: Theme.of(context).textTheme.titleLarge)),
-          const SizedBox(height: 8),
-          Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
+          const GuesserAppBar(),
+          // const SizedBox(height: 8),
+          // Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 16),
           Consumer<GameState>(
             builder: (context, value, child) =>
@@ -152,6 +152,43 @@ class Game extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class TitleText extends StatelessWidget {
+  const TitleText({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 8,
+      child: Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.compose(
+            Vector3.zero(), Quaternion.euler(0, 0, -0.1), Vector3.all(1.2)),
+        child: const OverflowBox(
+          maxHeight: double.infinity,
+          child: FittedBox(
+            child: Center(
+              child: SelectionContainer.disabled(
+                child: Text(
+                  Style.title,
+                  style: TextStyle(
+                    color: Style.textColor,
+                    fontSize: 999,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -48,
+                    fontVariations: [FontVariation.weight(800)],
+                  ),
+                  overflow: TextOverflow.visible,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:phrazy/data/load.dart';
 import 'package:soundpool/soundpool.dart';
 
 Soundpool pool = Soundpool.fromOptions();
@@ -17,6 +18,13 @@ Future<void> loadSounds() async {
   }
 }
 
-Future<int> playSound(String key) async {
+void playSound(String key) {
+  if (Load.isMuted) {
+    return;
+  }
+  playSoundAsync(key);
+}
+
+Future<int> playSoundAsync(String key) async {
   return await pool.play(soundIds[key]!);
 }

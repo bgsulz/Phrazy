@@ -1,5 +1,7 @@
 // import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
+import 'package:flutter/foundation.dart';
+
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -19,9 +21,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // setUrlStrategy(PathUrlStrategy());
   GoRouter.optionURLReflectsImperativeAPIs = true;
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  if (kDebugMode) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
   runApp(const PhraseApp());
 }
 

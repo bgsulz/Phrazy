@@ -47,3 +47,6 @@ flutter:
     - family: Fraunces-Italic
       fonts:
         - asset: fonts/Fraunces-Italic.ttf
+    - family: BioRhyme
+      fonts:
+        - asset: fonts/BioRhyme.ttf

@@ -14,7 +14,7 @@ class GuesserDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
-        width: 640,
+        width: 540,
         child: SelectionArea(
           child: Padding(
             padding: const EdgeInsets.all(32.0),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:phrazy/data/tail.dart';
 import '../data/puzzle.dart';
 import '../utility/debug.dart';
@@ -19,7 +20,17 @@ class Load {
   static int get totalDailies => endDate.difference(startDate).inDays + 1;
 
   static String path = 'phrases.yaml';
-  static Map<String, List<PhraseTail>> _allPhrases = {};
+  static Map<String, List<PhraseTail>> _phrases = {};
+
+  static bool get isMuted => _localStorage["muteSounds"] == "true";
+  static void toggleMute() {
+    final isMuted = _localStorage["muteSounds"];
+    if (isMuted == "true") {
+      _localStorage["muteSounds"] = "false";
+    } else {
+      _localStorage["muteSounds"] = "true";
+    }
+  }
 
   static bool checkFirstTime() {
     final firstTime = _localStorage["firstTime"];
@@ -30,18 +41,22 @@ class Load {
     return false;
   }
 
-  static Future<PhraseMap> _loadAllPhrases() async {
+  static Future<PhraseMap> _loadPhrasesForPuzzle(Puzzle puzzle) async {
     try {
       final PhraseMap phraseMap = {};
       final firestore = FirebaseFirestore.instance;
       final collection = firestore.collection("phrases");
-      final docs = await collection.get();
 
-      for (var doc in docs.docs) {
-        final data = doc.data();
-        final head = doc.id;
-        final tails = data.entries.map((e) => PhraseTail(data[e.key], e.key));
-        phraseMap[head] = tails.toList();
+      final queryResults = await Future.wait(puzzle.words
+          .map((word) => collection.where("name", isEqualTo: word).get()));
+
+      for (var result in queryResults) {
+        for (var doc in result.docs) {
+          final data = doc.data();
+          final head = doc.id;
+          final tails = data.entries.map((e) => PhraseTail(e.value, e.key));
+          phraseMap[head] = tails.toList();
+        }
       }
 
       return phraseMap;
@@ -53,7 +68,6 @@ class Load {
 
   static Future<Puzzle> puzzleForDate(DateTime date) async {
     final firestore = FirebaseFirestore.instance;
-    _allPhrases = await _loadAllPhrases();
 
     try {
       final dailiesCollection = firestore.collection("dailies");
@@ -78,7 +92,9 @@ class Load {
       }
 
       final puzzleData = puzzleDocSnap.data() as Map<String, dynamic>;
-      return Puzzle.fromFirebase(puzzleData);
+      final puzzle = Puzzle.fromFirebase(puzzleData);
+      _phrases = await _loadPhrasesForPuzzle(puzzle);
+      return puzzle;
     } on FirebaseException catch (f) {
       debug("Failed to load puzzle: $f");
       rethrow;
@@ -94,8 +110,14 @@ class Load {
     var head = a.trim();
     var tail = b.trim();
 
-    if (!_allPhrases.containsKey(head)) return PhraseTail.fail;
-    return _allPhrases[head]!.firstWhere((t) => t.tail.equalsIgnoreCase(tail),
+    if (kDebugMode) {
+      if (head == "count" && tail == "out") {
+        return const PhraseTail("", "out");
+      }
+    }
+
+    if (!_phrases.containsKey(head)) return PhraseTail.fail;
+    return _phrases[head]!.firstWhere((t) => t.tail.equalsIgnoreCase(tail),
         orElse: () => PhraseTail.fail);
   }
 

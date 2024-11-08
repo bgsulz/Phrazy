@@ -1,7 +1,9 @@
+import 'package:phrazy/game_widgets/card_style.dart';
+import 'package:phrazy/utility/style.dart';
+
 import '../game_widgets/interaction.dart';
 import '../game_widgets/walls.dart';
 import '../state.dart';
-import '../utility/style.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/grid.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +21,9 @@ class GuesserSolveGrid extends StatelessWidget {
     final gameState = Provider.of<GameState>(context, listen: false);
     final itemHeight = 320 / columnCount;
 
-    return Card(
-      elevation: 4,
-      clipBehavior: Clip.antiAlias,
-      shape: Style.cardShape(
-          Theme.of(context).colorScheme.surfaceContainerHigh, 8),
+    return PhrazyCard(
+      color: Style.textColor,
+      rounded: true,
       child: Stack(
         children: [
           GuesserWordGrid(
@@ -34,16 +34,6 @@ class GuesserSolveGrid extends StatelessWidget {
               return GuesserGridTile(
                   data: grid[index],
                   position: GridPosition(index: index, isWordBank: false));
-            },
-          ),
-          GuesserWordGrid(
-            itemCount: grid.length,
-            columnCount: columnCount,
-            itemHeight: itemHeight,
-            builder: (index) {
-              return GuesserTileOverlay(
-                data: grid[index],
-              );
             },
           ),
           if (!gameState.isPaused)
@@ -57,6 +47,16 @@ class GuesserSolveGrid extends StatelessWidget {
                 );
               },
             ),
+          GuesserWordGrid(
+            itemCount: grid.length,
+            columnCount: columnCount,
+            itemHeight: itemHeight,
+            builder: (index) {
+              return GuesserTileOverlay(
+                data: grid[index],
+              );
+            },
+          ),
         ],
       ),
     );

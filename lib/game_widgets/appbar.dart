@@ -28,6 +28,7 @@ class GuesserAppBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          const MuteIcon(),
           IconButton(
             icon: const Icon(Icons.info),
             onPressed: () => _showInfo(context),
@@ -54,7 +55,7 @@ class GuesserAppBar extends StatelessWidget {
               }
               return const SizedBox.shrink();
             },
-          )
+          ),
         ],
       ),
     );
@@ -158,5 +159,27 @@ class GuesserAppBar extends StatelessWidget {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
+  }
+}
+
+class MuteIcon extends StatefulWidget {
+  const MuteIcon({super.key});
+
+  @override
+  State<MuteIcon> createState() => _MuteIconState();
+}
+
+class _MuteIconState extends State<MuteIcon> {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Load.isMuted
+          ? const Icon(Icons.volume_off)
+          : const Icon(Icons.volume_up),
+      onPressed: () {
+        Load.toggleMute();
+        setState(() {});
+      },
+    );
   }
 }

@@ -14,11 +14,20 @@ class Style {
       "Thanks to my brother for helping with the design of the game.\n"
       "Thanks to Kenney for the sound effects.\n";
 
-  static const fontFamily = 'Fraunces';
+  static const fontFamily = 'BioRhyme';
+
+  static const Color backgroundColor = Color(0xFF5828D2);
+  static const Color foregroundColor = Color(0xFF330697);
+  static const Color backgroundColorLight = Color(0xFFA382FF);
+  static const Color foregroundColorLight = Color(0xFFB4A7FF);
+  static const Color cardColor = Colors.white;
+  static const Color textColor = Colors.black;
+  static const Color yesColor = Color(0xFF00FFC4);
+  static const Color noColor = Color(0xFFFF007F);
 
   static TextStyle get displayLarge {
     return const TextStyle(
-      fontFamily: "$fontFamily-Italic",
+      fontFamily: fontFamily,
       fontVariations: [
         FontVariation("wght", 400),
         FontVariation("wonk", 1),
@@ -34,7 +43,7 @@ class Style {
 
   static TextStyle get headlineLarge {
     return const TextStyle(
-      fontFamily: "$fontFamily-Italic",
+      fontFamily: fontFamily,
       fontVariations: [
         FontVariation("wght", 400),
         FontVariation("wonk", 1),
@@ -50,7 +59,7 @@ class Style {
 
   static TextStyle get titleLarge {
     return const TextStyle(
-        fontFamily: "$fontFamily-Italic",
+        fontFamily: fontFamily,
         fontVariations: [
           FontVariation("wght", 400),
           FontVariation("wonk", 1),
@@ -101,10 +110,16 @@ class Style {
 
   static TextStyle get labelSmall => labelLarge.copyWith(fontSize: 15);
 
-  static RoundedRectangleBorder cardShape(Color color, [double? radius]) =>
-      RoundedRectangleBorder(
+  static BoxDecoration cardShape(Color color, [double? radius]) =>
+      BoxDecoration(
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              blurRadius: 0,
+            ),
+          ],
           borderRadius: BorderRadius.circular(radius ?? 1),
-          side: BorderSide(
+          border: Border.all(
               color: color,
               width: 1,
               strokeAlign: BorderSide.strokeAlignCenter));
@@ -113,8 +128,7 @@ class Style {
 class GuesserThemeData {
   static ThemeData get instance => ThemeData(
         shadowColor: Colors.transparent,
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blueGrey, brightness: Brightness.dark),
+        colorScheme: const ColorScheme.dark(),
         useMaterial3: true,
         textTheme: TextTheme(
           displayLarge: Style.displayLarge,

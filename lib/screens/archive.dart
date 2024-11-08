@@ -94,7 +94,7 @@ class PuzzleCard extends StatelessWidget {
           child: Material(
             elevation: 4,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(4))),
+                borderRadius: BorderRadius.all(Radius.circular(16))),
             color: Theme.of(context).colorScheme.surfaceContainer,
             child: InkWell(
               onTap: () {

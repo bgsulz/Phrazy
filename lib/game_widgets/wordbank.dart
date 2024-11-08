@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:phrazy/game_widgets/card_style.dart';
+import 'package:phrazy/utility/style.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/grid.dart';
-import '../utility/style.dart';
 
 class GuesserWordbank extends StatelessWidget {
   const GuesserWordbank({
@@ -13,11 +14,8 @@ class GuesserWordbank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      clipBehavior: Clip.antiAlias,
-      shape: Style.cardShape(
-          Theme.of(context).colorScheme.surfaceContainerHigh, 8),
+    return PhrazyCard(
+      color: Style.textColor,
       child: GuesserWordGrid(
         itemCount: bank.length,
         columnCount: 5,

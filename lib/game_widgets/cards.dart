@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import '../utility/style.dart';
+import 'package:phrazy/game_widgets/card_style.dart';
+import 'package:phrazy/utility/style.dart';
 
 class EmptyCard extends StatelessWidget {
-  final Color? color;
+  final Color color;
   final Color? outlineColor;
 
   const EmptyCard({
     super.key,
-    this.color,
+    required this.color,
     this.outlineColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      margin: EdgeInsets.zero,
-      color: color ?? Theme.of(context).colorScheme.onSurfaceVariant,
-      shape: Style.cardShape(
-        outlineColor ?? Theme.of(context).colorScheme.onSurface,
-      ),
+    return PhrazyCard(
+      rounded: false,
+      outlineWidth: 1,
+      outlineColor: Style.backgroundColorLight,
+      color: color,
+      child: const SizedBox.shrink(),
     );
   }
 }
@@ -38,13 +38,12 @@ class WordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var card = Card(
-      elevation: size == null ? 2 : 16,
-      margin: EdgeInsets.zero,
-      shape: Style.cardShape(
-        Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
-      color: Theme.of(context).colorScheme.onSurface,
+    var card = PhrazyCard(
+      elevation: size == null ? 0 : 16,
+      outlineWidth: 1,
+      outlineColor: Colors.grey.shade200,
+      rounded: false,
+      color: Style.cardColor,
       child: Center(
         child: Padding(
           padding: hasMargins
@@ -55,8 +54,8 @@ class WordCard extends StatelessWidget {
               child: Text(
                 word,
                 maxLines: 1,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.surface,
+                style: const TextStyle(
+                  color: Style.textColor,
                 ),
               ),
             ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utility/style.dart';
 
 class Demo extends StatelessWidget {
   static const double cardWidth = 160, cardHeight = 80;
@@ -120,7 +119,6 @@ class DemoCard extends StatelessWidget {
       height: Demo.cardHeight,
       child: Card(
         margin: EdgeInsets.zero,
-        shape: Style.cardShape(Theme.of(context).colorScheme.onSurface),
         elevation: 0,
         child: Center(
           child: SelectionContainer.disabled(
