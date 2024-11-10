@@ -50,6 +50,12 @@ class PhrazyIcons extends StatelessWidget {
       builder: (context) {
         return PhrazyDialog(title: "How to play", buttons: [
           ButtonData(
+              text: "Try an easy one",
+              onPressed: () {
+                context.pop();
+                context.go('/demo');
+              }),
+          ButtonData(
               text: "Let's play!",
               onPressed: () {
                 context.pop();

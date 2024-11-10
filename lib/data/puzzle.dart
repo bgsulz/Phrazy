@@ -1,15 +1,19 @@
+import 'package:phrazy/data/load.dart';
+import 'package:phrazy/data/phrasetail.dart';
+
 enum TileData { empty, filled, wallRight, wallDown, wallBoth }
 
 class Puzzle {
-  Puzzle({
-    required this.words,
-    required this.columns,
-    required this.grid,
-  });
+  Puzzle(
+      {required this.words,
+      required this.columns,
+      required this.grid,
+      this.bundledInteractions});
 
   final List<String> words;
   final int columns;
   final List<TileData> grid;
+  final PhraseMap? bundledInteractions;
 
   factory Puzzle.empty() => Puzzle(
         words: [],
@@ -18,46 +22,16 @@ class Puzzle {
       );
 
   factory Puzzle.demo() {
-    const grid = "0000f0000";
+    const grid = "0d000f";
     return Puzzle(
-      words: [
-        'lemon',
-        'head',
-        'count',
-        'bar',
-        'out',
-        'fly',
-        'wheel',
-        'house',
-      ],
-      columns: 3,
-      grid: _parseGrid(grid),
-    );
-  }
-
-  factory Puzzle.demoHard() {
-    const grid = "000ff 0f0ff 00000 ff0f0 ff000";
-    return Puzzle(
-      words: [
-        'lemon',
-        'head',
-        'count',
-        'bar',
-        'out',
-        'fly',
-        'wheel',
-        'house',
-        'cat',
-        'call',
-        'time',
-        'off',
-        'party',
-        'line',
-        'dance'
-      ],
-      columns: 5,
-      grid: _parseGrid(grid),
-    );
+        words: ['center', 'stage', 'fright', 'field', 'day'],
+        columns: 3,
+        grid: _parseGrid(grid),
+        bundledInteractions: {
+          'center': [Tail.from('stage'), Tail.from('field')],
+          'stage': [Tail.from('fright')],
+          'field': [Tail.from('day')],
+        });
   }
 
   factory Puzzle.fromFirebase(Map<String, dynamic> data) {

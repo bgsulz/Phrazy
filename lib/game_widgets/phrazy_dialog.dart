@@ -26,7 +26,7 @@ class PhrazyDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium),
+                Text(title, style: Style.titleMedium),
                 const SizedBox(height: 16),
                 ...children,
                 if (buttons.isNotEmpty) const SizedBox(height: 16),
@@ -35,17 +35,20 @@ class PhrazyDialog extends StatelessWidget {
                   child: Wrap(
                     spacing: 16,
                     runSpacing: 16,
-                    children: buttons
-                        .map((e) => TextButton(
-                              onPressed: e.onPressed,
-                              style: TextButton.styleFrom(
-                                backgroundColor: e.color ?? Style.yesColor,
-                                foregroundColor:
-                                    Theme.of(context).colorScheme.onPrimary,
-                              ),
-                              child: Text(e.text),
-                            ))
-                        .toList(),
+                    children: List.generate(buttons.length, (index) {
+                      final button = buttons[index];
+                      return TextButton(
+                        onPressed: button.onPressed,
+                        style: TextButton.styleFrom(
+                          backgroundColor: button.color ??
+                              (index == buttons.length - 1
+                                  ? Style.yesColor
+                                  : Style.cardColor),
+                          foregroundColor: Style.textColor,
+                        ),
+                        child: Text(button.text),
+                      );
+                    }),
                   ),
                 ),
               ],

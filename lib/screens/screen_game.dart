@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:phrazy/data/puzzle.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -15,18 +17,17 @@ import '../utility/ext.dart';
 import '../utility/style.dart';
 
 class GameScreen extends StatelessWidget {
+  final Puzzle? puzzle;
   final DateTime? date;
-  const GameScreen({
-    super.key,
-    this.date,
-  });
+
+  const GameScreen({super.key, this.date, this.puzzle});
 
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<GameState>(context, listen: false);
 
     return FutureBuilder(
-      future: state.prepare(date),
+      future: state.prepare(date: date, puzzle: puzzle),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return SelectionArea(child: _buildPage(state, context));
@@ -60,8 +61,6 @@ class GameScreen extends StatelessWidget {
               const TitleText(),
               const SizedBox(height: 16),
               const PhrazyIcons(),
-              // const SizedBox(height: 8),
-              // Text(Style.subtitle, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 16),
               Consumer<GameState>(
                 builder: (context, value, child) =>
@@ -78,26 +77,7 @@ class GameScreen extends StatelessWidget {
               Consumer<GameState>(
                 builder: (context, value, child) {
                   return value.isSolved
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 16),
-                            Text('Solved!',
-                                style:
-                                    Theme.of(context).textTheme.displayMedium),
-                            const SizedBox(height: 16),
-                            _buildCelebrationText(context, value),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  _copyResults(context, value);
-                                },
-                                child: const Text('Copy Results'),
-                              ),
-                            ),
-                          ],
-                        )
+                      ? _buildSolvedCelebration(state, context, value)
                       : const Align(
                           alignment: Alignment.centerRight,
                           child: PuzzleTimer(),
@@ -132,18 +112,44 @@ class GameScreen extends StatelessWidget {
     );
   }
 
+  Column _buildSolvedCelebration(
+      GameState state, BuildContext context, GameState value) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        Text(Copy.congratsString(state.timer.rawTime.value),
+            style: Style.displayMedium),
+        const SizedBox(height: 16),
+        _buildCelebrationText(context, value),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {
+              _copyResults(context, value);
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Style.yesColor,
+              foregroundColor: Style.textColor,
+            ),
+            child: const Text('Copy Results'),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildCelebrationText(BuildContext context, GameState value) {
     return Text(
-      'You solved the ${Copy.gameName} for ${value.loadedDate.toDisplayDate} '
-      'in ${value.timer.rawTime.value.toDisplayTime}.',
-      style: Theme.of(context).textTheme.bodyMedium,
+      Copy.summaryString(
+          value.loadedDate, value.timer.rawTime.value.toDisplayTime),
+      style: Style.bodyMedium,
     );
   }
 
   void _copyResults(BuildContext context, GameState value) {
-    final text = '${Copy.gameName} ${value.loadedDate.toDisplayDate}\n'
-        '${value.timer.rawTime.value.toDisplayTime}\n'
-        'https://phrazy.fun';
+    final text = Copy.shareString(
+        value.loadedDate, value.timer.rawTime.value.toDisplayTime);
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Copied to clipboard')),
@@ -155,21 +161,29 @@ class GameScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return PhrazyDialog(
-          title: "Solved!",
+          title: Copy.congratsString(state.timer.rawTime.value),
           buttons: [
+            if (state.loadedDate.year < 1980)
+              ButtonData(
+                text: "Let's do today's!",
+                onPressed: () {
+                  context.pop();
+                  context.go("/");
+                },
+              ),
+            ButtonData(
+              text: "Admire grid",
+              onPressed: () {
+                context.pop();
+              },
+            ),
             ButtonData(
               text: "Copy results",
               onPressed: () {
                 _copyResults(context, state);
-                Navigator.of(context).pop();
+                context.pop();
               },
             ),
-            ButtonData(
-              text: "Resume",
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
           ],
           children: [
             _buildCelebrationText(context, state),

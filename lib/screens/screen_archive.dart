@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phrazy/data/web_storage.dart';
+import 'package:phrazy/utility/style.dart';
 import '../data/load.dart';
 import '../utility/hover.dart';
 import '../state.dart';
@@ -96,7 +97,7 @@ class PuzzleCard extends StatelessWidget {
             elevation: 4,
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(16))),
-            color: Theme.of(context).colorScheme.surfaceContainer,
+            color: Style.cardColor,
             child: InkWell(
               onTap: () {
                 context.go('/games/${date.toYMD}');
@@ -109,6 +110,7 @@ class PuzzleCard extends StatelessWidget {
                       date.toDisplayDate,
                       maxLines: null,
                       textAlign: TextAlign.left,
+                      style: const TextStyle(color: Style.textColor),
                     ),
                     const Spacer(),
                     Text(
@@ -119,6 +121,7 @@ class PuzzleCard extends StatelessWidget {
                           : "",
                       maxLines: null,
                       textAlign: TextAlign.right,
+                      style: const TextStyle(color: Style.textColor),
                     )
                   ],
                 ),

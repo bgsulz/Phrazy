@@ -1,14 +1,14 @@
-class PhraseTail {
+class Tail {
   static const emptyString = '<empty>';
   static const failString = '<fail>';
 
-  static const empty = PhraseTail(emptyString, '');
-  static const fail = PhraseTail(failString, '');
+  static const empty = Tail(emptyString, '');
+  static const fail = Tail(failString, '');
 
   final String connector;
   final String tail;
 
-  const PhraseTail(this.connector, this.tail);
+  const Tail(this.connector, this.tail);
 
   bool get isEmpty => connector == emptyString;
   bool get isFail => connector == failString;
@@ -16,4 +16,11 @@ class PhraseTail {
 
   @override
   String toString() => isEmpty ? 'Empty' : '$connector $tail';
+
+  factory Tail.from(String s) {
+    final match = RegExp(r'(\w+)$').firstMatch(s);
+    final connector = s.substring(0, match?.start).trim();
+    final tail = match?.group(0) ?? '';
+    return Tail(connector, tail);
+  }
 }

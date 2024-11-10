@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phrazy/utility/style.dart';
 import '../data/puzzle.dart';
 
 class PhrazyWallOverlay extends StatelessWidget {
@@ -11,7 +12,7 @@ class PhrazyWallOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final highlightColor = Theme.of(context).colorScheme.surfaceContainerLowest;
+    const highlightColor = Style.textColor;
     const borderWidth = 6.0;
     final borderSide = BorderSide(color: highlightColor, width: borderWidth);
 
@@ -37,11 +38,13 @@ class PhrazyWallOverlay extends StatelessWidget {
     return IgnorePointer(
         child: Transform.translate(
       offset: offset,
-      child: Card(
-          color: fillColor,
-          shadowColor: Colors.transparent,
-          margin: EdgeInsets.zero,
-          shape: border),
+      child: SizedBox.expand(
+        child: Card(
+            color: fillColor,
+            shadowColor: Colors.transparent,
+            margin: EdgeInsets.zero,
+            shape: border),
+      ),
     ));
   }
 }

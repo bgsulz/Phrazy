@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:phrazy/data/phrasetail.dart';
 import '../data/puzzle.dart';
 import '../utility/debug.dart';
 import '../utility/ext.dart';
 
-typedef PhraseMap = Map<String, List<PhraseTail>>;
+typedef PhraseMap = Map<String, List<Tail>>;
 
 class Load {
   static final DateTime startDate = DateTime(2024, 10, 1);
@@ -15,24 +14,26 @@ class Load {
   static int get totalDailies => endDate.difference(startDate).inDays + 1;
 
   static String path = 'phrases.yaml';
-  static Map<String, List<PhraseTail>> _phrases = {};
+  static PhraseMap _phrases = {};
 
   static Future<PhraseMap> _loadPhrasesForPuzzle(Puzzle puzzle) async {
+    if (puzzle.bundledInteractions != null) {
+      return Future.value(puzzle.bundledInteractions);
+    }
+
     try {
       final PhraseMap phraseMap = {};
       final firestore = FirebaseFirestore.instance;
       final collection = firestore.collection("phrases");
 
-      final queryResults = await Future.wait(puzzle.words
-          .map((word) => collection.where("name", isEqualTo: word).get()));
+      final queryResults = await Future.wait(
+          puzzle.words.map((word) => collection.doc(word).get()));
 
       for (var result in queryResults) {
-        for (var doc in result.docs) {
-          final data = doc.data();
-          final head = doc.id;
-          final tails = data.entries.map((e) => PhraseTail(e.value, e.key));
-          phraseMap[head] = tails.toList();
-        }
+        final data = result.data();
+        final head = result.id;
+        final tails = data!.entries.map((e) => Tail(e.value, e.key));
+        phraseMap[head] = tails.toList();
       }
 
       return phraseMap;
@@ -40,6 +41,11 @@ class Load {
       debug("Failed to load phrases: $e");
       rethrow;
     }
+  }
+
+  static Future<Puzzle> puzzle(Puzzle puzzle) async {
+    _phrases = await _loadPhrasesForPuzzle(puzzle);
+    return puzzle;
   }
 
   static Future<Puzzle> puzzleForDate(DateTime date) async {
@@ -81,19 +87,15 @@ class Load {
     return Puzzle.empty();
   }
 
-  static PhraseTail isValidPhrase(String a, String b) {
-    if (a.isEmpty || b.isEmpty) return PhraseTail.empty;
+  static Tail isValidPhrase(String a, String b) {
+    if (a.isEmpty || b.isEmpty) return Tail.empty;
     var head = a.trim();
     var tail = b.trim();
 
-    if (kDebugMode) {
-      if (head == "count" && tail == "out") {
-        return const PhraseTail("one", "out");
-      }
+    if (!_phrases.containsKey(head)) {
+      return Tail.fail;
     }
-
-    if (!_phrases.containsKey(head)) return PhraseTail.fail;
     return _phrases[head]!.firstWhere((t) => t.tail.equalsIgnoreCase(tail),
-        orElse: () => PhraseTail.fail);
+        orElse: () => Tail.fail);
   }
 }

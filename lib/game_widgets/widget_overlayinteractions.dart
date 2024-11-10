@@ -4,7 +4,7 @@ import 'package:phrazy/state.dart';
 
 class PhrazyInteractionGrid extends StatelessWidget {
   const PhrazyInteractionGrid({super.key, required this.interaction});
-  final PhraseInteraction interaction;
+  final Interaction interaction;
 
   @override
   Widget build(BuildContext context) {
@@ -16,22 +16,20 @@ class PhrazyInteractionGrid extends StatelessWidget {
               PhrazyKnob(
                 direction: InteractionDirection.down,
                 interaction: interaction,
-                context: context,
-                constraints: constraints,
+                cardSize: constraints,
               )
             else if (interaction.tailDown.isFail)
-              GuesserX(
+              PhrazyX(
                   direction: InteractionDirection.down,
                   constraints: constraints),
             if (interaction.interactsRight)
               PhrazyKnob(
                 direction: InteractionDirection.right,
                 interaction: interaction,
-                context: context,
-                constraints: constraints,
+                cardSize: constraints,
               )
             else if (interaction.tailRight.isFail)
-              GuesserX(
+              PhrazyX(
                   direction: InteractionDirection.right,
                   constraints: constraints),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:phrazy/data/puzzle.dart';
 import 'package:phrazy/utility/copy.dart';
 
 import 'firebase_options.dart';
@@ -35,6 +36,12 @@ final _router = GoRouter(
       builder: (context, state) => const PhrazyScreen(child: GameScreen()),
     ),
     GoRoute(
+      path: '/demo',
+      builder: (context, state) {
+        return PhrazyScreen(child: GameScreen(puzzle: Puzzle.demo()));
+      },
+    ),
+    GoRoute(
         path: '/games',
         builder: (context, state) => const PhrazyScreen(child: ArchiveScreen()),
         routes: [
@@ -64,7 +71,7 @@ class PhraseApp extends StatelessWidget {
       create: (context) => GameState(),
       child: MaterialApp.router(
         title: Copy.title,
-        theme: GuesserThemeData.instance,
+        theme: PhrazyTheme.instance,
         routerConfig: _router,
       ),
     );

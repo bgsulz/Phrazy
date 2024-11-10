@@ -16,24 +16,27 @@ class WordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var card = PhrazyBox(
-      elevation: size == null ? 0 : 16,
-      outlineWidth: 1,
-      outlineColor: Colors.grey.shade200,
-      rounded: false,
-      color: Style.cardColor,
-      child: Center(
-        child: Padding(
-          padding: hasMargins
-              ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
-              : const EdgeInsets.all(4.0),
-          child: SelectionContainer.disabled(
-            child: FittedBox(
-              child: Text(
-                word,
-                maxLines: 1,
-                style: const TextStyle(
-                  color: Style.textColor,
+    var card = MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: PhrazyBox(
+        elevation: size == null ? 0 : 16,
+        outlineWidth: 1,
+        outlineColor: Colors.grey.shade200,
+        rounded: false,
+        color: Style.cardColor,
+        child: Center(
+          child: Padding(
+            padding: hasMargins
+                ? const EdgeInsets.symmetric(horizontal: 18, vertical: 12)
+                : const EdgeInsets.all(4.0),
+            child: SelectionContainer.disabled(
+              child: FittedBox(
+                child: Text(
+                  word,
+                  maxLines: 1,
+                  style: const TextStyle(
+                    color: Style.textColor,
+                  ),
                 ),
               ),
             ),

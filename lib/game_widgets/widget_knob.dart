@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:phrazy/data/phrasetail.dart';
 import 'package:phrazy/utility/style.dart';
 import '../state.dart';
 
@@ -10,32 +11,45 @@ class PhrazyKnob extends StatelessWidget {
     super.key,
     required this.direction,
     required this.interaction,
-    required this.context,
-    required this.constraints,
+    required this.cardSize,
   });
 
   final InteractionDirection direction;
-  final PhraseInteraction interaction;
-  final BuildContext context;
-  final BoxConstraints constraints;
+  final Interaction interaction;
+  final BoxConstraints cardSize;
+
+  factory PhrazyKnob.right(Tail tail, Size cardSize) {
+    return PhrazyKnob(
+      direction: InteractionDirection.right,
+      interaction: Interaction(tailRight: tail),
+      cardSize: BoxConstraints.tight(cardSize),
+    );
+  }
+
+  factory PhrazyKnob.down(Tail tail, Size cardSize) {
+    return PhrazyKnob(
+      direction: InteractionDirection.down,
+      interaction: Interaction(tailDown: tail),
+      cardSize: BoxConstraints.tight(cardSize),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final width = min(constraints.maxWidth / 2.5, 36.0);
-    final height = min(constraints.maxHeight / 2.5, 24.0);
+    final width = min(cardSize.maxWidth / 2.5, 36.0);
+    final height = min(cardSize.maxHeight / 2.5, 24.0);
 
     final connectsDown = direction == InteractionDirection.down;
     const lineThickness = 6.0;
-    final lineWidth = connectsDown ? constraints.maxWidth : lineThickness;
-    final lineHeight = !connectsDown ? constraints.maxHeight : lineThickness;
+    final lineWidth = connectsDown ? cardSize.maxWidth : lineThickness;
+    final lineHeight = !connectsDown ? cardSize.maxHeight : lineThickness;
 
     final offset = connectsDown
-        ? Offset(constraints.maxWidth / 2, constraints.maxHeight)
-        : Offset(constraints.maxWidth, constraints.maxHeight / 2);
+        ? Offset(cardSize.maxWidth / 2, cardSize.maxHeight)
+        : Offset(cardSize.maxWidth, cardSize.maxHeight / 2);
 
-    final connector = connectsDown
-        ? interaction.tailDown.connector
-        : interaction.tailRight.connector;
+    final tail = connectsDown ? interaction.tailDown : interaction.tailRight;
+    final connector = tail.connector;
     final shouldUseIcon = connector.isEmpty || connector == '-';
 
     return Stack(
@@ -68,22 +82,14 @@ class PhrazyKnob extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: shouldUseIcon
-                          ? Icon(
+                          ? const Icon(
                               Icons.link,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainer,
+                              color: Style.textColor,
                             )
                           : Text(
                               connector,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.surface,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: Style.bodySmall
+                                  .copyWith(color: Style.textColor),
                             ),
                     ),
                   ),
@@ -97,8 +103,8 @@ class PhrazyKnob extends StatelessWidget {
   }
 }
 
-class GuesserX extends StatelessWidget {
-  const GuesserX({
+class PhrazyX extends StatelessWidget {
+  const PhrazyX({
     super.key,
     required this.direction,
     required this.constraints,

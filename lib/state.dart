@@ -13,20 +13,20 @@ import '../data/puzzle.dart';
 
 enum SolutionState { unsolved, solved, failed }
 
-class PhraseInteraction {
-  PhraseInteraction({
-    required this.tailDown,
-    required this.tailRight,
+class Interaction {
+  Interaction({
+    this.tailDown = Tail.empty,
+    this.tailRight = Tail.empty,
   });
 
-  PhraseTail tailDown;
-  PhraseTail tailRight;
+  Tail tailDown;
+  Tail tailRight;
 
   bool get interactsDown => tailDown.isValid;
   bool get interactsRight => tailRight.isValid;
 
-  static PhraseInteraction get empty => PhraseInteraction(
-      tailDown: PhraseTail.empty, tailRight: PhraseTail.empty);
+  static Interaction get empty =>
+      Interaction(tailDown: Tail.empty, tailRight: Tail.empty);
 
   @override
   String toString() => '(down: $tailDown, right: $tailRight)';
@@ -41,7 +41,7 @@ class GameState extends ChangeNotifier {
 
   List<String> _wordBankState = [];
   List<String> _gridState = [];
-  List<PhraseInteraction> interactionState = [];
+  List<Interaction> interactionState = [];
   bool isSolved = false;
   bool shouldCelebrateWin = false;
 
@@ -72,15 +72,13 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> prepare([DateTime? date]) async {
+  Future<void> prepare({DateTime? date, Puzzle? puzzle}) async {
     await loadSounds();
 
-    if (kDebugMode) {
+    if (puzzle != null) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
-      await Future.delayed(Durations.medium1);
-      loadedPuzzle = Puzzle.demo();
+      loadedPuzzle = await Load.puzzle(puzzle);
     } else {
-      // debug("Loading puzzle for $loadedDate");
       loadedDate = date ?? DateTime.now();
       loadedPuzzle = await Load.puzzleForDate(loadedDate);
     }
@@ -91,7 +89,7 @@ class GameState extends ChangeNotifier {
 
     _gridState = List.generate(loadedPuzzle.grid.length, (_) => '');
     interactionState =
-        List.generate(loadedPuzzle.grid.length, (_) => PhraseInteraction.empty);
+        List.generate(loadedPuzzle.grid.length, (_) => Interaction.empty);
     isSolved = false;
 
     BoardState? state;
@@ -171,6 +169,9 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Tail doesInteract(int a, int b) =>
+      Load.isValidPhrase(_gridState[a], _gridState[b]);
+
   void recalculateInteractions(List<int> modifiedIndices) {
     bool playLinkSound = false;
     for (var index in modifiedIndices) {
@@ -202,9 +203,6 @@ class GameState extends ChangeNotifier {
       playSound("link");
     }
   }
-
-  PhraseTail doesInteract(int a, int b) =>
-      Load.isValidPhrase(_gridState[a], _gridState[b]);
 
   bool checkWin({bool shouldCelebrate = false}) {
     if (_wordBankState.any((s) => s.isNotEmpty)) {

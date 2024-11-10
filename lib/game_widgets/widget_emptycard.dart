@@ -19,7 +19,7 @@ class EmptyCard extends StatelessWidget {
       outlineWidth: 1,
       outlineColor: Style.backgroundColorLight,
       color: color,
-      child: const SizedBox.shrink(),
+      child: const SizedBox.expand(),
     );
   }
 }

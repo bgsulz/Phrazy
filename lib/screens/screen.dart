@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mesh_gradient/mesh_gradient.dart';
 import 'package:phrazy/utility/style.dart';
 
 class PhrazyScreen extends StatelessWidget {
@@ -28,21 +27,6 @@ class PhrazyScreen extends StatelessWidget {
             child: child,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _gradientBackground(BuildContext context) {
-    return Positioned.fill(
-      child: AnimatedMeshGradient(
-        colors: [
-          Theme.of(context).colorScheme.surface,
-          Theme.of(context).colorScheme.surfaceContainer,
-          Theme.of(context).colorScheme.surfaceContainerLow,
-          Theme.of(context).colorScheme.surfaceContainerLowest,
-        ],
-        options: AnimatedMeshGradientOptions(
-            frequency: 0, speed: 1, grain: 0.5, amplitude: 100),
       ),
     );
   }

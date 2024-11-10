@@ -22,7 +22,7 @@ class WebStorage {
   }
 
   static void saveBoardForDate(BoardState state, String date) {
-    debug("Saving state for $date");
+    // debug("Saving state for $date");
     final historyString = state.toJson();
     _localStorage[date] = historyString;
   }
@@ -48,7 +48,7 @@ class WebStorage {
   }
 
   static void saveTimeForDate(TimerState state, String date) {
-    debug("Saving state $state for $date");
+    // debug("Saving state $state for $date");
     final stateString = state.toJson();
     _localStorage["${date}_time"] = stateString;
   }

@@ -112,7 +112,7 @@ class Style {
               strokeAlign: BorderSide.strokeAlignCenter));
 }
 
-class GuesserThemeData {
+class PhrazyTheme {
   static ThemeData get instance => ThemeData(
         shadowColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
