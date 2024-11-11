@@ -12,16 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PhrazySolveGrid extends StatelessWidget {
-  const PhrazySolveGrid(
-      {required this.columnCount, required this.grid, super.key});
+  const PhrazySolveGrid({required this.puzzle, super.key});
 
-  final int columnCount;
-  final List<TileData> grid;
+  final Puzzle puzzle;
 
   @override
   Widget build(BuildContext context) {
     final gameState = Provider.of<GameState>(context, listen: false);
-    final itemHeight = 320 / columnCount;
+    final itemHeight = 320 / puzzle.columns;
 
     return PhrazyBox(
       color: Style.textColor,
@@ -29,19 +27,19 @@ class PhrazySolveGrid extends StatelessWidget {
       child: Stack(
         children: [
           PhrazyGrid(
-            itemCount: grid.length,
-            columnCount: columnCount,
+            itemCount: puzzle.grid.length,
+            columnCount: puzzle.columns,
             itemHeight: itemHeight,
             builder: (index) {
               return PhrazyTile(
-                  data: grid[index],
+                  data: puzzle.grid[index],
                   position: GridPosition(index: index, isWordBank: false));
             },
           ),
           if (!gameState.isPaused)
             PhrazyGrid(
-              itemCount: grid.length,
-              columnCount: columnCount,
+              itemCount: puzzle.grid.length,
+              columnCount: puzzle.columns,
               itemHeight: itemHeight,
               builder: (index) {
                 return PhrazyInteractionGrid(
@@ -50,12 +48,12 @@ class PhrazySolveGrid extends StatelessWidget {
               },
             ),
           PhrazyGrid(
-            itemCount: grid.length,
-            columnCount: columnCount,
+            itemCount: puzzle.grid.length,
+            columnCount: puzzle.columns,
             itemHeight: itemHeight,
             builder: (index) {
               return PhrazyWallOverlay(
-                data: grid[index],
+                data: puzzle.grid[index],
               );
             },
           ),

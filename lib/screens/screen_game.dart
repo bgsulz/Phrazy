@@ -69,8 +69,7 @@ class GameScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Consumer<GameState>(
                 builder: (context, value, child) => PhrazySolveGrid(
-                  columnCount: value.loadedPuzzle.columns,
-                  grid: value.loadedPuzzle.grid,
+                  puzzle: value.loadedPuzzle,
                 ),
               ),
               const SizedBox(height: 16),

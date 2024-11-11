@@ -57,14 +57,14 @@ class WebStorage {
     final stateString = _localStorage["${date}_time"];
 
     if (stateString == null) {
-      debug("No saved time for $date");
+      // debug("No saved time for $date");
       return null;
     } else {
       try {
         // debug('attempting json');
         Map<String, dynamic> state = jsonDecode(stateString);
         var res = TimerState.fromJson(state);
-        debug("Loading time $res for $date");
+        // debug("Loading time $res for $date");
         return res;
       } on Exception catch (e) {
         debug('Failed to load state from $date: $e');

@@ -72,7 +72,7 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> prepare({DateTime? date, Puzzle? puzzle}) async {
+  Future prepare({DateTime? date, Puzzle? puzzle}) async {
     await loadSounds();
 
     if (puzzle != null) {
@@ -83,7 +83,6 @@ class GameState extends ChangeNotifier {
       loadedPuzzle = await Load.puzzleForDate(loadedDate);
     }
 
-    // debug("Loaded puzzle $loadedPuzzle");
     _wordBankState = loadedPuzzle.words;
     _wordBankState.shuffle();
 
@@ -92,12 +91,7 @@ class GameState extends ChangeNotifier {
         List.generate(loadedPuzzle.grid.length, (_) => Interaction.empty);
     isSolved = false;
 
-    BoardState? state;
-    if (kDebugMode) {
-      state = null;
-    } else {
-      state = WebStorage.loadBoardForDate(loadedDate.toYMD);
-    }
+    var state = WebStorage.loadBoardForDate(loadedDate.toYMD);
 
     final wordsChanged =
         state == null ? false : !state.allWords().isSameAs(loadedPuzzle.words);

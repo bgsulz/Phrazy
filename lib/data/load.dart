@@ -31,8 +31,9 @@ class Load {
 
       for (var result in queryResults) {
         final data = result.data();
+        if (data == null) continue;
         final head = result.id;
-        final tails = data!.entries.map((e) => Tail(e.value, e.key));
+        final tails = data.entries.map((e) => Tail(e.value, e.key));
         phraseMap[head] = tails.toList();
       }
 
@@ -68,6 +69,7 @@ class Load {
           .limit(1)
           .get()
           .then((snap) => snap.docs.first.reference);
+
       final puzzleDocSnap = await docRef.get();
       if (!puzzleDocSnap.exists) {
         throw Exception("Today's puzzle does not exist.");
@@ -80,7 +82,7 @@ class Load {
     } on FirebaseException catch (f) {
       debug("Failed to load puzzle: $f");
       rethrow;
-    } on Exception catch (e) {
+    } catch (e) {
       debug("Failed to load today's puzzle: $e");
     }
 

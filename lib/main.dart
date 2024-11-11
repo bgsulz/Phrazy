@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:phrazy/data/puzzle.dart';
 import 'package:phrazy/utility/copy.dart';
 
@@ -20,12 +19,9 @@ import 'package:go_router/go_router.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
-
-  if (kDebugMode) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const PhraseApp());
 }
 
