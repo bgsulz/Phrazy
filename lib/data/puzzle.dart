@@ -35,7 +35,6 @@ class Puzzle {
   }
 
   factory Puzzle.fromFirebase(Map<String, dynamic> data) {
-    print("found words: ${List<String>.from(data['words'])}");
     final gridData = data['grid'].split(',');
     return Puzzle(
       words: List<String>.from(data['words']),

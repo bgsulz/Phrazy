@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/data/web_storage.dart';
 import 'package:phrazy/game_widgets/phrazy_box.dart';
+import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/style.dart';
 import '../data/load.dart';
 import '../utility/hover.dart';
@@ -35,7 +37,7 @@ class ArchiveScreen extends StatelessWidget {
         color: Colors.transparent,
         child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
             onPressed: () {
               if (context.canPop()) {
                 context.pop();
@@ -63,9 +65,13 @@ class _PuzzlesListState extends State<PuzzlesList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.jumpTo(_controller.position.maxScrollExtent);
-    });
+    try {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        _controller.jumpTo(_controller.position.maxScrollExtent);
+      });
+    } catch (e) {
+      debug("Error jumping to bottom of list: $e");
+    }
   }
 
   @override

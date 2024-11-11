@@ -208,7 +208,7 @@ class TitleText extends StatelessWidget {
       child: Transform(
         alignment: Alignment.center,
         transform: Matrix4.compose(
-            Vector3.zero(), Quaternion.euler(0, 0, -0.1), Vector3.all(1.2)),
+            Vector3(0, 10, 0), Quaternion.euler(0, 0, -0.11), Vector3.all(1.2)),
         child: const OverflowBox(
           maxHeight: double.infinity,
           child: FittedBox(

@@ -16,10 +16,16 @@ class Copy {
       "Thanks to Kenney for the sound effects.\n";
 
   static String get motivation => [
-        "You're doing great!",
-        "Keep up the good work!",
-        "You've got this one!"
-      ][Random().nextInt(3)];
+        "You're doing great.",
+        "Take a breather!",
+        "Keep it up!",
+        "You've got this, boss.",
+        "No one Phrazys like you!",
+        "Trust me. You're killing it.",
+        "Deep breaths, deep breaths.",
+        "This one's all you!",
+        "You're a total pro."
+      ][Random().nextInt(9)];
 
   static String congratsString(int value) {
     final duration = Duration(milliseconds: value);

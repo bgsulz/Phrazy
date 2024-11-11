@@ -1,6 +1,7 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/data/web_storage.dart';
 import 'package:phrazy/utility/copy.dart';
 import '../game_widgets/demo.dart';
@@ -27,15 +28,15 @@ class PhrazyIcons extends StatelessWidget {
         children: [
           const MuteIcon(),
           IconButton(
-            icon: const Icon(Icons.info),
+            icon: const Icon(HugeIcons.strokeRoundedInformationCircle),
             onPressed: () => _showInfo(context),
           ),
           IconButton(
-            icon: const Icon(Icons.help),
+            icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
             onPressed: () => _showHelp(context),
           ),
           IconButton(
-            icon: const Icon(Icons.history),
+            icon: const Icon(HugeIcons.strokeRoundedArchive),
             onPressed: () => context.go('/games'),
           ),
           const PauseIcon(),
@@ -105,7 +106,7 @@ class PauseIcon extends StatelessWidget {
       builder: (context, value, child) {
         if (!value.isSolved) {
           return IconButton(
-            icon: const Icon(Icons.pause),
+            icon: const Icon(HugeIcons.strokeRoundedPause),
             onPressed: () {
               _showPause(context);
             },
@@ -126,24 +127,18 @@ class PauseIcon extends StatelessWidget {
       },
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Paused"),
-          actionsAlignment: MainAxisAlignment.end,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(Copy.motivation),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Resume"),
-            )
+        return PhrazyDialog(
+          title: "Paused...",
+          buttons: [
+            ButtonData(
+                text: "Resume",
+                onPressed: () {
+                  context.pop();
+                })
+          ],
+          children: [
+            Text(Copy.motivation),
+            const SizedBox(height: 16),
           ],
         );
       },
@@ -163,8 +158,8 @@ class _MuteIconState extends State<MuteIcon> {
   Widget build(BuildContext context) {
     return IconButton(
       icon: WebStorage.isMuted
-          ? const Icon(Icons.volume_off)
-          : const Icon(Icons.volume_up),
+          ? const Icon(HugeIcons.strokeRoundedVolumeMute02)
+          : const Icon(HugeIcons.strokeRoundedVolumeHigh),
       onPressed: () {
         WebStorage.toggleMute();
         setState(() {});

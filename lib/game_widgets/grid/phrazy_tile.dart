@@ -75,7 +75,7 @@ class _PhrazyTileState extends State<PhrazyTile> {
                       feedback: Transform.rotate(
                         angle: 0.1,
                         child: WordCard(
-                          word: state.isPaused ? "" : word,
+                          word: state.isPaused ? " " : word,
                           hasMargins: !widget.position.isWordBank,
                           size: Size(
                             constraints.maxWidth,
@@ -92,7 +92,7 @@ class _PhrazyTileState extends State<PhrazyTile> {
                           gameState.reportClicked(widget.position);
                         },
                         child: WordCard(
-                          word: state.isPaused ? "" : word,
+                          word: state.isPaused ? " " : word,
                           hasMargins: !widget.position.isWordBank,
                         ),
                       ),

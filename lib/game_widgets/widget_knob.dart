@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/data/phrasetail.dart';
 import 'package:phrazy/utility/style.dart';
 import '../state.dart';
@@ -82,9 +83,12 @@ class PhrazyKnob extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: shouldUseIcon
-                          ? const Icon(
-                              Icons.link,
-                              color: Style.textColor,
+                          ? const Padding(
+                              padding: EdgeInsets.all(2),
+                              child: Icon(
+                                HugeIcons.strokeRoundedLink05,
+                                color: Style.textColor,
+                              ),
                             )
                           : Text(
                               connector,
@@ -131,7 +135,7 @@ class PhrazyX extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(4),
             child: Icon(
-              Icons.close,
+              HugeIcons.strokeRoundedCancel02,
               color: Style.noColor,
             ),
           ),
