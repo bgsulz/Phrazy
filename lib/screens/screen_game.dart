@@ -61,10 +61,18 @@ class GameScreen extends StatelessWidget {
               const TitleText(),
               const SizedBox(height: 16),
               const PhrazyIcons(),
-              const SizedBox(height: 16),
               Consumer<GameState>(
-                builder: (context, value, child) =>
-                    PhrazyWordbank(bank: value.loadedPuzzle.words),
+                builder: (context, value, child) {
+                  if (value.isSolved) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      PhrazyWordbank(bank: value.loadedPuzzle.words)
+                    ],
+                  );
+                },
               ),
               const SizedBox(height: 16),
               Consumer<GameState>(
@@ -125,6 +133,7 @@ class GameScreen extends StatelessWidget {
             style: Style.displayMedium),
         const SizedBox(height: 4),
         _buildCelebrationText(context, value),
+        const SizedBox(height: 16),
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(

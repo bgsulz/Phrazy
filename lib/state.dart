@@ -111,7 +111,8 @@ class GameState extends ChangeNotifier {
     }
     if (!isSolved) timer.onStartTimer();
 
-    recalculateInteractions(List.generate(_gridState.length, (i) => i));
+    recalculateInteractions(List.generate(_gridState.length, (i) => i),
+        isFirstTime: true);
 
     shouldCelebrateWin = false;
     isSolved = checkWin();
@@ -166,7 +167,8 @@ class GameState extends ChangeNotifier {
   Tail doesInteract(int a, int b) =>
       Load.isValidPhrase(_gridState[a], _gridState[b]);
 
-  void recalculateInteractions(List<int> modifiedIndices) {
+  void recalculateInteractions(List<int> modifiedIndices,
+      {bool isFirstTime = false}) {
     bool playLinkSound = false;
     for (var index in modifiedIndices) {
       var (up, left, right, down) = loadedPuzzle.getSurrounding(index);
@@ -193,7 +195,7 @@ class GameState extends ChangeNotifier {
       }
     }
 
-    if (playLinkSound) {
+    if (!isFirstTime && playLinkSound) {
       playSound("link");
     }
   }
