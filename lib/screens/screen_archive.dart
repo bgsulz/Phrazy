@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phrazy/data/web_storage.dart';
+import 'package:phrazy/game_widgets/phrazy_box.dart';
 import 'package:phrazy/utility/style.dart';
 import '../data/load.dart';
 import '../utility/hover.dart';
@@ -92,43 +93,36 @@ class PuzzleCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: SizedBox(
         child: TranslateOnHover(
-          isActive: true,
-          child: Material(
-            elevation: 4,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16))),
-            color: Style.cardColor,
-            child: InkWell(
-              onTap: () {
-                context.go('/games/${date.toYMD}');
-              },
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Text(
-                      date.toDisplayDate,
-                      maxLines: null,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(color: Style.textColor),
+            isActive: true,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: PhrazyBox(
+                  color: Style.cardColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Text(
+                          date.toDisplayDate,
+                          maxLines: null,
+                          textAlign: TextAlign.left,
+                          style: const TextStyle(color: Style.textColor),
+                        ),
+                        const Spacer(),
+                        Text(
+                          context.mounted
+                              ? WebStorage.loadTimeForDate(date.toYMD)
+                                      ?.toString() ??
+                                  ""
+                              : "",
+                          maxLines: null,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(color: Style.textColor),
+                        )
+                      ],
                     ),
-                    const Spacer(),
-                    Text(
-                      context.mounted
-                          ? WebStorage.loadTimeForDate(date.toYMD)
-                                  ?.toString() ??
-                              ""
-                          : "",
-                      maxLines: null,
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(color: Style.textColor),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+                  )),
+            )),
       ),
     );
   }

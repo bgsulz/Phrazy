@@ -16,9 +16,7 @@ class Style {
     return const TextStyle(
       fontFamily: fontFamily,
       fontVariations: [
-        FontVariation("wght", 400),
-        FontVariation("wonk", 1),
-        FontVariation("soft", 100),
+        FontVariation("wght", 800),
       ],
       fontSize: 44,
     );
@@ -33,8 +31,6 @@ class Style {
       fontFamily: fontFamily,
       fontVariations: [
         FontVariation("wght", 400),
-        FontVariation("wonk", 1),
-        FontVariation("soft", 100),
       ],
       fontSize: 44,
     );
@@ -48,9 +44,7 @@ class Style {
     return const TextStyle(
         fontFamily: fontFamily,
         fontVariations: [
-          FontVariation("wght", 400),
-          FontVariation("wonk", 1),
-          FontVariation("soft", 100),
+          FontVariation("wght", 800),
         ],
         fontSize: 44);
   }
@@ -70,8 +64,6 @@ class Style {
       fontFamily: fontFamily,
       fontVariations: [
         FontVariation("wght", 400),
-        FontVariation("wonk", 1),
-        FontVariation("soft", 100),
       ],
       fontSize: 20,
     );
@@ -86,8 +78,6 @@ class Style {
       fontFamily: fontFamily,
       fontVariations: [
         FontVariation("wght", 400),
-        FontVariation("wonk", 1),
-        FontVariation("soft", 100),
       ],
       fontSize: 16,
     );
@@ -114,6 +104,7 @@ class Style {
 
 class PhrazyTheme {
   static ThemeData get instance => ThemeData(
+        iconTheme: const IconThemeData(color: Style.cardColor),
         shadowColor: Colors.transparent,
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
