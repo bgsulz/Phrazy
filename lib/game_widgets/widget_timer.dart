@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phrazy/utility/style.dart';
 import '../state.dart';
 import '../utility/ext.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class PuzzleTimer extends StatelessWidget {
 
           return Text(
             value!.toDisplayTimeFromSeconds,
+            style: Style.titleSmall,
           );
         },
       );

@@ -86,28 +86,32 @@ class GameScreen extends StatelessWidget {
             ],
           ),
         ),
-        IgnorePointer(
-          child: SizedBox.expand(
-            child: Center(
-              child: ConfettiWidget(
-                numberOfParticles: 200,
-                minBlastForce: 20,
-                maxBlastForce: 100,
-                blastDirectionality: BlastDirectionality.explosive,
-                confettiController: state.confetti,
-                colors: const [
-                  Style.yesColor,
-                  Style.noColor,
-                  Style.cardColor,
-                  Style.backgroundColor,
-                  Style.textColor,
-                  Style.backgroundColorLight,
-                ],
-              ),
-            ),
+        _confettiLayer(state),
+      ],
+    );
+  }
+
+  IgnorePointer _confettiLayer(GameState state) {
+    return IgnorePointer(
+      child: SizedBox.expand(
+        child: Center(
+          child: ConfettiWidget(
+            numberOfParticles: 200,
+            minBlastForce: 20,
+            maxBlastForce: 100,
+            blastDirectionality: BlastDirectionality.explosive,
+            confettiController: state.confetti,
+            colors: const [
+              Style.yesColor,
+              Style.noColor,
+              Style.cardColor,
+              Style.backgroundColor,
+              Style.textColor,
+              Style.backgroundColorLight,
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
