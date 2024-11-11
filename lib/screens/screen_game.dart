@@ -123,7 +123,7 @@ class GameScreen extends StatelessWidget {
         const SizedBox(height: 16),
         Text(Copy.congratsString(state.timer.rawTime.value),
             style: Style.displayMedium),
-        const SizedBox(height: 16),
+        const SizedBox(height: 4),
         _buildCelebrationText(context, value),
         Align(
           alignment: Alignment.centerRight,

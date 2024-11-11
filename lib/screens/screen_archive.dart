@@ -19,7 +19,13 @@ class ArchiveScreen extends StatelessWidget {
       children: [
         _buildIcons(context),
         const SizedBox(height: 8),
-        const Flexible(child: PuzzlesList()),
+        Flexible(
+          child: ClipRRect(
+            clipBehavior: Clip.hardEdge,
+            borderRadius: BorderRadius.circular(16),
+            child: const PuzzlesList(),
+          ),
+        ),
       ],
     );
   }
@@ -89,6 +95,17 @@ class PuzzleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var loadedTime = WebStorage.loadTimeForDate(date.toYMD);
+    var displayTime = context.mounted ? loadedTime?.toString() ?? "" : "";
+
+    var isStarted = loadedTime != null;
+    var isSolved = isStarted && !loadedTime.toString().endsWith('+');
+    var color = isSolved
+        ? Style.yesColor
+        : isStarted
+            ? Colors.amber
+            : Style.cardColor;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: SizedBox(
@@ -97,29 +114,34 @@ class PuzzleCard extends StatelessWidget {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: PhrazyBox(
-                  color: Style.cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Text(
-                          date.toDisplayDate,
-                          maxLines: null,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(color: Style.textColor),
+                  color: color,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      splashColor: Colors.black.withOpacity(0.1),
+                      onTap: () {
+                        context.go('/games/${date.toYMD}');
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Text(
+                              date.toDisplayDate,
+                              maxLines: null,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(color: Style.textColor),
+                            ),
+                            const Spacer(),
+                            Text(
+                              displayTime,
+                              maxLines: null,
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(color: Style.textColor),
+                            )
+                          ],
                         ),
-                        const Spacer(),
-                        Text(
-                          context.mounted
-                              ? WebStorage.loadTimeForDate(date.toYMD)
-                                      ?.toString() ??
-                                  ""
-                              : "",
-                          maxLines: null,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(color: Style.textColor),
-                        )
-                      ],
+                      ),
                     ),
                   )),
             )),

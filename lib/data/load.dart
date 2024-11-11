@@ -9,7 +9,7 @@ typedef PhraseMap = Map<String, List<Tail>>;
 class Load {
   static final DateTime startDate = DateTime(2024, 10, 1);
   static DateTime get endDate => DateTime.now()
-      .copyWith(hour: 0, minute: 0, second: 0, millisecond: 0, microsecond: 0);
+      .copyWith(hour: 23, minute: 0, second: 0, millisecond: 0, microsecond: 0);
 
   static int get totalDailies => endDate.difference(startDate).inDays + 1;
 
