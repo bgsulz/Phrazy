@@ -132,8 +132,18 @@ class PuzzleCard extends StatelessWidget {
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
+                            if (date.weekday == 7)
+                              const Row(
+                                children: [
+                                  HugeIcon(
+                                    icon: HugeIcons.strokeRoundedEvil,
+                                    color: Style.textColor,
+                                  ),
+                                  SizedBox(width: 8),
+                                ],
+                              ),
                             Text(
-                              date.toDisplayDate,
+                              date.toDisplayDateWithDay,
                               maxLines: null,
                               textAlign: TextAlign.left,
                               style: const TextStyle(color: Style.textColor),

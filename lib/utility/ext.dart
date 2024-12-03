@@ -32,6 +32,23 @@ extension DisplayDate on DateTime {
   String get toDisplayDate {
     return "$month/$day/$year";
   }
+
+  String get toDisplayDateWithDay {
+    return "${_dayOfWeek(this)} $toDisplayDate";
+  }
+
+  String _dayOfWeek(DateTime date) {
+    List<String> days = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ];
+    return days[date.weekday - 1];
+  }
 }
 
 extension DisplayTime on int {

@@ -8,7 +8,7 @@ import '../utility/ext.dart';
 typedef PhraseMap = Map<String, List<Tail>>;
 
 class Load {
-  static final DateTime startDate = DateTime(2024, 10, 1);
+  static final DateTime startDate = DateTime(2024, 10, 1, 12);
   static DateTime get endDate => DateTime.now()
       .copyWith(hour: 23, minute: 0, second: 0, millisecond: 0, microsecond: 0);
 
