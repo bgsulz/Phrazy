@@ -4,8 +4,15 @@ import 'package:soundpool/soundpool.dart';
 
 Soundpool pool = Soundpool.fromOptions();
 final soundIds = <String, int>{};
+bool soundsInitialized = false;
 
 Future<void> loadSounds() async {
+  if (WebStorage.isSafari) {
+    print("Safari detected.");
+    await Future.delayed(const Duration(seconds: 0));
+    return;
+  }
+
   try {
     soundIds['click'] = await pool.loadUri("/audio/click_003.ogg");
     soundIds['drop'] = await pool.loadUri("/audio/click1.ogg");
@@ -20,12 +27,19 @@ Future<void> loadSounds() async {
     debug(e);
     rethrow;
   }
+
+  soundsInitialized = true;
 }
 
 void playSound(String key) {
+  if (!soundsInitialized) {
+    return;
+  }
+
   if (WebStorage.isMuted) {
     return;
   }
+
   playSoundAsync(key);
 }
 

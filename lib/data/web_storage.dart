@@ -6,6 +6,10 @@ import 'package:web/web.dart' as web;
 class WebStorage {
   static final _localStorage = web.window.localStorage;
 
+  static bool get isSafari =>
+      web.window.navigator.userAgent.contains("Safari") &&
+      !web.window.navigator.userAgent.contains("Chrome");
+
   static bool get isMuted => _localStorage["muteSounds"] == "true";
   static void toggleMute() {
     final isMuted = _localStorage["muteSounds"];
