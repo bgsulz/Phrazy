@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:phrazy/data/phrasetail.dart';
+import 'package:phrazy/utility/debug.dart';
 import '../data/puzzle.dart';
-import '../utility/debug.dart';
+// import '../utility/debug.dart';
 import '../utility/ext.dart';
 
 typedef PhraseMap = Map<String, List<Tail>>;
@@ -31,7 +32,9 @@ class Load {
 
       for (var result in queryResults) {
         final data = result.data();
-        if (data == null) continue;
+        if (data == null) {
+          continue;
+        }
         final head = result.id;
         final tails = data.entries.map((e) => Tail(e.value, e.key));
         phraseMap[head] = tails.toList();
@@ -39,7 +42,7 @@ class Load {
 
       return phraseMap;
     } on FirebaseException catch (e) {
-      debug("Failed to load phrases: $e");
+      debug(e);
       rethrow;
     }
   }
@@ -77,13 +80,13 @@ class Load {
 
       final puzzleData = puzzleDocSnap.data() as Map<String, dynamic>;
       final puzzle = Puzzle.fromFirebase(puzzleData);
+
       _phrases = await _loadPhrasesForPuzzle(puzzle);
+
       return puzzle;
     } on FirebaseException catch (f) {
-      debug("Failed to load puzzle: $f");
-      rethrow;
-    } catch (e) {
-      debug("Failed to load today's puzzle: $e");
+      debug(f);
+      // rethrow;
     }
 
     return Puzzle.empty();

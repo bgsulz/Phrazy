@@ -14,11 +14,11 @@ class PuzzleTimer extends StatelessWidget {
         stream: gameState.timer.secondTime,
         initialData: 0,
         builder: (context, snap) {
-          final value = snap.data;
+          final value = snap.data ?? 0;
           _recordTimeIfCurrentRoute(gameState, context);
 
           return Text(
-            value!.toDisplayTimeFromSeconds,
+            value.toDisplayTimeFromSeconds,
             style: Style.titleSmall,
           );
         },

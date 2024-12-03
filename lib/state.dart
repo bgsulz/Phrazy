@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:phrazy/data/web_storage.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
@@ -77,9 +76,11 @@ class GameState extends ChangeNotifier {
 
     if (puzzle != null) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
+
       loadedPuzzle = await Load.puzzle(puzzle);
     } else {
       loadedDate = date ?? DateTime.now();
+
       loadedPuzzle = await Load.puzzleForDate(loadedDate);
     }
 

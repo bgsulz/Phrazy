@@ -14,7 +14,7 @@ class PhrazyWallOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     const highlightColor = Style.textColor;
     const borderWidth = 6.0;
-    final borderSide = BorderSide(color: highlightColor, width: borderWidth);
+    const borderSide = BorderSide(color: highlightColor, width: borderWidth);
 
     final isRight = data == TileData.wallRight || data == TileData.wallBoth;
     final isDown = data == TileData.wallDown || data == TileData.wallBoth;

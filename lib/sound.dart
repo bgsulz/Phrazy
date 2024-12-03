@@ -30,5 +30,8 @@ void playSound(String key) {
 }
 
 Future<int> playSoundAsync(String key) async {
-  return await pool.play(soundIds[key]!);
+  if (soundIds.containsKey(key) && soundIds[key] != null) {
+    return await pool.play(soundIds[key]!);
+  }
+  return -1;
 }
