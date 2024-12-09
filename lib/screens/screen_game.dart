@@ -87,7 +87,7 @@ class GameScreen extends StatelessWidget {
                   Flexible(
                     child: Consumer<GameState>(
                       builder: (context, value, child) {
-                        return FittedBox(child: _buildByline(value));
+                        return _buildByline(value);
                       },
                     ),
                   ),
@@ -95,7 +95,7 @@ class GameScreen extends StatelessWidget {
                   Consumer<GameState>(
                     builder: (context, value, child) {
                       return value.isSolved
-                          ? _buildSolvedCelebration(state, context, value)
+                          ? const SizedBox.shrink()
                           : const Align(
                               alignment: Alignment.centerRight,
                               child: PuzzleTimer(),
@@ -104,6 +104,7 @@ class GameScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              Consumer<GameState>(builder: _buildSolvedCelebration)
             ],
           ),
         ),
@@ -143,8 +144,10 @@ class GameScreen extends StatelessWidget {
     return const SizedBox.shrink();
   }
 
-  Column _buildSolvedCelebration(
-      GameState state, BuildContext context, GameState value) {
+  Widget _buildSolvedCelebration(
+      BuildContext context, GameState state, Widget? widget) {
+    if (!state.isSolved) return const SizedBox.shrink();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -152,13 +155,13 @@ class GameScreen extends StatelessWidget {
         Text(Copy.congratsString(state.timer.rawTime.value),
             style: Style.displayMedium),
         const SizedBox(height: 4),
-        _buildCelebrationText(context, value),
+        _buildCelebrationText(context, state),
         const SizedBox(height: 16),
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              _copyResults(context, value);
+              _copyResults(context, state);
             },
             style: TextButton.styleFrom(
               backgroundColor: Style.yesColor,
