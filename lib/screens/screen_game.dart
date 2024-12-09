@@ -81,15 +81,28 @@ class GameScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Consumer<GameState>(
-                builder: (context, value, child) {
-                  return value.isSolved
-                      ? _buildSolvedCelebration(state, context, value)
-                      : const Align(
-                          alignment: Alignment.centerRight,
-                          child: PuzzleTimer(),
-                        );
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Consumer<GameState>(
+                      builder: (context, value, child) {
+                        return FittedBox(child: _buildByline(value));
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Consumer<GameState>(
+                    builder: (context, value, child) {
+                      return value.isSolved
+                          ? _buildSolvedCelebration(state, context, value)
+                          : const Align(
+                              alignment: Alignment.centerRight,
+                              child: PuzzleTimer(),
+                            );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -121,6 +134,13 @@ class GameScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildByline(GameState value) {
+    if (value.loadedPuzzle.author case var author?) {
+      return Text("Puzzle by $author", style: Style.titleSmall);
+    }
+    return const SizedBox.shrink();
   }
 
   Column _buildSolvedCelebration(

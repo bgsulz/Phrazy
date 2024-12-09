@@ -16,11 +16,23 @@ class PhrazyWordbank extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int columns;
+    switch (MediaQuery.of(context).size.width) {
+      case int width when width > 450:
+        columns = 5;
+        break;
+      case int width when width > 375:
+        columns = 4;
+        break;
+      default:
+        columns = 3;
+    }
+
     return PhrazyBox(
       color: Style.textColor,
       child: PhrazyGrid(
         itemCount: bank.length,
-        columnCount: 5,
+        columnCount: columns,
         itemHeight: 320 / 5,
         builder: (index) {
           return PhrazyTile(

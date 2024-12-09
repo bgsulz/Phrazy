@@ -8,11 +8,14 @@ class Puzzle {
       {required this.words,
       required this.columns,
       required this.grid,
+      this.author,
       this.bundledInteractions});
 
   final List<String> words;
   final int columns;
   final List<TileData> grid;
+
+  final String? author;
   final PhraseMap? bundledInteractions;
 
   factory Puzzle.empty() => Puzzle(
@@ -31,7 +34,8 @@ class Puzzle {
           'center': [Tail.from('stage'), Tail.from('field')],
           'stage': [Tail.from('fright')],
           'field': [Tail.from('day')],
-        });
+        },
+        author: "The Tutorial Man");
   }
 
   factory Puzzle.fromFirebase(Map<String, dynamic> data) {
@@ -40,6 +44,7 @@ class Puzzle {
       words: List<String>.from(data['words']),
       columns: int.parse(gridData[0]),
       grid: _parseGrid(gridData[1]),
+      author: data.containsKey('author') ? data['author'] : null,
     );
   }
 
