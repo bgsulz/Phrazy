@@ -120,6 +120,31 @@ class GameState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearBoard() {
+    var modifiedIndices = <int>[];
+    for (var i = 0; i < _gridState.length; i++) {
+      if (_gridState[i].isNotEmpty) {
+        modifiedIndices.add(i);
+        for (var j = 0; j < _wordBankState.length; j++) {
+          if (_wordBankState[j].isEmpty) {
+            _wordBankState[j] = _gridState[i];
+            _gridState[i] = '';
+            break;
+          }
+        }
+      }
+    }
+
+    updateState(modifiedIndices);
+    playSound("drop");
+
+    recordTime();
+    WebStorage.saveBoardForDate(
+      BoardState(wordBank: _wordBankState, grid: _gridState),
+      loadedDate.toYMD,
+    );
+  }
+
   void reportDrop(GridPosition destination, GridPosition source) {
     if (isSolved) return;
 

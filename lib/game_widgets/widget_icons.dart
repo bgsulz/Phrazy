@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/data/web_storage.dart';
 import 'package:phrazy/utility/copy.dart';
+import 'package:phrazy/utility/style.dart';
 import '../game_widgets/demo.dart';
 import '../state.dart';
 import 'package:provider/provider.dart';
@@ -28,10 +29,6 @@ class PhrazyIcons extends StatelessWidget {
         children: [
           const MuteIcon(),
           IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedInformationCircle),
-            onPressed: () => _showInfo(context),
-          ),
-          IconButton(
             icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
             onPressed: () => _showHelp(context),
           ),
@@ -39,6 +36,7 @@ class PhrazyIcons extends StatelessWidget {
             icon: const Icon(HugeIcons.strokeRoundedArchive),
             onPressed: () => context.push('/games'),
           ),
+          const ClearIcon(),
           const PauseIcon(),
         ],
       ),
@@ -55,6 +53,12 @@ class PhrazyIcons extends StatelessWidget {
               onPressed: () {
                 context.pop();
                 context.go('/demo');
+              }),
+          ButtonData(
+              text: "About game",
+              onPressed: () {
+                context.pop();
+                _showInfo(context);
               }),
           ButtonData(
               text: "Let's play!",
@@ -81,8 +85,16 @@ class PhrazyIcons extends StatelessWidget {
       builder: (context) {
         return PhrazyDialog(title: "Credits", buttons: [
           ButtonData(
-              text: "More of my work",
-              onPressed: () => _launchUrl(Uri.parse("https://bgsulz.com"))),
+            text: "Back to game",
+            color: Style.cardColor,
+            onPressed: () => context.pop(),
+          ),
+          ButtonData(
+            text: "More of my work",
+            onPressed: () => _launchUrl(
+              Uri.parse("https://bgsulz.com"),
+            ),
+          ),
         ], children: const [
           Text(Copy.info),
         ]);
@@ -94,6 +106,27 @@ class PhrazyIcons extends StatelessWidget {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
+  }
+}
+
+class ClearIcon extends StatelessWidget {
+  const ClearIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GameState>(
+      builder: (context, value, child) {
+        if (!value.isSolved) {
+          return IconButton(
+            icon: const Icon(HugeIcons.strokeRoundedEraser),
+            onPressed: () {
+              value.clearBoard();
+            },
+          );
+        }
+        return const SizedBox.shrink();
+      },
+    );
   }
 }
 
