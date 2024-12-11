@@ -34,7 +34,7 @@ class PhrazyIcons extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(HugeIcons.strokeRoundedArchive),
-            onPressed: () => context.push('/games'),
+            onPressed: () => context.go('/games'),
           ),
           const ClearIcon(),
           const PauseIcon(),
