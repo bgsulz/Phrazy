@@ -116,7 +116,7 @@ class ClearIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GameState>(
       builder: (context, value, child) {
-        if (!value.isSolved) {
+        if (!value.isPreparing && !value.isSolved) {
           return IconButton(
             icon: const Icon(HugeIcons.strokeRoundedEraser),
             onPressed: () {
@@ -137,7 +137,7 @@ class PauseIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GameState>(
       builder: (context, value, child) {
-        if (!value.isSolved) {
+        if (!value.isPreparing && !value.isSolved) {
           return IconButton(
             icon: const Icon(HugeIcons.strokeRoundedPause),
             onPressed: () {
