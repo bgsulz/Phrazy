@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hugeicons/hugeicons.dart';
+import 'package:phrazy/data/load.dart';
 import 'package:phrazy/data/puzzle.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:provider/provider.dart';
@@ -104,7 +106,8 @@ class GameScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Consumer<GameState>(builder: _buildSolvedCelebration)
+              Consumer<GameState>(builder: _buildSolvedCelebration),
+              Consumer<GameState>(builder: _buildArrows),
             ],
           ),
         ),
@@ -226,6 +229,44 @@ class GameScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildArrows(BuildContext context, GameState value, Widget? child) {
+    final loadedDate = value.loadedDate;
+
+    if (loadedDate.isBefore(DateTime.fromMillisecondsSinceEpoch(1))) {
+      return const SizedBox.shrink();
+    }
+
+    final isFirst = !value.loadedDate.isAfter(Load.startDate);
+    final isLast = !value.loadedDate.isBefore(Load.endDate.copyWith(hour: 2));
+
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (!isFirst)
+              IconButton(
+                icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+                onPressed: () {
+                  context.go(
+                      '/games/${loadedDate.subtract(const Duration(days: 1, hours: 2)).toYMD}');
+                },
+              ),
+            if (!isLast)
+              IconButton(
+                icon: const Icon(HugeIcons.strokeRoundedArrowRight01),
+                onPressed: () {
+                  context.go(
+                      '/games/${loadedDate.add(const Duration(days: 1, hours: 2)).toYMD}');
+                },
+              ),
+          ],
+        ),
+      ],
     );
   }
 }

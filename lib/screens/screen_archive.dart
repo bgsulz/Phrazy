@@ -39,11 +39,8 @@ class ArchiveScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
             onPressed: () {
-              if (context.canPop()) {
-                context.pop();
-              } else {
-                context.go("/");
-              }
+              final state = Provider.of<GameState>(context, listen: false);
+              context.go('/games/${state.loadedDate.toYMD}');
             },
           )
         ]));

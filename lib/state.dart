@@ -76,11 +76,10 @@ class GameState extends ChangeNotifier {
 
     if (puzzle != null) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
-
       loadedPuzzle = await Load.puzzle(puzzle);
     } else {
-      loadedDate = date ?? DateTime.now();
-
+      loadedDate =
+          date?.copyWith(hour: 12) ?? DateTime.now().copyWith(hour: 12);
       loadedPuzzle = await Load.puzzleForDate(loadedDate);
     }
 

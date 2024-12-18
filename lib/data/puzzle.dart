@@ -27,15 +27,16 @@ class Puzzle {
   factory Puzzle.demo() {
     const grid = "0d000f";
     return Puzzle(
-        words: ['center', 'stage', 'fright', 'field', 'day'],
-        columns: 3,
-        grid: _parseGrid(grid),
-        bundledInteractions: {
-          'center': [Tail.from('stage'), Tail.from('field')],
-          'stage': [Tail.from('fright')],
-          'field': [Tail.from('day')],
-        },
-        author: "The Tutorial Man");
+      words: ['center', 'stage', 'fright', 'field', 'day'],
+      columns: 3,
+      grid: _parseGrid(grid),
+      bundledInteractions: {
+        'center': [Tail.from('stage'), Tail.from('field')],
+        'stage': [Tail.from('fright')],
+        'field': [Tail.from('day')],
+      },
+      author: "The Tutorializer",
+    );
   }
 
   factory Puzzle.fromFirebase(Map<String, dynamic> data) {
