@@ -41,11 +41,15 @@ class GameState extends ChangeNotifier {
   List<String> _wordBankState = [];
   List<String> _gridState = [];
   List<Interaction> interactionState = [];
+
   bool isSolved = false;
   bool shouldCelebrateWin = false;
 
   bool _isPaused = false;
   bool get isPaused => _isPaused;
+
+  bool _isPreparing = false;
+  bool get isPreparing => _isPreparing;
 
   StopWatchTimer timer = StopWatchTimer();
 
@@ -72,6 +76,8 @@ class GameState extends ChangeNotifier {
   }
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
+    _isPreparing = true;
+
     await loadSounds();
 
     if (puzzle != null) {
@@ -116,6 +122,8 @@ class GameState extends ChangeNotifier {
 
     shouldCelebrateWin = false;
     isSolved = checkWin();
+
+    _isPreparing = false;
     notifyListeners();
   }
 

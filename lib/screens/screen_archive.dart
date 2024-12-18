@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/data/web_storage.dart';
 import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/style.dart';
 import '../data/load.dart';
 import '../utility/hover.dart';
@@ -62,13 +61,11 @@ class _PuzzlesListState extends State<PuzzlesList> {
   @override
   void initState() {
     super.initState();
-    try {
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (_controller.position.hasContentDimensions) {
         _controller.jumpTo(_controller.position.maxScrollExtent);
-      });
-    } catch (e) {
-      debug("Error jumping to bottom of list: $e");
-    }
+      }
+    });
   }
 
   @override

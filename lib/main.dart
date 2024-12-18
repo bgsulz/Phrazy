@@ -33,9 +33,8 @@ final _router = GoRouter(
     ),
     GoRoute(
       path: '/demo',
-      builder: (context, state) {
-        return PhrazyScreen(child: GameScreen(puzzle: Puzzle.demo()));
-      },
+      builder: (context, state) =>
+          PhrazyScreen(child: GameScreen(puzzle: Puzzle.demo())),
     ),
     GoRoute(
         path: '/games',

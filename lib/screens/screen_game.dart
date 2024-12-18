@@ -27,17 +27,8 @@ class GameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<GameState>(context, listen: false);
-
-    return FutureBuilder(
-      future: state.prepare(date: date, puzzle: puzzle),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SelectionArea(child: _buildPage(state, context));
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+    state.prepare(date: date, puzzle: puzzle);
+    return SelectionArea(child: _buildPage(state, context));
   }
 
   Widget _buildPage(GameState state, BuildContext context) {
@@ -51,6 +42,7 @@ class GameScreen extends StatelessWidget {
             children: [
               Consumer<GameState>(
                 builder: (context, value, child) {
+                  if (value.isPreparing) return const SizedBox.shrink();
                   // Hack city
                   if (value.shouldCelebrateWin) {
                     Future.delayed(const Duration(milliseconds: 0), () {
@@ -63,9 +55,25 @@ class GameScreen extends StatelessWidget {
               const TitleText(),
               const SizedBox(height: 16),
               const PhrazyIcons(),
+              Consumer<GameState>(builder: (context, value, child) {
+                if (!value.isPreparing) return const SizedBox.shrink();
+                return const SizedBox(
+                  height: 460,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(Copy.downloading),
+                      SizedBox(height: 32),
+                      Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ],
+                  ),
+                );
+              }),
               Consumer<GameState>(
                 builder: (context, value, child) {
-                  if (value.isSolved) {
+                  if (value.isPreparing || value.isSolved) {
                     return const SizedBox.shrink();
                   }
                   return Column(
@@ -78,9 +86,12 @@ class GameScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Consumer<GameState>(
-                builder: (context, value, child) => PhrazySolveGrid(
-                  puzzle: value.loadedPuzzle,
-                ),
+                builder: (context, value, child) {
+                  if (value.isPreparing) return const SizedBox.shrink();
+                  return PhrazySolveGrid(
+                    puzzle: value.loadedPuzzle,
+                  );
+                },
               ),
               const SizedBox(height: 16),
               Row(
@@ -116,7 +127,8 @@ class GameScreen extends StatelessWidget {
     );
   }
 
-  IgnorePointer _confettiLayer(GameState state) {
+  Widget _confettiLayer(GameState state) {
+    if (!state.isPreparing) return const SizedBox.shrink();
     return IgnorePointer(
       child: SizedBox.expand(
         child: Center(
@@ -149,7 +161,7 @@ class GameScreen extends StatelessWidget {
 
   Widget _buildSolvedCelebration(
       BuildContext context, GameState state, Widget? widget) {
-    if (!state.isSolved) return const SizedBox.shrink();
+    if (state.isPreparing || !state.isSolved) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

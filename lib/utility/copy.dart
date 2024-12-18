@@ -27,6 +27,9 @@ class Copy {
         "You're a total pro."
       ][Random().nextInt(9)];
 
+  static const String downloading =
+      "Downloading your puzzle from the interwebs...";
+
   static String congratsString(int value) {
     final duration = Duration(milliseconds: value);
     var minutes = duration.inMinutes;
