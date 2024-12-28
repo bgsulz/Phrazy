@@ -54,9 +54,10 @@ class GameState extends ChangeNotifier {
   StopWatchTimer timer = StopWatchTimer();
 
   void recordTime() {
+    final time = timer.rawTime.value;
     WebStorage.saveTimeForDate(
       TimerState(
-        time: timer.rawTime.value,
+        time: time,
         isSolved: isSolved,
       ),
       loadedDate.toYMD,
@@ -76,6 +77,9 @@ class GameState extends ChangeNotifier {
   }
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
+    if (!loadedPuzzle.isEmpty && !isSolved) recordTime();
+    timer.onStopTimer();
+
     _isPreparing = true;
 
     await loadSounds();
@@ -120,8 +124,10 @@ class GameState extends ChangeNotifier {
     recalculateInteractions(List.generate(_gridState.length, (i) => i),
         isFirstTime: true);
 
-    shouldCelebrateWin = false;
-    isSolved = checkWin();
+    if (!isSolved) {
+      shouldCelebrateWin = false;
+      isSolved = checkWin();
+    }
 
     _isPreparing = false;
     notifyListeners();
@@ -144,12 +150,6 @@ class GameState extends ChangeNotifier {
 
     updateState(modifiedIndices);
     playSound("drop");
-
-    recordTime();
-    WebStorage.saveBoardForDate(
-      BoardState(wordBank: _wordBankState, grid: _gridState),
-      loadedDate.toYMD,
-    );
   }
 
   void reportDrop(GridPosition destination, GridPosition source) {
@@ -166,14 +166,7 @@ class GameState extends ChangeNotifier {
       if (!destination.isWordBank) destination.index,
       if (!source.isWordBank) source.index
     }.toList());
-
     playSound("drop");
-
-    recordTime();
-    WebStorage.saveBoardForDate(
-      BoardState(wordBank: _wordBankState, grid: _gridState),
-      loadedDate.toYMD,
-    );
   }
 
   void reportClicked(GridPosition source) {
@@ -194,6 +187,11 @@ class GameState extends ChangeNotifier {
     recalculateInteractions(modifiedIndices);
 
     isSolved = checkWin(shouldCelebrate: true);
+    recordTime();
+    WebStorage.saveBoardForDate(
+      BoardState(wordBank: _wordBankState, grid: _gridState),
+      loadedDate.toYMD,
+    );
     notifyListeners();
   }
 
@@ -253,6 +251,7 @@ class GameState extends ChangeNotifier {
     }
 
     timer.onStopTimer();
+    recordTime();
 
     if (shouldCelebrate) {
       playSound("win");

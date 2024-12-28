@@ -18,6 +18,8 @@ class Puzzle {
   final String? author;
   final PhraseMap? bundledInteractions;
 
+  bool get isEmpty => words.isEmpty;
+
   factory Puzzle.empty() => Puzzle(
         words: [],
         columns: 0,

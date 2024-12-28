@@ -27,7 +27,7 @@ class PuzzleTimer extends StatelessWidget {
   }
 
   void _recordTimeIfCurrentRoute(GameState gameState, BuildContext context) {
-    if (gameState.isSolved) return;
+    if (gameState.isPreparing || gameState.isSolved) return;
 
     final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
     final timer = gameState.timer;

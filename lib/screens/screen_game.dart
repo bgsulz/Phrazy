@@ -100,14 +100,16 @@ class GameScreen extends StatelessWidget {
                   Flexible(
                     child: Consumer<GameState>(
                       builder: (context, value, child) {
-                        return _buildByline(value);
+                        return value.isPreparing
+                            ? const SizedBox.shrink()
+                            : _buildByline(value);
                       },
                     ),
                   ),
                   const SizedBox(width: 8),
                   Consumer<GameState>(
                     builder: (context, value, child) {
-                      return value.isSolved
+                      return value.isPreparing || value.isSolved
                           ? const SizedBox.shrink()
                           : const Align(
                               alignment: Alignment.centerRight,
