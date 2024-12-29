@@ -119,6 +119,8 @@ class GameState extends ChangeNotifier {
       timer.setPresetTime(mSec: 0, add: false);
       isSolved = false;
     }
+    recordTime();
+
     if (!isSolved) timer.onStartTimer();
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i),
