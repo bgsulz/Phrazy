@@ -4,7 +4,7 @@ import 'package:phrazy/utility/copy.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'state.dart';
+import 'state/state.dart';
 import 'screens/screen.dart';
 import 'screens/screen_archive.dart';
 import 'screens/screen_game.dart';

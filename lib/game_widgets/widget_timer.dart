@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/utility/style.dart';
-import '../state.dart';
+import '../state/state.dart';
 import '../utility/ext.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/widget_knob.dart';
-import 'package:phrazy/state.dart';
+import 'package:phrazy/state/state.dart';
 
 class PhrazyInteractionGrid extends StatelessWidget {
   const PhrazyInteractionGrid({super.key, required this.interaction});

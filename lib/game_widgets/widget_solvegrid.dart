@@ -5,7 +5,7 @@ import 'package:phrazy/game_widgets/widget_overlayinteractions.dart';
 import 'package:phrazy/utility/style.dart';
 
 import 'widget_overlaywalls.dart';
-import '../state.dart';
+import '../state/state.dart';
 import '../data/puzzle.dart';
 import 'grid/phrazy_grid.dart';
 import 'package:flutter/material.dart';

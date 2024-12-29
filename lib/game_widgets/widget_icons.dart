@@ -6,7 +6,7 @@ import 'package:phrazy/data/web_storage.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:phrazy/utility/style.dart';
 import '../game_widgets/demo.dart';
-import '../state.dart';
+import '../state/state.dart';
 import 'package:provider/provider.dart';
 import 'phrazy_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +34,7 @@ class PhrazyIcons extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(HugeIcons.strokeRoundedArchive),
-            onPressed: () => context.go('/games'),
+            onPressed: () => context.pushReplacement('/games'),
           ),
           const ClearIcon(),
           const PauseIcon(),
@@ -52,7 +52,7 @@ class PhrazyIcons extends StatelessWidget {
               text: "Try an easy one",
               onPressed: () {
                 context.pop();
-                context.go('/demo');
+                context.pushReplacement('/demo');
               }),
           ButtonData(
               text: "About game",

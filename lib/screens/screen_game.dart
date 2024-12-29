@@ -10,7 +10,7 @@ import 'package:vector_math/vector_math_64.dart';
 import 'package:confetti/confetti.dart';
 
 import '../game_widgets/phrazy_dialog.dart';
-import '../state.dart';
+import '../state/state.dart';
 import '../game_widgets/widget_timer.dart';
 import '../game_widgets/widget_icons.dart';
 import '../game_widgets/widget_solvegrid.dart';
@@ -220,7 +220,7 @@ class GameScreen extends StatelessWidget {
                 text: "Let's do today's!",
                 onPressed: () {
                   context.pop();
-                  context.go("/");
+                  context.pushReplacement("/");
                 },
               ),
             ButtonData(
@@ -266,7 +266,7 @@ class GameScreen extends StatelessWidget {
               IconButton(
                 icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
                 onPressed: () {
-                  context.go(
+                  context.pushReplacement(
                       '/games/${loadedDate.subtract(const Duration(days: 1, hours: 2)).toYMD}');
                 },
               ),
@@ -274,7 +274,7 @@ class GameScreen extends StatelessWidget {
               IconButton(
                 icon: const Icon(HugeIcons.strokeRoundedArrowRight01),
                 onPressed: () {
-                  context.go(
+                  context.pushReplacement(
                       '/games/${loadedDate.add(const Duration(days: 1, hours: 2)).toYMD}');
                 },
               ),

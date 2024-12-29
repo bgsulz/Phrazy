@@ -4,7 +4,7 @@ import 'package:phrazy/game_widgets/grid_position.dart';
 import 'package:phrazy/game_widgets/widget_emptycard.dart';
 import 'package:phrazy/game_widgets/widget_wordcard.dart';
 import 'package:phrazy/sound.dart';
-import 'package:phrazy/state.dart';
+import 'package:phrazy/state/state.dart';
 import 'package:phrazy/utility/style.dart';
 import 'package:provider/provider.dart';
 

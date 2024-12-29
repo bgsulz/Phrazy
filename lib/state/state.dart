@@ -3,12 +3,12 @@ import 'package:phrazy/data/web_storage.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:confetti/confetti.dart';
 
-import '../data/phrasetail.dart';
-import '../game_widgets/grid_position.dart';
-import '../data/load.dart';
-import '../sound.dart';
-import '../utility/ext.dart';
-import '../data/puzzle.dart';
+import '../../data/phrasetail.dart';
+import '../../game_widgets/grid_position.dart';
+import '../../data/load.dart';
+import '../../sound.dart';
+import '../../utility/ext.dart';
+import '../../data/puzzle.dart';
 
 enum SolutionState { unsolved, solved, failed }
 

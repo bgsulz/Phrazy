@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/data/phrasetail.dart';
 import 'package:phrazy/utility/style.dart';
-import '../state.dart';
+import '../state/state.dart';
 
 enum InteractionDirection { right, down }
 
