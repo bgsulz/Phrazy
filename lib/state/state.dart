@@ -119,9 +119,6 @@ class GameState extends ChangeNotifier {
       timer.setPresetTime(mSec: 0, add: false);
       isSolved = false;
     }
-    recordTime();
-
-    if (!isSolved) timer.onStartTimer();
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i),
         isFirstTime: true);
@@ -130,6 +127,10 @@ class GameState extends ChangeNotifier {
       shouldCelebrateWin = false;
       isSolved = checkWin();
     }
+    if (time != null && isSolved && !time.isSolved) {
+      recordTime();
+    }
+    if (!isSolved) timer.onStartTimer();
 
     _isPreparing = false;
     notifyListeners();
