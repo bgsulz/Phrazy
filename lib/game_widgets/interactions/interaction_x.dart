@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/game_widgets/interactions/interaction_direction.dart';
-import 'package:phrazy/game_widgets/widget_knob.dart';
 import 'package:phrazy/utility/style.dart';
 
 class InteractionX extends StatelessWidget {
