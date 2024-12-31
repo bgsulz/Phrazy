@@ -3,7 +3,6 @@ import 'package:phrazy/game_widgets/interactions/interaction_knob.dart';
 import '../data/tail.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/grid/phrazy_grid.dart';
-import '../game_widgets/widget_knob.dart';
 import '../game_widgets/widget_overlaywalls.dart';
 import '../game_widgets/widget_wordcard.dart';
 
