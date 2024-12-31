@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../game_widgets/widget_knob.dart';
+import 'package:phrazy/game_widgets/interactions/interaction_direction.dart';
+import 'package:phrazy/game_widgets/interactions/interaction_knob.dart';
+import 'package:phrazy/game_widgets/interactions/interaction_x.dart';
 import '../state/state.dart';
 
 class OverlayInteractionGrid extends StatelessWidget {
@@ -13,23 +15,23 @@ class OverlayInteractionGrid extends StatelessWidget {
         return Stack(
           children: [
             if (interaction.interactsDown)
-              PhrazyKnob(
+              InteractionKnob(
                 direction: InteractionDirection.down,
                 interaction: interaction,
                 cardSize: constraints,
               )
             else if (interaction.tailDown.isFail)
-              PhrazyX(
+              InteractionX(
                   direction: InteractionDirection.down,
                   constraints: constraints),
             if (interaction.interactsRight)
-              PhrazyKnob(
+              InteractionKnob(
                 direction: InteractionDirection.right,
                 interaction: interaction,
                 cardSize: constraints,
               )
             else if (interaction.tailRight.isFail)
-              PhrazyX(
+              InteractionX(
                   direction: InteractionDirection.right,
                   constraints: constraints),
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phrazy/game_widgets/interactions/interaction_knob.dart';
 import '../data/tail.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/grid/phrazy_grid.dart';
@@ -53,13 +54,13 @@ class Demo extends StatelessWidget {
               if (index == 0) {
                 return Stack(
                   children: [
-                    PhrazyKnob.right(Tail.from(''), cardSize),
-                    PhrazyKnob.down(Tail.from(''), cardSize),
+                    InteractionKnob.right(Tail.from(''), cardSize),
+                    InteractionKnob.down(Tail.from(''), cardSize),
                   ],
                 );
               }
               if (index == 1) {
-                return PhrazyKnob.right(Tail.from(''), cardSize);
+                return InteractionKnob.right(Tail.from(''), cardSize);
               }
               return const SizedBox.shrink();
             })
@@ -107,16 +108,16 @@ class Demo extends StatelessWidget {
               if (index == 0) {
                 return Stack(
                   children: [
-                    PhrazyKnob.right(
+                    InteractionKnob.right(
                       Tail.from('and early'),
                       cardSize,
                     ),
-                    PhrazyKnob.down(Tail.from(''), cardSize),
+                    InteractionKnob.down(Tail.from(''), cardSize),
                   ],
                 );
               }
               if (index == 1) {
-                return PhrazyKnob.down(Tail.from(''), cardSize);
+                return InteractionKnob.down(Tail.from(''), cardSize);
               }
               return const SizedBox.shrink();
             })

@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
-import '../data/tail.dart';
-import '../utility/style.dart';
-import '../state/state.dart';
+import 'package:phrazy/data/tail.dart';
+import 'package:phrazy/game_widgets/interactions/interaction_direction.dart';
+import 'package:phrazy/game_widgets/widget_knob.dart';
+import 'package:phrazy/state/state.dart';
+import 'package:phrazy/utility/style.dart';
 
-enum InteractionDirection { right, down }
-
-class PhrazyKnob extends StatelessWidget {
-  const PhrazyKnob({
+class InteractionKnob extends StatelessWidget {
+  const InteractionKnob({
     super.key,
     required this.direction,
     required this.interaction,
@@ -19,16 +19,16 @@ class PhrazyKnob extends StatelessWidget {
   final Interaction interaction;
   final BoxConstraints cardSize;
 
-  factory PhrazyKnob.right(Tail tail, Size cardSize) {
-    return PhrazyKnob(
+  factory InteractionKnob.right(Tail tail, Size cardSize) {
+    return InteractionKnob(
       direction: InteractionDirection.right,
       interaction: Interaction(tailRight: tail),
       cardSize: BoxConstraints.tight(cardSize),
     );
   }
 
-  factory PhrazyKnob.down(Tail tail, Size cardSize) {
-    return PhrazyKnob(
+  factory InteractionKnob.down(Tail tail, Size cardSize) {
+    return InteractionKnob(
       direction: InteractionDirection.down,
       interaction: Interaction(tailDown: tail),
       cardSize: BoxConstraints.tight(cardSize),
@@ -103,44 +103,6 @@ class PhrazyKnob extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class PhrazyX extends StatelessWidget {
-  const PhrazyX({
-    super.key,
-    required this.direction,
-    required this.constraints,
-  });
-
-  final InteractionDirection direction;
-  final BoxConstraints constraints;
-
-  @override
-  Widget build(BuildContext context) {
-    final width = constraints.maxWidth / 2.5;
-    final height = constraints.maxHeight / 2.5;
-
-    var offset = direction == InteractionDirection.down
-        ? Offset(constraints.maxWidth / 2, constraints.maxHeight)
-        : Offset(constraints.maxWidth, constraints.maxHeight / 2);
-
-    return Transform.translate(
-      offset: offset.translate(-width / 2, -height / 2),
-      child: SizedBox(
-        width: width,
-        height: height,
-        child: const FittedBox(
-          child: Padding(
-            padding: EdgeInsets.all(4),
-            child: Icon(
-              HugeIcons.strokeRoundedCancel02,
-              color: Style.noColor,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

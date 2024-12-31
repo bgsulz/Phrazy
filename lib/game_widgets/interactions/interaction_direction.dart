@@ -1,0 +1,1 @@
+enum InteractionDirection { right, down }
