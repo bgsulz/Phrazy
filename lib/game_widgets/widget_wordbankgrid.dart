@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/game_widgets/grid_position.dart';
-import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/game_widgets/grid/phrazy_tile.dart';
-import 'package:phrazy/utility/style.dart';
+import '../game_widgets/grid_position.dart';
+import '../game_widgets/phrazy_box.dart';
+import '../game_widgets/grid/phrazy_tile.dart';
+import '../utility/style.dart';
 import '../data/puzzle.dart';
 import 'grid/phrazy_grid.dart';
 
-class PhrazyWordbank extends StatelessWidget {
-  const PhrazyWordbank({
+class WordbankGrid extends StatelessWidget {
+  const WordbankGrid({
     super.key,
     required this.bank,
   });

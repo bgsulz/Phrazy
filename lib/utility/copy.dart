@@ -1,5 +1,5 @@
+import '../utility/ext.dart';
 import 'dart:math';
-import 'package:phrazy/utility/ext.dart';
 
 class Copy {
   static const String gameName = "Phrazy";

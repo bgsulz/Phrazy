@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:phrazy/data/web_storage.dart';
-import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/utility/style.dart';
+import '../data/web_storage/web_storage.dart';
+import '../game_widgets/phrazy_box.dart';
+import '../utility/style.dart';
 import '../data/load.dart';
 import '../utility/hover.dart';
 import '../state/state.dart';
@@ -69,11 +69,6 @@ class _PuzzlesListState extends State<PuzzlesList> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   if (_controller.position.hasContentDimensions) {
-    //     _controller.jumpTo(_controller.position.maxScrollExtent);
-    //   }
-    // });
   }
 
   @override
@@ -108,8 +103,6 @@ class PuzzleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     print("building ${date.toYMD}");
     var loadedTime = WebStorage.loadTimeForDate(date.toYMD);
-    // if (loadedTime != null)
-    // print("loaded time ${loadedTime?.time.toDisplayTime} for ${date.toYMD}");
     var displayTime = context.mounted ? loadedTime?.toString() ?? "" : "";
 
     var isStarted = loadedTime != null;

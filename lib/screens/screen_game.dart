@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:phrazy/data/load.dart';
-import 'package:phrazy/data/puzzle.dart';
-import 'package:phrazy/utility/copy.dart';
+import '../data/load.dart';
+import '../data/puzzle.dart';
+import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:confetti/confetti.dart';
@@ -79,7 +79,7 @@ class GameScreen extends StatelessWidget {
                   return Column(
                     children: [
                       const SizedBox(height: 16),
-                      PhrazyWordbank(bank: value.loadedPuzzle.words)
+                      WordbankGrid(bank: value.loadedPuzzle.words)
                     ],
                   );
                 },
@@ -88,7 +88,7 @@ class GameScreen extends StatelessWidget {
               Consumer<GameState>(
                 builder: (context, value, child) {
                   if (value.isPreparing) return const SizedBox.shrink();
-                  return PhrazySolveGrid(
+                  return SolveGrid(
                     puzzle: value.loadedPuzzle,
                   );
                 },
@@ -113,7 +113,7 @@ class GameScreen extends StatelessWidget {
                           ? const SizedBox.shrink()
                           : const Align(
                               alignment: Alignment.centerRight,
-                              child: PuzzleTimer(),
+                              child: SolveTimer(),
                             );
                     },
                   ),

@@ -1,5 +1,7 @@
-import 'package:phrazy/data/load.dart';
-import 'package:phrazy/data/phrasetail.dart';
+import 'dart:math';
+
+import '../data/load.dart';
+import '../data/tail.dart';
 
 enum TileData { empty, filled, wallRight, wallDown, wallBoth }
 
@@ -80,43 +82,37 @@ class Puzzle {
   }
 
   bool isDownWallBetween(int top, int bottom) {
-    if (top < 0 || bottom < 0) return false;
-    return grid[top] == TileData.wallDown || grid[top] == TileData.wallBoth;
+    final minIndex = min(top, bottom);
+    if (minIndex < 0) return false;
+    return grid[minIndex] == TileData.wallDown ||
+        grid[minIndex] == TileData.wallBoth;
   }
 
   bool isRightWallBetween(int left, int right) {
-    if (left < 0 || right < 0) return false;
-    return grid[left] == TileData.wallRight || grid[left] == TileData.wallBoth;
+    final minIndex = min(left, right);
+    if (minIndex < 0) return false;
+    return grid[minIndex] == TileData.wallRight ||
+        grid[minIndex] == TileData.wallBoth;
   }
 
-  bool isAtTop(int index) => index < columns;
-  bool isAtBottom(int index) => index >= grid.length - columns;
-  bool isAtLeft(int index) => index % columns == 0;
-  bool isAtRight(int index) => (index + 1) % columns == 0;
-
-  int getUp(int index) {
-    var res = isAtTop(index) ? -1 : index - columns;
-    if (isBlocked(res) || isDownWallBetween(res, index)) res = -1;
+  int _getAdjacent(int index, int offset, bool Function(int, int) isWallBetween,
+      bool isEdge) {
+    var res = isEdge ? -1 : index + offset;
+    if (isBlocked(res) || isWallBetween(index, res)) res = -1;
     return res;
   }
 
-  int getLeft(int index) {
-    var res = isAtLeft(index) ? -1 : index - 1;
-    if (isBlocked(res) || isRightWallBetween(res, index)) res = -1;
-    return res;
-  }
+  int getUp(int index) =>
+      _getAdjacent(index, -columns, isDownWallBetween, index < columns);
 
-  int getRight(int index) {
-    var res = isAtRight(index) ? -1 : index + 1;
-    if (isBlocked(res) || isRightWallBetween(index, res)) res = -1;
-    return res;
-  }
+  int getLeft(int index) =>
+      _getAdjacent(index, -1, isRightWallBetween, index % columns == 0);
 
-  int getDown(int index) {
-    var res = isAtBottom(index) ? -1 : index + columns;
-    if (isBlocked(res) || isDownWallBetween(index, res)) res = -1;
-    return res;
-  }
+  int getRight(int index) =>
+      _getAdjacent(index, 1, isRightWallBetween, (index + 1) % columns == 0);
+
+  int getDown(int index) => _getAdjacent(
+      index, columns, isDownWallBetween, index >= grid.length - columns);
 
   (int up, int left, int right, int down) getSurrounding(int index) {
     return (

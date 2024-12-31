@@ -1,5 +1,5 @@
-import 'package:phrazy/data/web_storage.dart';
-import 'package:phrazy/utility/debug.dart';
+import '../data/web_storage/web_storage.dart';
+import '../utility/debug.dart';
 import 'package:soundpool/soundpool.dart';
 
 Soundpool pool = Soundpool.fromOptions();

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/utility/style.dart';
+import '../utility/style.dart';
 import '../state/state.dart';
 import '../utility/ext.dart';
 import 'package:provider/provider.dart';
 
-class PuzzleTimer extends StatelessWidget {
-  const PuzzleTimer({super.key});
+class SolveTimer extends StatelessWidget {
+  const SolveTimer({super.key});
 
   @override
   Widget build(BuildContext context) {

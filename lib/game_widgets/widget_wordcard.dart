@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/utility/style.dart';
+import '../game_widgets/phrazy_box.dart';
+import '../utility/style.dart';
 
 class WordCard extends StatelessWidget {
   final String word;

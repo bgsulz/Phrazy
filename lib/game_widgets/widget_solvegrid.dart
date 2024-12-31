@@ -1,8 +1,8 @@
-import 'package:phrazy/game_widgets/grid_position.dart';
-import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/game_widgets/grid/phrazy_tile.dart';
-import 'package:phrazy/game_widgets/widget_overlayinteractions.dart';
-import 'package:phrazy/utility/style.dart';
+import '../game_widgets/grid_position.dart';
+import '../game_widgets/phrazy_box.dart';
+import '../game_widgets/grid/phrazy_tile.dart';
+import '../game_widgets/widget_overlayinteractions.dart';
+import '../utility/style.dart';
 
 import 'widget_overlaywalls.dart';
 import '../state/state.dart';
@@ -11,8 +11,8 @@ import 'grid/phrazy_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PhrazySolveGrid extends StatelessWidget {
-  const PhrazySolveGrid({required this.puzzle, super.key});
+class SolveGrid extends StatelessWidget {
+  const SolveGrid({required this.puzzle, super.key});
 
   final Puzzle puzzle;
 
@@ -42,7 +42,7 @@ class PhrazySolveGrid extends StatelessWidget {
               columnCount: puzzle.columns,
               itemHeight: itemHeight,
               builder: (index) {
-                return PhrazyInteractionGrid(
+                return OverlayInteractionGrid(
                   interaction: gameState.interactionState[index],
                 );
               },
@@ -52,7 +52,7 @@ class PhrazySolveGrid extends StatelessWidget {
             columnCount: puzzle.columns,
             itemHeight: itemHeight,
             builder: (index) {
-              return PhrazyWallOverlay(
+              return OverlayWallGrid(
                 data: puzzle.grid[index],
               );
             },

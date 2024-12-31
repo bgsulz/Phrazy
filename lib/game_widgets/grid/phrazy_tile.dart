@@ -1,11 +1,13 @@
+import '../grid_position.dart';
+import '../widget_emptycard.dart';
+import '../widget_wordcard.dart';
+import '../grid/card_drop_data.dart';
+import '../../data/puzzle.dart';
+import '../../sound.dart';
+import '../../state/state.dart';
+import '../../utility/style.dart';
+
 import 'package:flutter/material.dart';
-import 'package:phrazy/data/puzzle.dart';
-import 'package:phrazy/game_widgets/grid_position.dart';
-import 'package:phrazy/game_widgets/widget_emptycard.dart';
-import 'package:phrazy/game_widgets/widget_wordcard.dart';
-import 'package:phrazy/sound.dart';
-import 'package:phrazy/state/state.dart';
-import 'package:phrazy/utility/style.dart';
 import 'package:provider/provider.dart';
 
 class PhrazyTile extends StatefulWidget {
@@ -112,11 +114,4 @@ class _PhrazyTileState extends State<PhrazyTile> {
       outlineColor: Style.backgroundColorLight,
     );
   }
-}
-
-class CardDropData {
-  final Size size;
-  final GridPosition position;
-
-  const CardDropData({required this.size, required this.position});
 }

@@ -1,4 +1,4 @@
-import 'phrasetail.dart';
+import 'tail.dart';
 
 class Interaction {
   Interaction({

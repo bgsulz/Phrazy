@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/data/phrasetail.dart';
-import 'package:phrazy/data/puzzle.dart';
-import 'package:phrazy/game_widgets/grid/phrazy_grid.dart';
-import 'package:phrazy/game_widgets/widget_knob.dart';
-import 'package:phrazy/game_widgets/widget_overlaywalls.dart';
-import 'package:phrazy/game_widgets/widget_wordcard.dart';
+import '../data/tail.dart';
+import '../data/puzzle.dart';
+import '../game_widgets/grid/phrazy_grid.dart';
+import '../game_widgets/widget_knob.dart';
+import '../game_widgets/widget_overlaywalls.dart';
+import '../game_widgets/widget_wordcard.dart';
 
 class Demo extends StatelessWidget {
   static const double cardWidth = 160, cardHeight = 80;
@@ -93,7 +93,7 @@ class Demo extends StatelessWidget {
           responsiveHeight: false,
           builder: (index) {
             if (index == 2) {
-              return const PhrazyWallOverlay(data: TileData.wallRight);
+              return const OverlayWallGrid(data: TileData.wallRight);
             }
             return const SizedBox.shrink();
           },

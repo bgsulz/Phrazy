@@ -51,12 +51,10 @@ class Style {
 
   static TextStyle get titleMedium => titleLarge.copyWith(
         fontSize: 32,
-        // letterSpacing: 2.0,
       );
 
   static TextStyle get titleSmall => titleLarge.copyWith(
         fontSize: 20,
-        // letterSpacing: 2.0,
       );
 
   static TextStyle get bodyLarge {

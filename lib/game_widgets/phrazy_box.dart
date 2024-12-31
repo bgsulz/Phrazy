@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/utility/style.dart';
+import '../utility/style.dart';
 
 class PhrazyBox extends StatelessWidget {
   const PhrazyBox({

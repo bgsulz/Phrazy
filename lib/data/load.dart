@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:phrazy/data/phrasetail.dart';
-import 'package:phrazy/utility/debug.dart';
+import '../data/tail.dart';
+import '../utility/debug.dart';
 import '../data/puzzle.dart';
-// import '../utility/debug.dart';
 import '../utility/ext.dart';
 
 typedef PhraseMap = Map<String, List<Tail>>;
@@ -86,7 +85,6 @@ class Load {
       return puzzle;
     } on FirebaseException catch (f) {
       debug(f);
-      // rethrow;
     }
 
     return Puzzle.empty();

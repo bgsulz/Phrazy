@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:phrazy/data/web_storage.dart';
-import 'package:stop_watch_timer/stop_watch_timer.dart';
-import 'package:confetti/confetti.dart';
-
-import '../../data/phrasetail.dart';
+import '../data/web_storage/board_save.dart';
+import '../data/web_storage/timer_save.dart';
+import '../data/web_storage/web_storage.dart';
+import '../data/tail.dart';
 import '../../game_widgets/grid_position.dart';
 import '../../data/load.dart';
 import '../../sound.dart';
 import '../../utility/ext.dart';
 import '../../data/puzzle.dart';
+
+import 'package:flutter/material.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
+import 'package:confetti/confetti.dart';
 
 enum SolutionState { unsolved, solved, failed }
 
@@ -56,7 +58,7 @@ class GameState extends ChangeNotifier {
   void recordTime() {
     final time = timer.rawTime.value;
     WebStorage.saveTimeForDate(
-      TimerState(
+      TimerSave(
         time: time,
         isSolved: isSolved,
       ),
@@ -192,7 +194,7 @@ class GameState extends ChangeNotifier {
     isSolved = checkWin(shouldCelebrate: true);
     recordTime();
     WebStorage.saveBoardForDate(
-      BoardState(wordBank: _wordBankState, grid: _gridState),
+      BoardSave(wordBank: _wordBankState, grid: _gridState),
       loadedDate.toYMD,
     );
     notifyListeners();

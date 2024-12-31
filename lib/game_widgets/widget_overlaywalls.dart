@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:phrazy/utility/style.dart';
+import '../utility/style.dart';
 import '../data/puzzle.dart';
 
-class PhrazyWallOverlay extends StatelessWidget {
-  const PhrazyWallOverlay({
+class OverlayWallGrid extends StatelessWidget {
+  const OverlayWallGrid({
     required this.data,
     super.key,
   });
