@@ -55,8 +55,8 @@ class GameState extends ChangeNotifier {
 
   StopWatchTimer timer = StopWatchTimer();
 
-  void recordTime() {
-    final time = timer.rawTime.value;
+  void recordTime({int? overrideTime}) {
+    final time = overrideTime ?? timer.rawTime.value;
     WebStorage.saveTimeForDate(
       TimerSave(
         time: time,
@@ -79,7 +79,10 @@ class GameState extends ChangeNotifier {
   }
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
-    if (!loadedPuzzle.isEmpty && !isSolved) recordTime();
+    if (!loadedPuzzle.isEmpty && !isSolved) {
+      print("Saving time on the way out.");
+      recordTime();
+    }
     timer.onStopTimer();
 
     _isPreparing = true;
@@ -130,7 +133,8 @@ class GameState extends ChangeNotifier {
       isSolved = checkWin();
     }
     if (time != null && isSolved && !time.isSolved) {
-      recordTime();
+      timer.setPresetTime(mSec: time.time, add: false);
+      recordTime(overrideTime: time.time);
     }
     if (!isSolved) timer.onStartTimer();
 
@@ -192,6 +196,7 @@ class GameState extends ChangeNotifier {
     recalculateInteractions(modifiedIndices);
 
     isSolved = checkWin(shouldCelebrate: true);
+    print("Saving time in response to updated state.");
     recordTime();
     WebStorage.saveBoardForDate(
       BoardSave(wordBank: _wordBankState, grid: _gridState),
@@ -256,7 +261,6 @@ class GameState extends ChangeNotifier {
     }
 
     timer.onStopTimer();
-    recordTime();
 
     if (shouldCelebrate) {
       playSound("win");

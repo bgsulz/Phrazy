@@ -101,7 +101,6 @@ class PuzzleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("building ${date.toYMD}");
     var loadedTime = WebStorage.loadTimeForDate(date.toYMD);
     var displayTime = context.mounted ? loadedTime?.toString() ?? "" : "";
 
