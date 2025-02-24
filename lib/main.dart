@@ -1,3 +1,6 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:phrazy/utility/events.dart';
+
 import '../utility/copy.dart';
 
 import 'firebase_options.dart';
@@ -25,6 +28,7 @@ class Phrazy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Events.logVisit();
     return ChangeNotifierProvider(
       create: (context) => GameState(),
       child: MaterialApp.router(

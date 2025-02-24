@@ -1,3 +1,5 @@
+import 'package:phrazy/utility/events.dart';
+
 import '../data/web_storage/board_save.dart';
 import '../data/web_storage/timer_save.dart';
 import '../data/web_storage/web_storage.dart';
@@ -128,8 +130,8 @@ class GameState extends ChangeNotifier {
     recalculateInteractions(List.generate(_gridState.length, (i) => i),
         isFirstTime: true);
 
+    shouldCelebrateWin = false;
     if (!isSolved) {
-      shouldCelebrateWin = false;
       isSolved = checkWin();
     }
     if (time != null && isSolved && !time.isSolved) {
@@ -263,6 +265,7 @@ class GameState extends ChangeNotifier {
     timer.onStopTimer();
 
     if (shouldCelebrate) {
+      Events.logWin(date: loadedDate);
       playSound("win");
       confetti.play();
       shouldCelebrateWin = true;
