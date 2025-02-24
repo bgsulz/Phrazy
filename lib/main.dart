@@ -1,4 +1,3 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:phrazy/utility/events.dart';
 
 import '../utility/copy.dart';
