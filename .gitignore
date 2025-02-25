@@ -45,3 +45,7 @@ app.*.map.json
 # Firebase
 .firebase/
 lib/firebase_options.dart
+
+# Trying out Aider
+.aider*
+.env

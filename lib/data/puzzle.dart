@@ -2,10 +2,11 @@ import 'dart:math';
 
 import '../data/load.dart';
 import '../data/tail.dart';
+import 'puzzle_interface.dart';
 
 enum TileData { empty, filled, wallRight, wallDown, wallBoth }
 
-class Puzzle {
+class Puzzle implements PuzzleInterface {
   Puzzle(
       {required this.words,
       required this.columns,

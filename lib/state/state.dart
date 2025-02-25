@@ -97,7 +97,8 @@ class GameState extends ChangeNotifier {
     } else {
       loadedDate =
           date?.copyWith(hour: 12) ?? DateTime.now().copyWith(hour: 12);
-      loadedPuzzle = await Load.puzzleForDate(loadedDate);
+      final load = Load(dailiesCollectionName: "dailies", puzzlesCollectionName: "puzzles");
+      loadedPuzzle = await load.puzzleForDate(loadedDate);
     }
 
     _wordBankState = loadedPuzzle.words;

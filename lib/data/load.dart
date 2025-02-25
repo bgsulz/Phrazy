@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../core/puzzle_loader.dart';
 import '../data/tail.dart';
 import '../utility/debug.dart';
 import '../data/puzzle.dart';
@@ -15,6 +17,14 @@ class Load {
 
   static String path = 'phrases.yaml';
   static PhraseMap _phrases = {};
+
+  final String dailiesCollectionName;
+  final String puzzlesCollectionName;
+
+  Load({
+    required this.dailiesCollectionName,
+    required this.puzzlesCollectionName,
+  });
 
   static Future<PhraseMap> _loadPhrasesForPuzzle(Puzzle puzzle) async {
     if (puzzle.bundledInteractions != null) {
@@ -51,34 +61,21 @@ class Load {
     return puzzle;
   }
 
-  static Future<Puzzle> puzzleForDate(DateTime date) async {
-    final firestore = FirebaseFirestore.instance;
+  Future<Puzzle> puzzleForDate(DateTime date) async {
+    final puzzleLoader = PuzzleLoader<Puzzle>(
+      dailiesCollectionName: dailiesCollectionName,
+      puzzlesCollectionName: puzzlesCollectionName,
+      fromFirebase: Puzzle.fromFirebase,
+    );
 
     try {
-      final dailiesCollection = firestore.collection("dailies");
-      final dailyDocRef = dailiesCollection.doc(date.toYMD);
-      final dailyDocSnap = await dailyDocRef.get();
-      if (!dailyDocSnap.exists) {
-        throw Exception("Today's daily (${date.toYMD}) does not exist.");
-      }
+      final puzzleData = await puzzleLoader.loadPuzzleForDate(date);
 
-      final dailyData = dailyDocSnap.data() as Map<String, dynamic>;
-      final id = dailyData['id'] as int;
-
-      final docRef = await firestore
-          .collection("puzzles")
-          .where("id", isEqualTo: id)
-          .limit(1)
-          .get()
-          .then((snap) => snap.docs.first.reference);
-
-      final puzzleDocSnap = await docRef.get();
-      if (!puzzleDocSnap.exists) {
+      if (puzzleData == null) {
         throw Exception("Today's puzzle does not exist.");
       }
 
-      final puzzleData = puzzleDocSnap.data() as Map<String, dynamic>;
-      final puzzle = Puzzle.fromFirebase(puzzleData);
+      final puzzle = puzzleLoader.fromFirebase(puzzleData);
 
       _phrases = await _loadPhrasesForPuzzle(puzzle);
 
