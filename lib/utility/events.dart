@@ -1,5 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:phrazy/utility/ext.dart';
+import 'package:phrazy/core/ext_ymd.dart';
 
 class Events {
   static final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;

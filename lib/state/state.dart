@@ -1,3 +1,4 @@
+import 'package:phrazy/core/ext_ymd.dart';
 import 'package:phrazy/utility/events.dart';
 
 import '../data/web_storage/board_save.dart';
@@ -97,7 +98,8 @@ class GameState extends ChangeNotifier {
     } else {
       loadedDate =
           date?.copyWith(hour: 12) ?? DateTime.now().copyWith(hour: 12);
-      final load = Load(dailiesCollectionName: "dailies", puzzlesCollectionName: "puzzles");
+      final load = Load(
+          dailiesCollectionName: "dailies", puzzlesCollectionName: "puzzles");
       loadedPuzzle = await load.puzzleForDate(loadedDate);
     }
 

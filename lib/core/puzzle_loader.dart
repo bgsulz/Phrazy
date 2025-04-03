@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:phrazy/data/puzzle_interface.dart';
+import 'package:phrazy/core/puzzle_interface.dart';
+import 'package:phrazy/core/ext_ymd.dart';
 
 class PuzzleLoader<T extends PuzzleInterface> {
   final String dailiesCollectionName;
@@ -16,9 +17,8 @@ class PuzzleLoader<T extends PuzzleInterface> {
   Future<int?> getPuzzleIdForDate(DateTime date) async {
     try {
       final firestore = FirebaseFirestore.instance;
-      final dailyDocRef = firestore
-          .collection(dailiesCollectionName)
-          .doc(date.toIso8601String().split('T')[0]);
+      final dailyDocRef =
+          firestore.collection(dailiesCollectionName).doc(date.toYMD);
       final dailyDocSnap = await dailyDocRef.get();
 
       if (!dailyDocSnap.exists) {

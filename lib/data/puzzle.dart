@@ -2,7 +2,7 @@ import 'dart:math';
 
 import '../data/load.dart';
 import '../data/tail.dart';
-import 'puzzle_interface.dart';
+import '../core/puzzle_interface.dart';
 
 enum TileData { empty, filled, wallRight, wallDown, wallBoth }
 
