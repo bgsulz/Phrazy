@@ -6,6 +6,7 @@ class PhrazyBox extends StatelessWidget {
     super.key,
     this.elevation,
     this.rounded,
+    this.borderRadius,
     this.outlineWidth,
     this.outlineColor,
     required this.child,
@@ -18,10 +19,12 @@ class PhrazyBox extends StatelessWidget {
   final Color? outlineColor;
   final Widget child;
   final Color color;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {
-    var radius = BorderRadius.circular((rounded ?? true) ? 16 : 1);
+    var radius =
+        borderRadius ?? BorderRadius.circular((rounded ?? true) ? 16 : 1);
 
     return Material(
       borderRadius: radius,

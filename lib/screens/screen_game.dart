@@ -5,6 +5,7 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
 import '../data/load.dart';
 import '../data/puzzle.dart';
+import '../game_widgets/widget_connectorbank.dart';
 import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 import 'package:vector_math/vector_math_64.dart';
@@ -81,6 +82,24 @@ class GameScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 16),
                       WordbankGrid(bank: value.loadedPuzzle.words)
+                    ],
+                  );
+                },
+              ),
+              Consumer<GameState>(
+                builder: (context, value, child) {
+                  if (value.isPreparing ||
+                      value.isSolved ||
+                      puzzle?.connectors == null) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      ConnectorBank(
+                        allConnectors: puzzle!.connectors!,
+                        activeConnectors: value.activeConnections,
+                      )
                     ],
                   );
                 },

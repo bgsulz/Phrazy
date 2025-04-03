@@ -45,6 +45,7 @@ class GameState extends ChangeNotifier {
 
   List<String> _wordBankState = [];
   List<String> _gridState = [];
+  List<String> activeConnections = [];
   List<Interaction> interactionState = [];
 
   bool isSolved = false;
@@ -240,6 +241,13 @@ class GameState extends ChangeNotifier {
         playLinkSound = playLinkSound || interaction.isValid;
       }
     }
+
+    activeConnections = interactionState.expand((x) {
+      return [
+        if (x.tailDown.isValid) x.tailDown.connector,
+        if (x.tailRight.isValid) x.tailRight.connector
+      ];
+    }).toList();
 
     if (!isFirstTime && playLinkSound) {
       playSound("link");

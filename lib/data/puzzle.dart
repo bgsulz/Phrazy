@@ -12,7 +12,8 @@ class Puzzle implements PuzzleInterface {
       required this.columns,
       required this.grid,
       this.author,
-      this.bundledInteractions});
+      this.bundledInteractions,
+      this.connectors});
 
   final List<String> words;
   final int columns;
@@ -20,6 +21,7 @@ class Puzzle implements PuzzleInterface {
 
   final String? author;
   final PhraseMap? bundledInteractions;
+  final List<String>? connectors;
 
   bool get isEmpty => words.isEmpty;
 
@@ -37,10 +39,11 @@ class Puzzle implements PuzzleInterface {
       grid: _parseGrid(grid),
       bundledInteractions: {
         'center': [Tail.from('stage'), Tail.from('field')],
-        'stage': [Tail.from('fright')],
-        'field': [Tail.from('day')],
+        'stage': [Tail.from('to fright')],
+        'field': [Tail.from('to day')],
       },
       author: "The Tutorializer",
+      // connectors: ['to', 'to'],
     );
   }
 
@@ -51,6 +54,9 @@ class Puzzle implements PuzzleInterface {
       columns: int.parse(gridData[0]),
       grid: _parseGrid(gridData[1]),
       author: data.containsKey('author') ? data['author'] : null,
+      connectors: data.containsKey('connectors')
+          ? List<String>.from(data['connectors'])
+          : null, // Parse connectors from Firebase data
     );
   }
 
@@ -74,7 +80,7 @@ class Puzzle implements PuzzleInterface {
 
   @override
   String toString() {
-    return 'Puzzle{words: $words, columns: $columns}';
+    return 'Puzzle{words: $words, columns: $columns, connectors: $connectors}';
   }
 
   bool isBlocked(int index) {
