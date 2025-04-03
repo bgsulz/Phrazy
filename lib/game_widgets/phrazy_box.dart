@@ -27,6 +27,8 @@ class PhrazyBox extends StatelessWidget {
         borderRadius ?? BorderRadius.circular((rounded ?? true) ? 16 : 1);
 
     return Material(
+      type:
+          color.alpha == 255 ? MaterialType.canvas : MaterialType.transparency,
       borderRadius: radius,
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -38,15 +40,19 @@ class PhrazyBox extends StatelessWidget {
                   color: outlineColor ?? Style.textColor,
                 ),
           borderRadius: radius,
+          boxShadow: null,
         ),
         decoration: BoxDecoration(
           color: color,
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 0,
-                color: Colors.black.withOpacity(0.25),
-                offset: Offset(0, elevation ?? 8))
-          ],
+          boxShadow: elevation == 0
+              ? null
+              : [
+                  BoxShadow(
+                    blurRadius: 0,
+                    color: Colors.black.withOpacity(0.25),
+                    offset: Offset(0, elevation ?? 8),
+                  )
+                ],
           borderRadius: radius,
         ),
         child: child,

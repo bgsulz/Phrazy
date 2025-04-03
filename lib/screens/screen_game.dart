@@ -90,14 +90,14 @@ class GameScreen extends StatelessWidget {
                 builder: (context, value, child) {
                   if (value.isPreparing ||
                       value.isSolved ||
-                      puzzle?.connectors == null) {
+                      value.loadedPuzzle.connectors == null) {
                     return const SizedBox.shrink();
                   }
                   return Column(
                     children: [
                       const SizedBox(height: 16),
                       ConnectorBank(
-                        allConnectors: puzzle!.connectors!,
+                        allConnectors: value.loadedPuzzle.connectors!,
                         activeConnectors: value.activeConnections,
                       )
                     ],
