@@ -9,7 +9,8 @@ class Copy {
       "Words next to each other must form\nphrases or compound words.";
   static const String rules2 =
       "If there's a wall between two words,\nthey don't need to form a phrase.\n\n"
-      "Words might be separated by a common word:\na, an, and, the, of";
+      "Some phrases might be joined together\nby a 'connector word.'\n\n"
+      "If that's the case,\nthe connector word appears above the puzzle.";
   static const String info =
       "${Copy.gameName} was created and programmed by me, Ben Sulzinsky.\n"
       "Thanks to my brother for helping with the design of the game.\n"

@@ -39,8 +39,8 @@ class Puzzle implements PuzzleInterface {
       grid: _parseGrid(grid),
       bundledInteractions: {
         'center': [Tail.from('stage'), Tail.from('field')],
-        'stage': [Tail.from('to fright')],
-        'field': [Tail.from('to day')],
+        'stage': [Tail.from('fright')],
+        'field': [Tail.from('day')],
       },
       author: "The Tutorializer",
       // connectors: ['to', 'to'],

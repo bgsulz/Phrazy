@@ -52,7 +52,7 @@ class ConnectorBank extends StatelessWidget {
 
     return PhrazyBox(
       elevation: 0,
-      color: Style.backgroundColor,
+      color: Colors.transparent,
       outlineColor: Style.backgroundColorLight,
       child: SizedBox(
         width: double.infinity,
