@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/utility/copy.dart';
 import '../data/web_storage/web_storage.dart';
 import '../game_widgets/phrazy_box.dart';
 import '../utility/style.dart';
@@ -150,12 +151,23 @@ class PuzzleCard extends StatelessWidget {
                           style: const TextStyle(color: Style.textColor),
                         ),
                         const Spacer(),
-                        Text(
-                          displayTime,
-                          maxLines: null,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(color: Style.textColor),
-                        )
+                        Row(
+                          children: [
+                            if (isSolved)
+                              Icon(
+                                Copy.congratsIcon(loadedTime.time),
+                                color: Style.textColor,
+                                size: 16,
+                              ),
+                            const SizedBox(width: 4),
+                            Text(
+                              displayTime,
+                              maxLines: null,
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(color: Style.textColor),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),

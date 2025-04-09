@@ -184,8 +184,16 @@ class GameScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        Text(Copy.congratsString(state.timer.rawTime.value),
-            style: Style.displayMedium),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Copy.congratsIcon(state.timer.rawTime.value),
+                color: Style.yesColor),
+            const SizedBox(width: 8),
+            Text(Copy.congratsString(state.timer.rawTime.value),
+                style: Style.displayMedium),
+          ],
+        ),
         const SizedBox(height: 4),
         _buildCelebrationText(context, state),
         const SizedBox(height: 16),

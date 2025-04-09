@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
+
 import '../utility/ext.dart';
 import 'dart:math';
 
@@ -47,6 +50,17 @@ class Copy {
     if (minutes < 5) return "Nicely done!";
     if (minutes < 10) return "Solved!";
     return "Stuck with it!";
+  }
+
+  static IconData congratsIcon(int value) {
+    final duration = Duration(milliseconds: value);
+    var minutes = duration.inMinutes;
+    if (minutes < 1) return HugeIcons.strokeRoundedZap;
+    if (minutes < 2) return HugeIcons.strokeRoundedMotorbike01;
+    if (minutes < 3) return HugeIcons.strokeRoundedClean;
+    if (minutes < 5) return HugeIcons.strokeRoundedChampion;
+    if (minutes < 10) return HugeIcons.strokeRoundedAward02;
+    return HugeIcons.strokeRoundedBoxingGlove;
   }
 
   static String summaryString(DateTime date, String displayTime) {

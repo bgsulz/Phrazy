@@ -54,6 +54,36 @@ class ConnectorBank extends StatelessWidget {
             'Both allConnectorsOverride and activeConnectorsOverride must be provided together or not at all.');
   @override
   Widget build(BuildContext context) {
+    return PhrazyBox(
+      shouldAnimate: true,
+      elevation: 0,
+      color: Colors.transparent,
+      outlineColor: Style.backgroundColorLight,
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: _ConnectorBankContent(
+            allConnectorsOverride: allConnectorsOverride,
+            activeConnectorsOverride: activeConnectorsOverride,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ConnectorBankContent extends StatelessWidget {
+  final List<String>? allConnectorsOverride;
+  final List<String>? activeConnectorsOverride;
+
+  const _ConnectorBankContent({
+    this.allConnectorsOverride,
+    this.activeConnectorsOverride,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<GameState>(
       builder: (context, value, child) {
         final List<String> allConnectors =
@@ -62,31 +92,20 @@ class ConnectorBank extends StatelessWidget {
             activeConnectorsOverride ?? value.activeConnections;
         final List<String> remainingActive = List.from(activeConnectors);
 
-        return PhrazyBox(
-          elevation: 0,
-          color: Colors.transparent,
-          outlineColor: Style.backgroundColorLight,
-          child: SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Wrap(
-                spacing: 4.0,
-                runSpacing: 4.0,
-                children: allConnectors.map((connectorText) {
-                  bool isChecked = false;
-                  if (remainingActive.contains(connectorText)) {
-                    isChecked = true;
-                    remainingActive.remove(connectorText);
-                  }
-                  return Connector(
-                    text: connectorText,
-                    isCheckedOff: isChecked,
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
+        return Wrap(
+          spacing: 4.0,
+          runSpacing: 4.0,
+          children: allConnectors.map((connectorText) {
+            bool isChecked = false;
+            if (remainingActive.contains(connectorText)) {
+              isChecked = true;
+              remainingActive.remove(connectorText);
+            }
+            return Connector(
+              text: connectorText,
+              isCheckedOff: isChecked,
+            );
+          }).toList(),
         );
       },
     );
