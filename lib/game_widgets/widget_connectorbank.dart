@@ -41,11 +41,13 @@ class Connector extends StatelessWidget {
 class ConnectorBank extends StatelessWidget {
   final List<String>? allConnectorsOverride;
   final List<String>? activeConnectorsOverride;
+  final bool shouldAnimateOverride;
 
   const ConnectorBank({
     super.key,
     this.allConnectorsOverride,
     this.activeConnectorsOverride,
+    this.shouldAnimateOverride = true,
   }) : assert(
             (allConnectorsOverride == null &&
                     activeConnectorsOverride == null) ||
@@ -55,7 +57,7 @@ class ConnectorBank extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PhrazyBox(
-      shouldAnimate: true,
+      shouldAnimate: shouldAnimateOverride,
       elevation: 0,
       color: Colors.transparent,
       outlineColor: Style.backgroundColorLight,

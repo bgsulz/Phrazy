@@ -24,6 +24,7 @@ dependencies:
   stop_watch_timer: ^3.2.1
   assorted_layout_widgets: ^9.0.2
 
+  flavor_text: ^1.0.0
   hugeicons: ^0.0.7
   confetti: ^0.8.0
   widget_and_text_animator: ^1.1.5

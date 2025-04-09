@@ -8,15 +8,17 @@ class Copy {
   static const String gameName = "Phrazy";
   static const String title = Copy.gameName;
   static const String subtitle = 'Assemble the words into phrases!';
-  static const String rules1 = "Drag the words into the grid!\n\n"
-      "All neighboring words must connect\nto form phrases or compound words.";
+  static const String rules1 =
+      "<style fontWeight='bold'>Drag</style> the words into the grid!\n\n"
+      "All neighboring words must <style fontWeight='bold'>connect</style>\n"
+      "to form <style fontWeight='bold'>phrases</style> or <style fontWeight='bold'>compound words</style>.";
   static const String rules2 =
-      "If there's a wall between two words,\nthey don't need to form a phrase.\n\n"
-      "Some phrases have a 'connector word.'\n"
+      "If there's a <style fontWeight='bold'>wall</style> between two words,\nthey don't need to form a phrase.\n\n"
+      "Some phrases have a '<style fontWeight='bold'>connector word</style>.'\n"
       "All connector words appear above the puzzle.";
   static const String info =
       "Howdy, I'm Ben. I made ${Copy.gameName} and most of its daily puzzles.\n\n"
-      "Thanks to the guest puzzle creators (see byline beneath certain puzzle grids!)\n"
+      "Thanks to the <style fontWeight='bold'>guest puzzle creators</style> (see byline beneath certain puzzle grids!)\n"
       "Thanks to my brother for helping with the design of the game.\n"
       "Thanks to Kenney for the sound effects.\n";
 

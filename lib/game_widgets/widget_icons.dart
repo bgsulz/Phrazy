@@ -1,4 +1,5 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:flavor_text/flavor_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -77,15 +78,15 @@ class PhrazyIcons extends StatelessWidget {
               onPressed: () {
                 context.pop();
               })
-        ], children: const [
-          Text(Copy.rules1),
-          SizedBox(height: 16),
-          Demo(type: 1),
-          SizedBox(height: 16),
-          Text(Copy.rules2),
-          SizedBox(height: 16),
-          Demo(type: 2),
-          SizedBox(height: 16),
+        ], children: [
+          FlavorText(Copy.rules1),
+          const SizedBox(height: 16),
+          const Demo(type: 1),
+          const SizedBox(height: 16),
+          FlavorText(Copy.rules2),
+          const SizedBox(height: 16),
+          const Demo(type: 2),
+          const SizedBox(height: 16),
         ]);
       },
     );
@@ -107,8 +108,8 @@ class PhrazyIcons extends StatelessWidget {
               Uri.parse("https://bgsulz.com"),
             ),
           ),
-        ], children: const [
-          Text(Copy.info),
+        ], children: [
+          FlavorText(Copy.info),
         ]);
       },
     );

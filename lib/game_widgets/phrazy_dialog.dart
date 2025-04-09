@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utility/style.dart';
 
-class PhrazyDialog extends StatefulWidget {
+class PhrazyDialog extends StatelessWidget {
   const PhrazyDialog({
     super.key,
     required this.title,
@@ -14,37 +15,10 @@ class PhrazyDialog extends StatefulWidget {
   final List<ButtonData> buttons;
 
   @override
-  State<PhrazyDialog> createState() => _PhrazyDialogState();
-}
-
-class _PhrazyDialogState extends State<PhrazyDialog>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
-    );
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
+    return WidgetAnimator(
+      incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+          curve: Curves.easeOutCirc),
       child: Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
@@ -63,23 +37,23 @@ class _PhrazyDialogState extends State<PhrazyDialog>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.title, style: Style.titleMedium),
+                    Text(title, style: Style.titleMedium),
                     const SizedBox(height: 16),
-                    ...widget.children,
-                    if (widget.buttons.isNotEmpty) const SizedBox(height: 16),
+                    ...children,
+                    if (buttons.isNotEmpty) const SizedBox(height: 16),
                     Align(
                       alignment: Alignment.centerRight,
                       child: Wrap(
                         alignment: WrapAlignment.end,
                         spacing: 16,
                         runSpacing: 16,
-                        children: List.generate(widget.buttons.length, (index) {
-                          final button = widget.buttons[index];
+                        children: List.generate(buttons.length, (index) {
+                          final button = buttons[index];
                           return TextButton(
                             onPressed: button.onPressed,
                             style: TextButton.styleFrom(
                               backgroundColor: button.color ??
-                                  (index == widget.buttons.length - 1
+                                  (index == buttons.length - 1
                                       ? Style.yesColor
                                       : Style.cardColor),
                               foregroundColor: Style.textColor,

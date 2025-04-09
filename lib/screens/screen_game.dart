@@ -338,7 +338,9 @@ class TitleText extends StatelessWidget {
                     curve: Curves.easeOutCirc,
                   ),
                   atRestEffect: WidgetRestingEffects.wave(
-                    effectStrength: 10,
+                    duration: const Duration(seconds: 3),
+                    delay: const Duration(milliseconds: 500),
+                    effectStrength: 5,
                     curve: Curves.easeInOutCirc,
                   ),
                   style: const TextStyle(
