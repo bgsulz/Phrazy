@@ -18,10 +18,10 @@ class SolveGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameState = Provider.of<GameState>(context, listen: false);
     final itemHeight = 320 / puzzle.columns;
 
     return PhrazyBox(
+      shouldAnimate: true,
       color: Style.textColor,
       rounded: true,
       child: Stack(
@@ -36,17 +36,24 @@ class SolveGrid extends StatelessWidget {
                   position: GridPosition(index: index, isWordBank: false));
             },
           ),
-          if (!gameState.isPaused)
-            PhrazyGrid(
-              itemCount: puzzle.grid.length,
-              columnCount: puzzle.columns,
-              itemHeight: itemHeight,
-              builder: (index) {
-                return OverlayInteractionGrid(
-                  interaction: gameState.interactionState[index],
+          Consumer<GameState>(
+            builder: (context, gameState, child) {
+              if (!gameState.isPaused) {
+                return PhrazyGrid(
+                  itemCount: puzzle.grid.length,
+                  columnCount: puzzle.columns,
+                  itemHeight: itemHeight,
+                  builder: (index) {
+                    return OverlayInteractionGrid(
+                      interaction: gameState.interactionState[index],
+                    );
+                  },
                 );
-              },
-            ),
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
           PhrazyGrid(
             itemCount: puzzle.grid.length,
             columnCount: puzzle.columns,

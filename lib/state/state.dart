@@ -203,7 +203,7 @@ class GameState extends ChangeNotifier {
   void updateState(List<int> modifiedIndices) {
     recalculateInteractions(modifiedIndices);
 
-    if (isSolved && checkWin(shouldCelebrate: true)) {
+    if (!isSolved && checkWin(shouldCelebrate: true)) {
       _currentState = GameLifecycleState.solved;
     }
     debug("Saving time in response to updated state.");

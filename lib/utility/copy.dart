@@ -5,14 +5,15 @@ class Copy {
   static const String gameName = "Phrazy";
   static const String title = Copy.gameName;
   static const String subtitle = 'Assemble the words into phrases!';
-  static const String rules1 = "Drag and drop the words into the grid!\n\n"
-      "Words next to each other must form\nphrases or compound words.";
+  static const String rules1 = "Drag the words into the grid!\n\n"
+      "All neighboring words must connect\nto form phrases or compound words.";
   static const String rules2 =
       "If there's a wall between two words,\nthey don't need to form a phrase.\n\n"
-      "Some phrases might be joined together\nby a 'connector word.'\n\n"
-      "If that's the case,\nthe connector word appears above the puzzle.";
+      "Some phrases have a 'connector word.'\n"
+      "All connector words appear above the puzzle.";
   static const String info =
-      "${Copy.gameName} was created and programmed by me, Ben Sulzinsky.\n"
+      "Howdy, I'm Ben. I made ${Copy.gameName} and most of its daily puzzles.\n\n"
+      "Thanks to the guest puzzle creators (see byline beneath certain puzzle grids!)\n"
       "Thanks to my brother for helping with the design of the game.\n"
       "Thanks to Kenney for the sound effects.\n";
 
@@ -35,7 +36,7 @@ class Copy {
         "Summoning your puzzle from the digital ether...",
         "Grabbing your puzzle from a random hard drive somewhere...",
         "Delivering your puzzle by carrier pigeon...",
-      ][Random().nextInt(7)];
+      ][Random().nextInt(6)];
 
   static String congratsString(int value) {
     final duration = Duration(milliseconds: value);

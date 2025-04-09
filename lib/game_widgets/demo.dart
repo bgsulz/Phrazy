@@ -78,8 +78,8 @@ class Demo extends StatelessWidget {
         SizedBox(
           width: cardSize.width * gridSize.width,
           child: const ConnectorBank(
-            allConnectors: ['and'],
-            activeConnectors: ['and'],
+            allConnectorsOverride: ['and'],
+            activeConnectorsOverride: ['and'],
           ),
         ),
         const SizedBox(height: 16),

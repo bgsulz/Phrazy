@@ -40,10 +40,6 @@ class InteractionKnob extends StatelessWidget {
     final height = min(cardSize.maxHeight / 2.5, 24.0);
 
     final connectsDown = direction == InteractionDirection.down;
-    const lineThickness = 6.0;
-    final lineWidth = connectsDown ? cardSize.maxWidth : lineThickness;
-    final lineHeight = !connectsDown ? cardSize.maxHeight : lineThickness;
-
     final offset = connectsDown
         ? Offset(cardSize.maxWidth / 2, cardSize.maxHeight)
         : Offset(cardSize.maxWidth, cardSize.maxHeight / 2);
@@ -54,12 +50,10 @@ class InteractionKnob extends StatelessWidget {
 
     return Stack(
       children: [
-        Transform.translate(
-          offset: offset.translate(-lineWidth / 2, -lineHeight / 2),
-          child: SizedBox(
-            width: lineWidth,
-            height: lineHeight,
-            child: const Material(color: Style.yesColor),
+        CustomPaint(
+          painter: LinePainter(
+            direction: direction,
+            cardSize: cardSize,
           ),
         ),
         Transform.translate(
@@ -103,5 +97,37 @@ class InteractionKnob extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class LinePainter extends CustomPainter {
+  final InteractionDirection direction;
+  final BoxConstraints cardSize;
+
+  LinePainter({required this.direction, required this.cardSize});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final connectsDown = direction == InteractionDirection.down;
+    const lineThickness = 6.0;
+
+    final start = connectsDown
+        ? Offset(lineThickness / 2, cardSize.maxHeight)
+        : Offset(cardSize.maxWidth, lineThickness / 2);
+    final end = connectsDown
+        ? Offset(cardSize.maxWidth - lineThickness / 2, cardSize.maxHeight)
+        : Offset(cardSize.maxWidth, cardSize.maxHeight - lineThickness / 2);
+
+    final paint = Paint()
+      ..color = Style.yesColor
+      ..strokeWidth = lineThickness
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawLine(start, end, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

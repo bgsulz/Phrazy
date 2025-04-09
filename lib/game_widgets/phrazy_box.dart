@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utility/style.dart';
 
 class PhrazyBox extends StatelessWidget {
@@ -9,6 +10,7 @@ class PhrazyBox extends StatelessWidget {
     this.borderRadius,
     this.outlineWidth,
     this.outlineColor,
+    this.shouldAnimate = false,
     required this.child,
     required this.color,
   });
@@ -20,13 +22,14 @@ class PhrazyBox extends StatelessWidget {
   final Widget child;
   final Color color;
   final BorderRadius? borderRadius;
+  final bool shouldAnimate;
 
   @override
   Widget build(BuildContext context) {
     var radius =
         borderRadius ?? BorderRadius.circular((rounded ?? true) ? 16 : 1);
 
-    return Material(
+    var material = Material(
       type:
           color.alpha == 255 ? MaterialType.canvas : MaterialType.transparency,
       borderRadius: radius,
@@ -58,5 +61,13 @@ class PhrazyBox extends StatelessWidget {
         child: child,
       ),
     );
+
+    if (shouldAnimate) {
+      return WidgetAnimator(
+          incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+              curve: Curves.easeOutCirc),
+          child: material);
+    } else
+      return material;
   }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 
 <head>
   <base href="$FLUTTER_BASE_HREF">
@@ -7,19 +7,40 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description"
-    content="A new daily crossword-style puzzle! Place words from a word bank into a grid, and form pairs of words into phrases or compound words.">
+    content="Phrazy: A daily word puzzle game. Arrange words to form connections in a crossword-like grid. Relaxing and quick word game!">
+  <meta name="keywords" content="word puzzle, daily puzzle, word game, crossword, phrazy, brain game">
+  <meta name="author" content="Phrazy Game">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Phrazy">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="icons/Icon-512.png">
+
+  <!-- Android meta tags & icons -->
+  <link rel="icon" type="image/png" href="icons/Icon-512.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- <link rel="icon" type="image/png" href="favicon.png" /> -->
 
-  <title>Phrazy | Like a crossword, but for phrases!</title>
+  <title>Phrazy | Daily word puzzle game</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://phrazy.fun/">
+  <meta property="og:title" content="Phrazy | Daily word puzzle game">
+  <meta property="og:description"
+    content="Phrazy: A daily word puzzle game. Arrange words to form connections in a crossword-like grid. Relaxing and quick!">
+  <meta property="og:image" content="icons/Icon-512.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://phrazy.fun/">
+  <meta property="twitter:title" content="Phrazy | Daily word puzzle game">
+  <meta property="twitter:description"
+    content="Phrazy: A daily word puzzle game. Arrange words to form connections in a crossword-like grid. Relaxing and quick!">
+  <meta property="twitter:image" content="icons/Icon-512.png">
 
   <style>
     h1 {
@@ -28,28 +49,10 @@
       left: -9999px;
     }
   </style>
-  <h1><a href="/games">Archive | Play puzzles from past days</a></h1>
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4498713711122554"
-     crossorigin="anonymous"></script>
+  <h1><a href="/games">Archive | Phrazy puzzles from the past</a></h1>
 </head>
 
 <body>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyBgp09lOpaQVL0AC8CHHYEA3gI4_ZorJe8",
-      authDomain: "phrase-crossword-game.firebaseapp.com",
-      projectId: "phrase-crossword-game",
-      storageBucket: "phrase-crossword-game.firebasestorage.app",
-      messagingSenderId: "555223979064",
-      appId: "1:555223979064:web:e876fcaaab2a0dcd0282cd",
-      measurementId: "G-3KJQ7FRDJR"
-    };
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 

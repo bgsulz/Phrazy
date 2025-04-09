@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../data/load.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/widget_connectorbank.dart';
@@ -93,14 +94,8 @@ class GameScreen extends StatelessWidget {
                       value.loadedPuzzle.connectors == null) {
                     return const SizedBox.shrink();
                   }
-                  return Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      ConnectorBank(
-                        allConnectors: value.loadedPuzzle.connectors!,
-                        activeConnectors: value.activeConnections,
-                      )
-                    ],
+                  return const Column(
+                    children: [SizedBox(height: 16), ConnectorBank()],
                   );
                 },
               ),
@@ -283,20 +278,27 @@ class GameScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (!isFirst)
-              IconButton(
-                icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
-                onPressed: () {
-                  context.pushReplacement(
-                      '/games/${loadedDate.subtract(const Duration(days: 1, hours: 2)).toYMD}');
-                },
+              Tooltip(
+                message: "Previous day's Phrazy",
+                child: IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+                  onPressed: () {
+                    context.pushReplacement(
+                        '/games/${loadedDate.subtract(const Duration(days: 1, hours: 2)).toYMD}');
+                  },
+                ),
               ),
+            const Spacer(),
             if (!isLast)
-              IconButton(
-                icon: const Icon(HugeIcons.strokeRoundedArrowRight01),
-                onPressed: () {
-                  context.pushReplacement(
-                      '/games/${loadedDate.add(const Duration(days: 1, hours: 2)).toYMD}');
-                },
+              Tooltip(
+                message: "Next day's Phrazy",
+                child: IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedArrowRight01),
+                  onPressed: () {
+                    context.pushReplacement(
+                        '/games/${loadedDate.add(const Duration(days: 1, hours: 2)).toYMD}');
+                  },
+                ),
               ),
           ],
         ),
@@ -316,21 +318,29 @@ class TitleText extends StatelessWidget {
         alignment: Alignment.center,
         transform: Matrix4.compose(
             Vector3(0, 10, 0), Quaternion.euler(0, 0, -0.11), Vector3.all(1.2)),
-        child: const OverflowBox(
+        child: OverflowBox(
           maxHeight: double.infinity,
           child: FittedBox(
             child: Center(
               child: SelectionContainer.disabled(
-                child: Text(
+                child: TextAnimator(
                   Copy.title,
-                  style: TextStyle(
+                  incomingEffect:
+                      WidgetTransitionEffects.incomingSlideInFromBottom(
+                    curve: Curves.easeOutCirc,
+                  ),
+                  atRestEffect: WidgetRestingEffects.wave(
+                    effectStrength: 10,
+                    curve: Curves.easeInOutCirc,
+                  ),
+                  style: const TextStyle(
                     color: Style.textColor,
                     fontSize: 999,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -48,
                     fontVariations: [FontVariation.weight(800)],
                   ),
-                  overflow: TextOverflow.visible,
+                  // overflow: TextOverflow.visible,
                   textAlign: TextAlign.center,
                 ),
               ),

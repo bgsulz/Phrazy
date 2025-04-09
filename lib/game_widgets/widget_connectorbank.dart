@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/phrazy_box.dart';
+import 'package:phrazy/state/state.dart';
 import 'package:phrazy/utility/style.dart';
+import 'package:provider/provider.dart';
 
 class Connector extends StatelessWidget {
   final String text;
@@ -37,44 +39,56 @@ class Connector extends StatelessWidget {
 }
 
 class ConnectorBank extends StatelessWidget {
-  final List<String> allConnectors;
-  final List<String> activeConnectors;
+  final List<String>? allConnectorsOverride;
+  final List<String>? activeConnectorsOverride;
 
   const ConnectorBank({
     super.key,
-    required this.allConnectors,
-    required this.activeConnectors,
-  });
-
+    this.allConnectorsOverride,
+    this.activeConnectorsOverride,
+  }) : assert(
+            (allConnectorsOverride == null &&
+                    activeConnectorsOverride == null) ||
+                (allConnectorsOverride != null &&
+                    activeConnectorsOverride != null),
+            'Both allConnectorsOverride and activeConnectorsOverride must be provided together or not at all.');
   @override
   Widget build(BuildContext context) {
-    final List<String> remainingActive = List.from(activeConnectors);
+    return Consumer<GameState>(
+      builder: (context, value, child) {
+        final List<String> allConnectors =
+            allConnectorsOverride ?? value.loadedPuzzle.connectors!;
+        final List<String> activeConnectors =
+            activeConnectorsOverride ?? value.activeConnections;
+        final List<String> remainingActive = List.from(activeConnectors);
 
-    return PhrazyBox(
-      elevation: 0,
-      color: Colors.transparent,
-      outlineColor: Style.backgroundColorLight,
-      child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Wrap(
-            spacing: 4.0,
-            runSpacing: 4.0,
-            children: allConnectors.map((connectorText) {
-              bool isChecked = false;
-              if (remainingActive.contains(connectorText)) {
-                isChecked = true;
-                remainingActive.remove(connectorText);
-              }
-              return Connector(
-                text: connectorText,
-                isCheckedOff: isChecked,
-              );
-            }).toList(),
+        return PhrazyBox(
+          elevation: 0,
+          color: Colors.transparent,
+          outlineColor: Style.backgroundColorLight,
+          child: SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Wrap(
+                spacing: 4.0,
+                runSpacing: 4.0,
+                children: allConnectors.map((connectorText) {
+                  bool isChecked = false;
+                  if (remainingActive.contains(connectorText)) {
+                    isChecked = true;
+                    remainingActive.remove(connectorText);
+                  }
+                  return Connector(
+                    text: connectorText,
+                    isCheckedOff: isChecked,
+                  );
+                }).toList(),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
