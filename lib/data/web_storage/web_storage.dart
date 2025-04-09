@@ -54,7 +54,7 @@ class WebStorage {
   static void saveTimeForDate(TimerSave state, String date) {
     final stateString = state.toJson();
     _localStorage["${date}_time"] = stateString;
-    print("Saved time ${state.time}, ${state.isSolved} for date $date");
+    debug("Saved time ${state.time}, ${state.isSolved} for date $date");
   }
 
   static TimerSave? loadTimeForDate(String date) {

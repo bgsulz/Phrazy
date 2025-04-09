@@ -8,7 +8,7 @@ bool soundsInitialized = false;
 
 Future<void> loadSounds() async {
   if (WebStorage.isSafari) {
-    print("Safari detected.");
+    debug("Safari detected.");
     await Future.delayed(const Duration(seconds: 0));
     return;
   }

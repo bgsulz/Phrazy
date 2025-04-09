@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:phrazy/core/puzzle_interface.dart';
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/utility/debug.dart';
 
 class PuzzleLoader<T extends PuzzleInterface> {
   final String dailiesCollectionName;
@@ -22,20 +23,20 @@ class PuzzleLoader<T extends PuzzleInterface> {
       final dailyDocSnap = await dailyDocRef.get();
 
       if (!dailyDocSnap.exists) {
-        print("Daily document for ${date.toIso8601String()} does not exist.");
+        debug("Daily document for ${date.toIso8601String()} does not exist.");
         return null;
       }
 
       final dailyData = dailyDocSnap.data();
       if (dailyData == null || !dailyData.containsKey('id')) {
-        print(
+        debug(
             "Daily document for ${date.toIso8601String()} is missing the 'id' field.");
         return null;
       }
 
       return dailyData['id'] as int?;
     } catch (e) {
-      print("Error fetching puzzle ID: $e");
+      debug("Error fetching puzzle ID: $e");
       return null;
     }
   }
@@ -51,14 +52,14 @@ class PuzzleLoader<T extends PuzzleInterface> {
           .get();
 
       if (puzzleQuerySnapshot.docs.isEmpty) {
-        print("Puzzle with ID $puzzleId does not exist.");
+        debug("Puzzle with ID $puzzleId does not exist.");
         return null;
       }
 
       final puzzleDocSnap = puzzleQuerySnapshot.docs.first;
       return puzzleDocSnap.data();
     } catch (e) {
-      print("Error fetching puzzle  $e");
+      debug("Error fetching puzzle  $e");
       return null;
     }
   }

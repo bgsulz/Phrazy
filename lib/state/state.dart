@@ -1,4 +1,5 @@
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/events.dart';
 
 import '../data/web_storage/board_save.dart';
@@ -16,6 +17,8 @@ import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:confetti/confetti.dart';
 
 enum SolutionState { unsolved, solved, failed }
+
+enum GameLifecycleState { preparing, error, puzzle, solved }
 
 class Interaction {
   Interaction({
@@ -48,14 +51,15 @@ class GameState extends ChangeNotifier {
   List<String> activeConnections = [];
   List<Interaction> interactionState = [];
 
-  bool isSolved = false;
+  GameLifecycleState _currentState = GameLifecycleState.preparing;
+
+  bool get isSolved => _currentState == GameLifecycleState.solved;
   bool shouldCelebrateWin = false;
 
   bool _isPaused = false;
   bool get isPaused => _isPaused;
 
-  bool _isPreparing = false;
-  bool get isPreparing => _isPreparing;
+  bool get isPreparing => _currentState == GameLifecycleState.preparing;
 
   StopWatchTimer timer = StopWatchTimer();
 
@@ -84,12 +88,12 @@ class GameState extends ChangeNotifier {
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
     if (!loadedPuzzle.isEmpty && !isSolved) {
-      print("Saving time on the way out.");
+      debug("Saving time on the way out.");
       recordTime();
     }
     timer.onStopTimer();
 
-    _isPreparing = true;
+    _currentState = GameLifecycleState.preparing;
 
     await loadSounds();
 
@@ -110,7 +114,7 @@ class GameState extends ChangeNotifier {
     _gridState = List.generate(loadedPuzzle.grid.length, (_) => '');
     interactionState =
         List.generate(loadedPuzzle.grid.length, (_) => Interaction.empty);
-    isSolved = false;
+    _currentState = GameLifecycleState.puzzle;
 
     var state = WebStorage.loadBoardForDate(loadedDate.toYMD);
 
@@ -125,18 +129,17 @@ class GameState extends ChangeNotifier {
     var time = WebStorage.loadTimeForDate(loadedDate.toYMD);
     if (time != null && !wordsChanged) {
       timer.setPresetTime(mSec: time.time, add: false);
-      isSolved = time.isSolved;
+      if (time.isSolved) _currentState = GameLifecycleState.solved;
     } else {
       timer.setPresetTime(mSec: 0, add: false);
-      isSolved = false;
     }
 
     recalculateInteractions(List.generate(_gridState.length, (i) => i),
         isFirstTime: true);
 
     shouldCelebrateWin = false;
-    if (!isSolved) {
-      isSolved = checkWin();
+    if (!isSolved && checkWin()) {
+      _currentState = GameLifecycleState.solved;
     }
     if (time != null && isSolved && !time.isSolved) {
       timer.setPresetTime(mSec: time.time, add: false);
@@ -144,7 +147,6 @@ class GameState extends ChangeNotifier {
     }
     if (!isSolved) timer.onStartTimer();
 
-    _isPreparing = false;
     notifyListeners();
   }
 
@@ -201,8 +203,10 @@ class GameState extends ChangeNotifier {
   void updateState(List<int> modifiedIndices) {
     recalculateInteractions(modifiedIndices);
 
-    isSolved = checkWin(shouldCelebrate: true);
-    print("Saving time in response to updated state.");
+    if (isSolved && checkWin(shouldCelebrate: true)) {
+      _currentState = GameLifecycleState.solved;
+    }
+    debug("Saving time in response to updated state.");
     recordTime();
     WebStorage.saveBoardForDate(
       BoardSave(wordBank: _wordBankState, grid: _gridState),

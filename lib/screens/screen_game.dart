@@ -59,14 +59,14 @@ class GameScreen extends StatelessWidget {
               const PhrazyIcons(),
               Consumer<GameState>(builder: (context, value, child) {
                 if (!value.isPreparing) return const SizedBox.shrink();
-                return const SizedBox(
+                return SizedBox(
                   height: 460,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(Copy.downloading),
-                      SizedBox(height: 32),
-                      Center(
+                      const SizedBox(height: 32),
+                      const Center(
                         child: CircularProgressIndicator(),
                       ),
                     ],

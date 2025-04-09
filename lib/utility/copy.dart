@@ -28,8 +28,14 @@ class Copy {
         "You're a total pro."
       ][Random().nextInt(9)];
 
-  static const String downloading =
-      "Downloading your puzzle from the interwebs...";
+  static String get downloading => [
+        "Downloading your puzzle from the interwebs...",
+        "Politely requesting your puzzle from the server...",
+        "Retriving your puzzle from the binary soup...",
+        "Summoning your puzzle from the digital ether...",
+        "Grabbing your puzzle from a random hard drive somewhere...",
+        "Delivering your puzzle by carrier pigeon...",
+      ][Random().nextInt(7)];
 
   static String congratsString(int value) {
     final duration = Duration(milliseconds: value);
