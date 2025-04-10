@@ -65,9 +65,11 @@ class PhrazyBox extends StatelessWidget {
     if (shouldAnimate) {
       return WidgetAnimator(
           incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
-              curve: Curves.easeOutCirc),
+            curve: Curves.easeOutCirc,
+          ),
           child: material);
-    } else
+    } else {
       return material;
+    }
   }
 }

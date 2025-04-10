@@ -72,7 +72,8 @@ class Load {
       final puzzleData = await puzzleLoader.loadPuzzleForDate(date);
 
       if (puzzleData == null) {
-        throw Exception("Today's puzzle does not exist.");
+        debug("Today's puzzle does not exist. Returning an empty puzzle.");
+        return Puzzle.empty();
       }
 
       final puzzle = puzzleLoader.fromFirebase(puzzleData);
@@ -82,9 +83,8 @@ class Load {
       return puzzle;
     } on FirebaseException catch (f) {
       debug(f);
+      return Puzzle.empty();
     }
-
-    return Puzzle.empty();
   }
 
   static Tail isValidPhrase(String a, String b) {
