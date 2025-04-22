@@ -37,7 +37,7 @@ class InteractionKnob extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = min(cardSize.maxWidth / 2.5, 36.0);
-    final height = min(cardSize.maxHeight / 2.5, 24.0);
+    final height = min(cardSize.maxHeight / 2.5, 36.0);
 
     final connectsDown = direction == InteractionDirection.down;
     final offset = connectsDown
@@ -73,20 +73,27 @@ class InteractionKnob extends StatelessWidget {
               child: Center(
                 child: SelectionContainer.disabled(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: shouldUseIcon
                         ? const Padding(
-                            padding: EdgeInsets.all(2),
+                            padding: EdgeInsets.all(4),
                             child: Icon(
                               HugeIcons.strokeRoundedLink05,
                               color: Style.textColor,
                             ),
                           )
-                        : Text(
-                            connector,
-                            style: Style.bodySmall
-                                .copyWith(color: Style.textColor),
-                            textAlign: TextAlign.center,
+                        : Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                connector.replaceAll(" ", "\n"),
+                                style: Style.bodySmall.copyWith(
+                                    color: Style.textColor, height: 1.1),
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                              ),
+                            ),
                           ),
                   ),
                 ),
