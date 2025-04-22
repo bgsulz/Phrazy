@@ -87,7 +87,11 @@ class InteractionKnob extends StatelessWidget {
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Text(
-                                connector.replaceAll(" ", "\n"),
+                                connector
+                                        .split(" ")
+                                        .any((word) => word.length >= 3)
+                                    ? connector.replaceAll(" ", "\n")
+                                    : connector,
                                 style: Style.bodySmall.copyWith(
                                     color: Style.textColor, height: 1.1),
                                 textAlign: TextAlign.center,
