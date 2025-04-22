@@ -20,9 +20,8 @@ class NavigationArrows extends StatelessWidget {
         }
 
         final bool canGoBack = state.loadedDate.isAfter(Load.startDate);
-
         final bool canGoForward =
-            !state.loadedDate.isBefore(Load.endDate.copyWith(hour: 2));
+            state.loadedDate.isBefore(Load.endDate.copyWith(hour: 2));
 
         if (!canGoBack && !canGoForward) {
           return const SizedBox.shrink();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:phrazy/game_widgets/widget_navarrows.dart';
 import 'package:phrazy/game_widgets/widget_titletext.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
@@ -10,7 +9,6 @@ import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 import 'package:confetti/confetti.dart';
 
-import '../game_widgets/phrazy_dialog.dart';
 import '../state/state.dart';
 import '../game_widgets/widget_timer.dart';
 import '../game_widgets/widget_icons.dart';
@@ -80,8 +78,6 @@ class _GameScreenContent extends StatelessWidget {
     if (state.shouldCelebrateWin) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (context.mounted && state.shouldCelebrateWin) {
-          _showCelebration(context, state);
-
           state.acknowledgeWinCelebration();
         }
       });
@@ -94,45 +90,6 @@ class _GameScreenContent extends StatelessWidget {
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Copied to clipboard')),
-    );
-  }
-
-  void _showCelebration(BuildContext context, GameState state) {
-    return;
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return PhrazyDialog(
-          title: Copy.congratsString(state.timer.rawTime.value),
-          buttons: [
-            if (state.loadedDate.year < 1980)
-              ButtonData(
-                text: "Let's do today's!",
-                onPressed: () {
-                  Navigator.of(dialogContext).pop();
-                  context.pushReplacement("/");
-                },
-              ),
-            ButtonData(
-              text: "Admire grid",
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-            ButtonData(
-              text: "Copy results",
-              onPressed: () {
-                _copyResults(context, state);
-                Navigator.of(dialogContext).pop();
-              },
-            ),
-          ],
-          children: [
-            _buildCelebrationText(context, state),
-            const SizedBox(height: 16),
-          ],
-        );
-      },
     );
   }
 

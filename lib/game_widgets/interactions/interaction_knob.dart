@@ -72,23 +72,22 @@ class InteractionKnob extends StatelessWidget {
               color: Style.yesColor,
               child: Center(
                 child: SelectionContainer.disabled(
-                  child: FittedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: shouldUseIcon
-                          ? const Padding(
-                              padding: EdgeInsets.all(2),
-                              child: Icon(
-                                HugeIcons.strokeRoundedLink05,
-                                color: Style.textColor,
-                              ),
-                            )
-                          : Text(
-                              connector,
-                              style: Style.bodySmall
-                                  .copyWith(color: Style.textColor),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: shouldUseIcon
+                        ? const Padding(
+                            padding: EdgeInsets.all(2),
+                            child: Icon(
+                              HugeIcons.strokeRoundedLink05,
+                              color: Style.textColor,
                             ),
-                    ),
+                          )
+                        : Text(
+                            connector,
+                            style: Style.bodySmall
+                                .copyWith(color: Style.textColor),
+                            textAlign: TextAlign.center,
+                          ),
                   ),
                 ),
               ),
