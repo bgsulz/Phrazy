@@ -45,7 +45,13 @@ class Load {
           continue;
         }
         final head = result.id;
-        final tails = data.entries.map((e) => Tail(e.value, e.key));
+        final tails = data.entries
+            .where((e) =>
+                (puzzle.connectors?.contains(e.value) ?? false) ||
+                e.value == "" ||
+                e.value == " " ||
+                e.value == "-")
+            .map((e) => Tail(e.value, e.key));
         phraseMap[head] = tails.toList();
       }
 

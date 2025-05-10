@@ -83,23 +83,6 @@ class _GameScreenContent extends StatelessWidget {
       });
     }
   }
-
-  void _copyResults(BuildContext context, GameState value) {
-    final text = Copy.shareString(
-        value.loadedDate, value.timer.rawTime.value.toDisplayTime);
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Copied to clipboard')),
-    );
-  }
-
-  Widget _buildCelebrationText(BuildContext context, GameState value) {
-    return Text(
-      Copy.summaryString(
-          value.loadedDate, value.timer.rawTime.value.toDisplayTime),
-      style: Style.bodyMedium,
-    );
-  }
 }
 
 class _LoadingErrorIndicator extends StatelessWidget {
@@ -242,8 +225,8 @@ class _SolvedCelebrationSection extends StatelessWidget {
   const _SolvedCelebrationSection();
 
   void _copyResults(BuildContext context, GameState value) {
-    final text = Copy.shareString(
-        value.loadedDate, value.timer.rawTime.value.toDisplayTime);
+    final time = value.timer.rawTime.value;
+    final text = Copy.shareString(value.loadedDate, time.toDisplayTime, time);
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Copied to clipboard')),

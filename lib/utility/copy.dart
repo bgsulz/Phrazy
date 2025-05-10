@@ -70,10 +70,27 @@ class Copy {
     return 'You solved the ${Copy.gameName}$datePart in $displayTime.';
   }
 
-  static String shareString(DateTime date, String displayTime) {
+  static String shareString(DateTime date, String displayTime, int solveTime) {
     final datePart = date.year < 1980 ? 'demo' : date.toDisplayDate;
+    String emoji;
+    final duration = Duration(milliseconds: solveTime);
+    var minutes = duration.inMinutes;
+
+    if (minutes < 1) {
+      emoji = "⚡️";
+    } else if (minutes < 2) {
+      emoji = "🏍️";
+    } else if (minutes < 3) {
+      emoji = "🧹";
+    } else if (minutes < 5) {
+      emoji = "🏆";
+    } else if (minutes < 10) {
+      emoji = "🏅";
+    } else {
+      emoji = "🥊";
+    }
     return '${Copy.gameName} $datePart\n'
-        '$displayTime\n'
+        '$emoji $displayTime\n'
         'https://phrazy.fun';
   }
 }
