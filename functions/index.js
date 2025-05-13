@@ -88,7 +88,8 @@ exports.getFormattedLobbyScoreboardByDate = functions.https.onRequest(
     }
 
     try {
-      const docRef = db.doc(`lobbies/${lobbyName}/scores/${puzzleId}`);
+      const sanitizedLobbyName = lobbyName.trim().toLowerCase();
+      const docRef = db.doc(`lobbies/${sanitizedLobbyName}/scores/${puzzleId}`);
       const snapshot = await docRef.get();
 
       if (!snapshot.exists) {
