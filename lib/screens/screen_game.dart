@@ -354,16 +354,16 @@ class _SolvedCelebrationSection extends StatelessWidget {
       String lobbyCode, String playerName) async {
     await Lobby.saveToLobby(state, lobbyCode, playerName);
     if (!context.mounted) {
-      debug("context not mounted, early return");
+      debug("context not mounted after saving lobby, early return");
       return;
     }
-    context.pop();
     final data =
         await Lobby.getScoreboard(lobbyCode, state.loadedPuzzle.remoteId!);
     if (!context.mounted) {
-      debug("context not mounted, early return");
+      debug("context not mounted after getting scoreboard, early return");
       return;
     }
+    context.pop();
     showDialog(
       context: context,
       builder: (context) {
