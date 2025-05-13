@@ -134,7 +134,13 @@ exports.getFormattedLobbyScoreboardByDate = functions.https.onRequest(
       );
 
       let formattedString = "";
-      formattedString += `Phrazy ${dateString} - Lobby ${lobbyName}\n`;
+
+      const year = dateString.substring(0, 4);
+      const month = parseInt(dateString.substring(4, 6), 10);
+      const day = parseInt(dateString.substring(6, 8), 10);
+      const formattedDate = `${month}/${day}/${year}`;
+      
+      formattedString += `Phrazy ${formattedDate} - Lobby ${lobbyName}\n`;
 
       for (const [name, time] of sortedEntries) {
         const minutes = Math.floor(time / 60000);
