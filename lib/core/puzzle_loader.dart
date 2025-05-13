@@ -6,7 +6,7 @@ import 'package:phrazy/utility/debug.dart';
 class PuzzleLoader<T extends PuzzleInterface> {
   final String dailiesCollectionName;
   final String puzzlesCollectionName;
-  final T Function(Map<String, dynamic>) fromFirebase;
+  final T Function(Map<String, dynamic>, int?) fromFirebase;
 
   PuzzleLoader({
     required this.dailiesCollectionName,

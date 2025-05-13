@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:phrazy/data/lobby.dart';
+import 'package:phrazy/data/web_storage/web_storage.dart';
+import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/game_widgets/widget_navarrows.dart';
+import 'package:phrazy/game_widgets/widget_scoreboard.dart';
 import 'package:phrazy/game_widgets/widget_titletext.dart';
+import 'package:phrazy/utility/debug.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/widget_connectorbank.dart';
@@ -225,7 +231,7 @@ class _SolvedCelebrationSection extends StatelessWidget {
   const _SolvedCelebrationSection();
 
   void _copyResults(BuildContext context, GameState value) {
-    final time = value.timer.rawTime.value;
+    final time = value.time;
     final text = Copy.shareString(value.loadedDate, time.toDisplayTime, time);
     Clipboard.setData(ClipboardData(text: text));
     ScaffoldMessenger.of(context).showSnackBar(
@@ -235,8 +241,7 @@ class _SolvedCelebrationSection extends StatelessWidget {
 
   Widget _buildCelebrationText(BuildContext context, GameState value) {
     return Text(
-      Copy.summaryString(
-          value.loadedDate, value.timer.rawTime.value.toDisplayTime),
+      Copy.summaryString(value.loadedDate, value.time.toDisplayTime),
       style: Style.bodyMedium,
     );
   }
@@ -256,32 +261,145 @@ class _SolvedCelebrationSection extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Copy.congratsIcon(state.timer.rawTime.value),
-                    color: Style.yesColor),
+                Icon(Copy.congratsIcon(state.time), color: Style.yesColor),
                 const SizedBox(width: 8),
-                TextAnimator(Copy.congratsString(state.timer.rawTime.value),
+                TextAnimator(Copy.congratsString(state.time),
                     style: Style.displayMedium),
               ],
             ),
             const SizedBox(height: 4),
             _buildCelebrationText(context, state),
             const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  _copyResults(context, state);
-                },
-                style: TextButton.styleFrom(
-                  backgroundColor: Style.yesColor,
-                  foregroundColor: Style.textColor,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    _copyResults(context, state);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: Style.yesColor,
+                    foregroundColor: Style.textColor,
+                  ),
+                  child: const Text('Copy Results'),
                 ),
-                child: const Text('Copy Results'),
-              ),
+                const SizedBox(width: 8),
+                if (WebStorage.isDeveloperMode && state.loadedPuzzle.isRemote)
+                  TextButton(
+                    onPressed: () {
+                      _submitResultsToLobby(context, state);
+                    },
+                    child: const Text('Submit to Lobby'),
+                  ),
+              ],
             ),
           ],
         );
       },
+    );
+  }
+
+  void _submitResultsToLobby(BuildContext context, GameState state) {
+    String lobbyCode = '';
+    String playerName = '';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PhrazyDialog(
+          title: 'Submit to Lobby',
+          buttons: [
+            ButtonData(
+              text: 'Cancel',
+              onPressed: () {
+                context.pop();
+              },
+            ),
+            ButtonData(
+              text: 'Submit',
+              onPressed: () {
+                _saveToLobbyAsync(context, state, lobbyCode, playerName);
+              },
+            ),
+          ],
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter Lobby Code',
+                hintStyle: Style.bodyMedium,
+              ),
+              style: Style.bodyMedium,
+              onChanged: (value) {
+                lobbyCode = value;
+              },
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter Your Name',
+                hintStyle: Style.bodyMedium,
+              ),
+              style: Style.bodyMedium,
+              onChanged: (value) {
+                playerName = value;
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _saveToLobbyAsync(BuildContext context, GameState state,
+      String lobbyCode, String playerName) async {
+    await Lobby.saveToLobby(state, lobbyCode, playerName);
+    if (!context.mounted) {
+      debug("context not mounted, early return");
+      return;
+    }
+    context.pop();
+    final data =
+        await Lobby.getScoreboard(lobbyCode, state.loadedPuzzle.remoteId!);
+    if (!context.mounted) {
+      debug("context not mounted, early return");
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (context) {
+        return PhrazyDialog(title: "Submitted to lobby $lobbyCode!", buttons: [
+          ButtonData(
+            text: "Copy lobby to clipboard",
+            onPressed: () {
+              _copyLobby(context, state, lobbyCode, data);
+              context.pop();
+            },
+          ),
+          ButtonData(text: "Close", onPressed: context.pop),
+        ], children: [
+          ScoreboardDisplay(data)
+        ]);
+      },
+    );
+  }
+
+  void _copyLobby(BuildContext context, GameState state, String lobbyCode,
+      Map<String, int>? data) {
+    final buffer = StringBuffer();
+    if (data == null) return;
+
+    final sorted = data.entries.toList()
+      ..sort((a, b) => a.value.compareTo(b.value));
+
+    buffer
+        .writeln('Phrazy ${state.loadedDate.toDisplayDate} - Lobby $lobbyCode');
+    for (var entry in sorted) {
+      buffer.writeln('${entry.key} - ${entry.value.toDisplayTime}');
+    }
+
+    Clipboard.setData(ClipboardData(text: buffer.toString()));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Copied lobby to clipboard')),
     );
   }
 }

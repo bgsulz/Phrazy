@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/utility/copy.dart';
 import '../data/web_storage/web_storage.dart';
 import '../game_widgets/phrazy_box.dart';
@@ -37,7 +38,7 @@ class ArchiveScreen extends StatelessWidget {
     return Container(
       color: Colors.transparent,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
             icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
@@ -49,9 +50,42 @@ class ArchiveScreen extends StatelessWidget {
                 context.pushReplacement('/games/${state.loadedDate.toYMD}');
               }
             },
+          ),
+          IconButton(
+            icon: const Icon(HugeIcons.strokeRoundedCode),
+            onPressed: () {
+              _openDevModeWindow(context);
+            },
           )
         ],
       ),
+    );
+  }
+
+  void _openDevModeWindow(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return PhrazyDialog(
+          title: 'Developer Mode',
+          buttons: <ButtonData>[
+            ButtonData(
+                text:
+                    "Turn developer mode ${WebStorage.isDeveloperMode ? "off" : "on"}",
+                onPressed: () {
+                  context.pop();
+                  WebStorage.toggleDeveloperMode();
+                })
+          ],
+          children: [
+            Text('You know who you are! 📺',
+                style: TextStyle(color: Colors.red.shade200)),
+            const SizedBox(height: 8),
+            const Text(
+                'Developer Mode adds the option to submit your score to a lobby for you and your friends.'),
+          ],
+        );
+      },
     );
   }
 }

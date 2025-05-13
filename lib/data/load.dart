@@ -75,14 +75,22 @@ class Load {
     );
 
     try {
-      final puzzleData = await puzzleLoader.loadPuzzleForDate(date);
+      final puzzleId = await puzzleLoader.getPuzzleIdForDate(date);
 
-      if (puzzleData == null) {
-        debug("Today's puzzle does not exist. Returning an empty puzzle.");
+      if (puzzleId == null) {
+        debug("Today's puzzle ID was not found. Returning an empty puzzle.");
         return Puzzle.empty();
       }
 
-      final puzzle = puzzleLoader.fromFirebase(puzzleData);
+      final puzzleData = await puzzleLoader.loadPuzzleForDate(date);
+
+      if (puzzleData == null) {
+        debug(
+            "Puzzle for ID $puzzleId was not found. Returning an empty puzzle.");
+        return Puzzle.empty();
+      }
+
+      final puzzle = puzzleLoader.fromFirebase(puzzleData, puzzleId);
 
       _phrases = await _loadPhrasesForPuzzle(puzzle);
 

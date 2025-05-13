@@ -63,6 +63,7 @@ class GameState extends ChangeNotifier {
   bool get isError => currentState == GameLifecycleState.error;
 
   StopWatchTimer timer = StopWatchTimer();
+  int get time => timer.rawTime.value;
 
   void recordTime({int? overrideTime}) {
     final time = overrideTime ?? timer.rawTime.value;

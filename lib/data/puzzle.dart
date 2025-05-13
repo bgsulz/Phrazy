@@ -11,6 +11,7 @@ class Puzzle implements PuzzleInterface {
       {required this.words,
       required this.columns,
       required this.grid,
+      this.remoteId,
       this.author,
       this.bundledInteractions,
       this.connectors});
@@ -19,11 +20,13 @@ class Puzzle implements PuzzleInterface {
   final int columns;
   final List<TileData> grid;
 
+  final int? remoteId;
   final String? author;
   final PhraseMap? bundledInteractions;
   final List<String>? connectors;
 
   bool get isEmpty => words.isEmpty;
+  bool get isRemote => remoteId != null;
 
   factory Puzzle.empty() => Puzzle(
         words: [],
@@ -47,7 +50,7 @@ class Puzzle implements PuzzleInterface {
     );
   }
 
-  factory Puzzle.fromFirebase(Map<String, dynamic> data) {
+  factory Puzzle.fromFirebase(Map<String, dynamic> data, int? id) {
     final gridData = data['grid'].split(',');
     return Puzzle(
       words: List<String>.from(data['words']),
@@ -56,7 +59,8 @@ class Puzzle implements PuzzleInterface {
       author: data.containsKey('author') ? data['author'] : null,
       connectors: data.containsKey('connectors')
           ? List<String>.from(data['connectors'])
-          : null, // Parse connectors from Firebase data
+          : null,
+      remoteId: id,
     );
   }
 
