@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:phrazy/state/state.dart';
 import 'package:phrazy/utility/debug.dart';
+import 'package:phrazy/utility/security.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -32,12 +33,14 @@ class Lobby {
     }
 
     lobbyName = lobbyName.replaceAll(" ", "").toLowerCase();
+    String hashedLobbyName = Security.hashLobbyName(lobbyName);
+    String encodedMyName = Security.encodePlayerName(myName, lobbyName);
 
     await firestore
-        .doc("lobbies/$lobbyName/scores/${state.loadedPuzzle.remoteId}")
+        .doc("lobbies/$hashedLobbyName/scores/${state.loadedPuzzle.remoteId}")
         .set(
       {
-        myName: state.time,
+        encodedMyName: state.time,
       },
       SetOptions(
         merge: true,
@@ -48,8 +51,9 @@ class Lobby {
   static Future<Map<String, int>?> getScoreboard(
       String lobbyName, int puzzleId) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String hashedLobbyName = Security.hashLobbyName(lobbyName);
     DocumentSnapshot snapshot =
-        await firestore.doc("lobbies/$lobbyName/scores/$puzzleId").get();
+        await firestore.doc("lobbies/$hashedLobbyName/scores/$puzzleId").get();
 
     if (snapshot.exists) {
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
@@ -57,18 +61,20 @@ class Lobby {
         return null;
       }
 
-      return _parseScoreboardData(data);
+      return _parseScoreboardData(data, lobbyName);
     } else {
       return {};
     }
   }
 
-  static Map<String, int> _parseScoreboardData(Map<String, dynamic> data) {
+  static Map<String, int> _parseScoreboardData(
+      Map<String, dynamic> data, String lobbyName) {
     Map<String, int> result = {};
     data.forEach((key, value) {
+      String decodedKey = Security.decodePlayerName(key, lobbyName);
       int? parsedValue = _tryParseInt(value);
       if (parsedValue != null) {
-        result[key] = parsedValue;
+        result[decodedKey] = parsedValue;
       }
     });
     return result;
