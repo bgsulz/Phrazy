@@ -98,6 +98,23 @@ class Style {
               color: color,
               width: 1,
               strokeAlign: BorderSide.strokeAlignCenter));
+
+  static ButtonStyle get button {
+    return ButtonStyle(
+      foregroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.grey.shade900;
+        }
+        return Colors.black;
+      }),
+      backgroundColor: WidgetStateProperty.resolveWith<Color>((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return Colors.grey.shade800;
+        }
+        return Style.yesColor;
+      }),
+    );
+  }
 }
 
 class PhrazyTheme {

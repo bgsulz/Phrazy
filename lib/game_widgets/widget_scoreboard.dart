@@ -9,7 +9,7 @@ class ScoreboardDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (data == null || data!.isEmpty) {
-      return const Center(child: Text('No scores yet!'));
+      return const Text('No scores yet!');
     }
 
     List<MapEntry<String, int>> sortedEntries = data!.entries.toList()
