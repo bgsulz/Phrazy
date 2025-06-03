@@ -4,6 +4,8 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
 import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/utility/copy.dart';
+import 'package:phrazy/utility/debug.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../data/web_storage/web_storage.dart';
 import '../game_widgets/phrazy_box.dart';
 import '../utility/style.dart';
@@ -18,6 +20,11 @@ class ArchiveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gameState = Provider.of<GameState>(context, listen: false);
+    final loadedDate = gameState.loadedPuzzle.isEmpty
+        ? DateTime.now().copyWith(hour: 12)
+        : gameState.loadedDate;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -27,7 +34,7 @@ class ArchiveScreen extends StatelessWidget {
           child: ClipRRect(
             clipBehavior: Clip.hardEdge,
             borderRadius: BorderRadius.circular(16),
-            child: const PuzzlesList(),
+            child: PuzzlesList(loadedDate: loadedDate),
           ),
         ),
       ],
@@ -129,34 +136,40 @@ class ArchiveScreen extends StatelessWidget {
 class PuzzlesList extends StatefulWidget {
   const PuzzlesList({
     super.key,
+    required this.loadedDate,
   });
+
+  final DateTime loadedDate;
 
   @override
   State<PuzzlesList> createState() => _PuzzlesListState();
 }
 
 class _PuzzlesListState extends State<PuzzlesList> {
-  final ScrollController _controller = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final ItemScrollController _itemScrollController = ItemScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      cacheExtent: 0.0,
-      shrinkWrap: true,
-      controller: _controller,
+    final loadedDate = widget.loadedDate;
+    final totalDailies = Load.totalDailies;
+    final endDate = Load.endDate;
+
+    final initialScrollIndex = -loadedDate.difference(endDate).inDays - 4;
+    final clampedInitialScrollIndex =
+        initialScrollIndex.clamp(0, totalDailies - 1);
+
+    debug("Scrolling to index $initialScrollIndex");
+
+    return ScrollablePositionedList.builder(
+      itemScrollController: _itemScrollController,
+      initialScrollIndex: clampedInitialScrollIndex,
       itemCount: Load.totalDailies,
       reverse: true,
       itemBuilder: (context, index) {
-        return Consumer<GameState>(
-          builder: (BuildContext context, GameState gameState, Widget? child) {
-            final date = Load.endDate.subtract(Duration(days: index));
-            return PuzzleCard(date: date);
-          },
+        final date = Load.endDate.subtract(Duration(days: index));
+        return PuzzleCard(
+          date: date,
+          isLoaded: date.isSameDayAs(widget.loadedDate),
         );
       },
     );
@@ -167,9 +180,11 @@ class PuzzleCard extends StatelessWidget {
   const PuzzleCard({
     super.key,
     required this.date,
+    required this.isLoaded,
   });
 
   final DateTime date;
+  final bool isLoaded;
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +208,7 @@ class PuzzleCard extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: PhrazyBox(
               color: color,
+              outlineColor: isLoaded ? Style.cardColor : Style.textColor,
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
