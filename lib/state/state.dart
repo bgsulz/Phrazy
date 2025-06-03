@@ -217,8 +217,14 @@ class GameState extends ChangeNotifier {
   void updateState(List<int> modifiedIndices) {
     recalculateInteractions(modifiedIndices);
 
-    if (!isSolved && checkWin(shouldCelebrate: true)) {
-      currentState = GameLifecycleState.solved;
+    if (!isSolved && checkWin()) {
+      if (currentState == GameLifecycleState.puzzle) {
+        currentState = GameLifecycleState.solved;
+        confetti.play();
+        shouldCelebrateWin = true;
+        playSound("win");
+        Events.logWin(date: loadedDate);
+      }
     }
     debug("Saving time in response to updated state.");
     recordTime();
@@ -272,7 +278,7 @@ class GameState extends ChangeNotifier {
     }
   }
 
-  bool checkWin({bool shouldCelebrate = false}) {
+  bool checkWin() {
     if (_wordBankState.any((s) => s.isNotEmpty)) {
       return false;
     }
@@ -292,13 +298,6 @@ class GameState extends ChangeNotifier {
     }
 
     timer.onStopTimer();
-
-    if (shouldCelebrate) {
-      Events.logWin(date: loadedDate);
-      playSound("win");
-      confetti.play();
-      shouldCelebrateWin = true;
-    }
     return true;
   }
 }

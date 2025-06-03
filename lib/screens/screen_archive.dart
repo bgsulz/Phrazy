@@ -52,7 +52,10 @@ class ArchiveScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedCode),
+            icon: const Icon(
+              HugeIcons.strokeRoundedTestTube01,
+              color: Style.foregroundColor,
+            ),
             onPressed: () {
               _openDevModeWindow(context);
             },
@@ -67,25 +70,58 @@ class ArchiveScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return PhrazyDialog(
-          title: 'Developer Mode',
+          title: 'Experimental Features!',
           buttons: <ButtonData>[
             ButtonData(
                 text:
-                    "Turn developer mode ${WebStorage.isDeveloperMode ? "off" : "on"}",
+                    "Turn experimental features ${WebStorage.isDeveloperMode ? "off" : "on"}",
                 onPressed: () {
                   context.pop();
                   WebStorage.toggleDeveloperMode();
                 })
           ],
           children: [
-            Text('You know who you are! 📺',
-                style: TextStyle(color: Colors.red.shade200)),
+            const Text(
+              'Get a preview of upcoming features!',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             const Text(
-                'Developer Mode adds the option to submit your score to a lobby for you and your friends.'),
+              'These are under development and may be unstable.',
+              style: TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 16),
+            _buildFeatureItem(
+              title: 'Lobbies',
+              description:
+                  'Submit your score to a lobby for you and your friends.\nAll the information you enter is encoded and completely anonymous!',
+            ),
           ],
         );
       },
+    );
+  }
+
+  static Widget _buildFeatureItem({
+    required String title,
+    required String description,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            description,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
     );
   }
 }
