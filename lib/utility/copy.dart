@@ -71,7 +71,7 @@ class Copy {
   }
 
   static String shareString(DateTime date, String displayTime, int solveTime) {
-    final datePart = date.year < 1980 ? 'demo' : date.toDisplayDate;
+    final datePart = date.year < 1980 ? 'Tutorial' : date.toDisplayDate;
     String emoji;
     final duration = Duration(milliseconds: solveTime);
     var minutes = duration.inMinutes;

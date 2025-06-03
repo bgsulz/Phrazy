@@ -14,6 +14,7 @@ import '../game_widgets/widget_icons.dart';
 import '../game_widgets/widget_solvegrid.dart';
 import '../game_widgets/widget_wordbankgrid.dart';
 import '../utility/style.dart';
+import '../utility/ext.dart';
 
 class GameScreen extends StatelessWidget {
   final Puzzle? puzzle;
@@ -189,31 +190,44 @@ class _BylineAndTimerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GameState>(
       builder: (context, state, child) {
-        if (state.currentState == GameLifecycleState.puzzle) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Flexible(
-                child: _buildByline(state),
-              ),
-              const SizedBox(width: 8),
-              if (!state.isSolved)
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child: SolveTimer(),
-                ),
-            ],
-          );
+        if (state.currentState == GameLifecycleState.error ||
+            state.currentState == GameLifecycleState.preparing) {
+          return const SizedBox.shrink();
         }
-        return const SizedBox.shrink();
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (!state.isSolved)
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: SolveTimer(),
+              ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  state.loadedDate.year < 1980
+                      ? "Tutorial"
+                      : state.loadedDate.toDisplayDateWithDay,
+                  style: Style.bodyMedium,
+                ),
+                _buildByline(state),
+              ],
+            ),
+          ],
+        );
       },
     );
   }
 
   Widget _buildByline(GameState state) {
     if (state.loadedPuzzle.author case var author?) {
-      return Text("Puzzle by $author", style: Style.titleSmall);
+      return Text(
+        "by $author",
+        style: Style.titleSmall.copyWith(fontSize: 14),
+      );
     }
     return const SizedBox.shrink();
   }
