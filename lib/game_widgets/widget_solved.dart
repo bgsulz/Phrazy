@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:phrazy/data/web_storage/web_storage.dart';
 import 'package:phrazy/game_widgets/widget_lobbybox.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utility/copy.dart';
@@ -69,7 +70,7 @@ class SolvedCelebrationSection extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            const LobbyBox(),
+            if (WebStorage.isDeveloperMode) const LobbyBox(),
           ],
         );
       },
