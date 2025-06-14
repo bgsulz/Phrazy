@@ -13,38 +13,70 @@ class OverlayWallGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const highlightColor = Style.textColor;
-    const borderWidth = 6.0;
-    const borderSide = BorderSide(color: highlightColor, width: borderWidth);
 
-    final isRight = data == TileData.wallRight || data == TileData.wallBoth;
-    final isDown = data == TileData.wallDown || data == TileData.wallBoth;
+    // For filled cells, use a simple colored container
+    if (data == TileData.filled) {
+      return IgnorePointer(
+        child: Container(
+          color: highlightColor,
+        ),
+      );
+    }
 
-    final fillColor =
-        data == TileData.filled ? highlightColor : Colors.transparent;
-    final rightBorder = isRight ? borderSide : BorderSide.none;
-    final downBorder = isDown ? borderSide : BorderSide.none;
-    final border = data == TileData.filled
-        ? Border.fromBorderSide(
-            borderSide.copyWith(strokeAlign: BorderSide.strokeAlignCenter))
-        : Border(
-            right: rightBorder,
-            bottom: downBorder,
-          );
-
-    final offset = data == TileData.filled
-        ? Offset.zero
-        : Offset(isRight ? borderWidth / 2 : 0, isDown ? borderWidth / 2 : 0);
-
+    // For walls, use custom painter
     return IgnorePointer(
-        child: Transform.translate(
-      offset: offset,
-      child: SizedBox.expand(
-        child: Card(
-            color: fillColor,
-            shadowColor: Colors.transparent,
-            margin: EdgeInsets.zero,
-            shape: border),
+      child: CustomPaint(
+        painter: WallPainter(
+          isRight: data == TileData.wallRight || data == TileData.wallBoth,
+          isDown: data == TileData.wallDown || data == TileData.wallBoth,
+          wallColor: highlightColor,
+          wallWidth: 6.0,
+        ),
+        child: SizedBox.expand(),
       ),
-    ));
+    );
+  }
+}
+
+class WallPainter extends CustomPainter {
+  WallPainter({
+    required this.isRight,
+    required this.isDown,
+    required this.wallColor,
+    required this.wallWidth,
+  });
+
+  final bool isRight;
+  final bool isDown;
+  final Color wallColor;
+  final double wallWidth;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = wallColor
+      ..strokeWidth = wallWidth
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    if (isRight) {
+      final startPoint = Offset(size.width, 0);
+      final endPoint = Offset(size.width, size.height);
+      canvas.drawLine(startPoint, endPoint, paint);
+    }
+
+    if (isDown) {
+      final startPoint = Offset(0, size.height);
+      final endPoint = Offset(size.width, size.height);
+      canvas.drawLine(startPoint, endPoint, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(WallPainter oldDelegate) {
+    return oldDelegate.isRight != isRight ||
+        oldDelegate.isDown != isDown ||
+        oldDelegate.wallColor != wallColor ||
+        oldDelegate.wallWidth != wallWidth;
   }
 }

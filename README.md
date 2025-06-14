@@ -1,23 +1,21 @@
-<a href="https://phrazy.fun"><img src="web/favicon.png" width="200" /></a>
+<a href="https://phrazy.fun"><img src="assets/icon/icon.png" width="200" /></a>
 
-# Phrazy
+# Phrazy!
 
-Phrazy is a word-based puzzle game. Drag and drop words into a grid such that all adjacent pairs of words form phrases or compound words.
+A new daily puzzle game! Arrange words to form connections in a crossword-like grid.
 
 ## Rules
 
-* Drag and drop the words into the grid.
-* All adjacent pairs of words (vertical and horizontal) must form phrases or compound words.
-* Pairs of words can be joined by one or more of the following common words: a, of, an, to, in, the, for
+* Drag the words into the grid.
+* Neighboring words must form phrases or compound words.
+
+Easy puzzles on Mondays, tough ones on Sundays!
 
 ## About
 
-Phrazy was created and programmed by me, Ben Sulzinsky. So far, he has also designed all the daily puzzles.
+I made Phrazy and most of its daily puzzles; a few are guest features! (Those have bylines below the puzzle grid.)
+Find more of my stuff [on my website: https://bgsulz.com](https://bgsulz.com)
 
-I created Lyrically with Flutter. Firebase and Firestore power hosting and data storage.
-
-You can find more [on my website: https://bgsulz.com](https://bgsulz.com)
-
-## Play
+## Want to try?
 
 Play here: [https://phrazy.fun](https://phrazy.fun)

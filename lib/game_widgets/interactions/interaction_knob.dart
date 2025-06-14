@@ -37,13 +37,9 @@ class InteractionKnob extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = min(cardSize.maxWidth / 2.5, 36.0);
-    final height = min(cardSize.maxHeight / 2.5, 24.0);
+    final height = min(cardSize.maxHeight / 2.5, 36.0);
 
     final connectsDown = direction == InteractionDirection.down;
-    const lineThickness = 6.0;
-    final lineWidth = connectsDown ? cardSize.maxWidth : lineThickness;
-    final lineHeight = !connectsDown ? cardSize.maxHeight : lineThickness;
-
     final offset = connectsDown
         ? Offset(cardSize.maxWidth / 2, cardSize.maxHeight)
         : Offset(cardSize.maxWidth, cardSize.maxHeight / 2);
@@ -54,12 +50,10 @@ class InteractionKnob extends StatelessWidget {
 
     return Stack(
       children: [
-        Transform.translate(
-          offset: offset.translate(-lineWidth / 2, -lineHeight / 2),
-          child: SizedBox(
-            width: lineWidth,
-            height: lineHeight,
-            child: const Material(color: Style.yesColor),
+        CustomPaint(
+          painter: LinePainter(
+            direction: direction,
+            cardSize: cardSize,
           ),
         ),
         Transform.translate(
@@ -78,23 +72,33 @@ class InteractionKnob extends StatelessWidget {
               color: Style.yesColor,
               child: Center(
                 child: SelectionContainer.disabled(
-                  child: FittedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: shouldUseIcon
-                          ? const Padding(
-                              padding: EdgeInsets.all(2),
-                              child: Icon(
-                                HugeIcons.strokeRoundedLink05,
-                                color: Style.textColor,
-                              ),
-                            )
-                          : Text(
-                              connector,
-                              style: Style.bodySmall
-                                  .copyWith(color: Style.textColor),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2),
+                    child: shouldUseIcon
+                        ? const Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Icon(
+                              HugeIcons.strokeRoundedLink05,
+                              color: Style.textColor,
                             ),
-                    ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(1),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                connector
+                                        .split(" ")
+                                        .any((word) => word.length >= 3)
+                                    ? connector.replaceAll(" ", "\n")
+                                    : connector,
+                                style: Style.bodySmall.copyWith(
+                                    color: Style.textColor, height: 1.1),
+                                textAlign: TextAlign.center,
+                                softWrap: true,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
               ),
@@ -103,5 +107,37 @@ class InteractionKnob extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class LinePainter extends CustomPainter {
+  final InteractionDirection direction;
+  final BoxConstraints cardSize;
+
+  LinePainter({required this.direction, required this.cardSize});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final connectsDown = direction == InteractionDirection.down;
+    const lineThickness = 6.0;
+
+    final start = connectsDown
+        ? Offset(lineThickness / 2, cardSize.maxHeight)
+        : Offset(cardSize.maxWidth, lineThickness / 2);
+    final end = connectsDown
+        ? Offset(cardSize.maxWidth - lineThickness / 2, cardSize.maxHeight)
+        : Offset(cardSize.maxWidth, cardSize.maxHeight - lineThickness / 2);
+
+    final paint = Paint()
+      ..color = Style.yesColor
+      ..strokeWidth = lineThickness
+      ..strokeCap = StrokeCap.round;
+
+    canvas.drawLine(start, end, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

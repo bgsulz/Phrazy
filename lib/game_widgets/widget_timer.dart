@@ -19,7 +19,8 @@ class SolveTimer extends StatelessWidget {
 
           return Text(
             value.toDisplayTimeFromSeconds,
-            style: Style.titleSmall,
+            style: Style.bodyMedium
+                .copyWith(fontVariations: [const FontVariation("wght", 700)]),
           );
         },
       );

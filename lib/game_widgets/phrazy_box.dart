@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utility/style.dart';
 
 class PhrazyBox extends StatelessWidget {
@@ -6,8 +7,10 @@ class PhrazyBox extends StatelessWidget {
     super.key,
     this.elevation,
     this.rounded,
+    this.borderRadius,
     this.outlineWidth,
     this.outlineColor,
+    this.shouldAnimate = false,
     required this.child,
     required this.color,
   });
@@ -18,12 +21,17 @@ class PhrazyBox extends StatelessWidget {
   final Color? outlineColor;
   final Widget child;
   final Color color;
+  final BorderRadius? borderRadius;
+  final bool shouldAnimate;
 
   @override
   Widget build(BuildContext context) {
-    var radius = BorderRadius.circular((rounded ?? true) ? 16 : 1);
+    var radius =
+        borderRadius ?? BorderRadius.circular((rounded ?? true) ? 16 : 1);
 
-    return Material(
+    var material = Material(
+      type:
+          color.alpha == 255 ? MaterialType.canvas : MaterialType.transparency,
       borderRadius: radius,
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -35,19 +43,33 @@ class PhrazyBox extends StatelessWidget {
                   color: outlineColor ?? Style.textColor,
                 ),
           borderRadius: radius,
+          boxShadow: null,
         ),
         decoration: BoxDecoration(
           color: color,
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 0,
-                color: Colors.black.withOpacity(0.25),
-                offset: Offset(0, elevation ?? 8))
-          ],
+          boxShadow: elevation == 0
+              ? null
+              : [
+                  BoxShadow(
+                    blurRadius: 0,
+                    color: Colors.black.withOpacity(0.25),
+                    offset: Offset(0, elevation ?? 8),
+                  )
+                ],
           borderRadius: radius,
         ),
         child: child,
       ),
     );
+
+    if (shouldAnimate) {
+      return WidgetAnimator(
+          incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+            curve: Curves.easeOutCirc,
+          ),
+          child: material);
+    } else {
+      return material;
+    }
   }
 }

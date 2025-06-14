@@ -8,7 +8,7 @@ bool soundsInitialized = false;
 
 Future<void> loadSounds() async {
   if (WebStorage.isSafari) {
-    print("Safari detected.");
+    debug("Safari detected.");
     await Future.delayed(const Duration(seconds: 0));
     return;
   }
@@ -16,13 +16,13 @@ Future<void> loadSounds() async {
   try {
     soundIds['click'] = await pool.loadUri("/audio/click_003.ogg");
     soundIds['drop'] = await pool.loadUri("/audio/click1.ogg");
-    soundIds['win'] = await pool.loadUri("/audio/phrazy_win.ogg");
+    soundIds['win'] = await pool.loadUri("/audio/phrazy_win_2.ogg");
     soundIds['rollover'] = await pool.loadUri("/audio/rollover4.ogg");
     soundIds['link'] = await pool.loadUri("/audio/switch16.ogg");
 
     pool.setVolume(soundId: soundIds['link'], volume: 0.5);
     pool.setVolume(soundId: soundIds['rollover'], volume: 0.125);
-    pool.setVolume(soundId: soundIds['win'], volume: 1.25);
+    pool.setVolume(soundId: soundIds['win'], volume: 0.75);
   } catch (e) {
     debug(e);
     rethrow;

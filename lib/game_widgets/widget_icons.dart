@@ -1,7 +1,9 @@
 import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
+import 'package:flavor_text/flavor_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../data/web_storage/web_storage.dart';
 import '../utility/copy.dart';
 import '../utility/style.dart';
@@ -22,23 +24,34 @@ class PhrazyIcons extends StatelessWidget {
       });
     }
 
-    return Container(
-      color: Colors.transparent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          const MuteIcon(),
-          IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
-            onPressed: () => _showHelp(context),
-          ),
-          IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedArchive),
-            onPressed: () => context.pushReplacement('/games'),
-          ),
-          const ClearIcon(),
-          const PauseIcon(),
-        ],
+    return WidgetAnimator(
+      incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
+        curve: Curves.easeOutCirc,
+      ),
+      child: Container(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            const MuteIcon(),
+            Tooltip(
+              message: 'Help',
+              child: IconButton(
+                icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
+                onPressed: () => _showHelp(context),
+              ),
+            ),
+            Tooltip(
+              message: 'Archive',
+              child: IconButton(
+                icon: const Icon(HugeIcons.strokeRoundedArchive),
+                onPressed: () => context.pushReplacement('/games'),
+              ),
+            ),
+            const ClearIcon(),
+            const PauseIcon(),
+          ],
+        ),
       ),
     );
   }
@@ -65,15 +78,15 @@ class PhrazyIcons extends StatelessWidget {
               onPressed: () {
                 context.pop();
               })
-        ], children: const [
-          Text(Copy.rules1),
-          SizedBox(height: 16),
-          Demo(type: 1),
-          SizedBox(height: 16),
-          Text(Copy.rules2),
-          SizedBox(height: 16),
-          Demo(type: 2),
-          SizedBox(height: 16),
+        ], children: [
+          FlavorText(Copy.rules1),
+          const SizedBox(height: 16),
+          const Demo(type: 1),
+          const SizedBox(height: 16),
+          FlavorText(Copy.rules2),
+          const SizedBox(height: 16),
+          const Demo(type: 2),
+          const SizedBox(height: 16),
         ]);
       },
     );
@@ -95,8 +108,8 @@ class PhrazyIcons extends StatelessWidget {
               Uri.parse("https://bgsulz.com"),
             ),
           ),
-        ], children: const [
-          Text(Copy.info),
+        ], children: [
+          FlavorText(Copy.info),
         ]);
       },
     );
@@ -117,11 +130,14 @@ class ClearIcon extends StatelessWidget {
     return Consumer<GameState>(
       builder: (context, value, child) {
         if (!value.isPreparing && !value.isSolved) {
-          return IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedEraser),
-            onPressed: () {
-              value.clearBoard();
-            },
+          return Tooltip(
+            message: 'Clear',
+            child: IconButton(
+              icon: const Icon(HugeIcons.strokeRoundedEraser),
+              onPressed: () {
+                value.clearBoard();
+              },
+            ),
           );
         }
         return const SizedBox.shrink();
@@ -138,11 +154,14 @@ class PauseIcon extends StatelessWidget {
     return Consumer<GameState>(
       builder: (context, value, child) {
         if (!value.isPreparing && !value.isSolved) {
-          return IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedPause),
-            onPressed: () {
-              _showPause(context);
-            },
+          return Tooltip(
+            message: 'Pause',
+            child: IconButton(
+              icon: const Icon(HugeIcons.strokeRoundedPause),
+              onPressed: () {
+                _showPause(context);
+              },
+            ),
           );
         }
         return const SizedBox.shrink();
@@ -189,14 +208,17 @@ class MuteIcon extends StatefulWidget {
 class _MuteIconState extends State<MuteIcon> {
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: WebStorage.isMuted
-          ? const Icon(HugeIcons.strokeRoundedVolumeMute02)
-          : const Icon(HugeIcons.strokeRoundedVolumeHigh),
-      onPressed: () {
-        WebStorage.toggleMute();
-        setState(() {});
-      },
+    return Tooltip(
+      message: WebStorage.isMuted ? 'Unmute' : 'Mute',
+      child: IconButton(
+        icon: WebStorage.isMuted
+            ? const Icon(HugeIcons.strokeRoundedVolumeMute02)
+            : const Icon(HugeIcons.strokeRoundedVolumeHigh),
+        onPressed: () {
+          WebStorage.toggleMute();
+          setState(() {});
+        },
+      ),
     );
   }
 }

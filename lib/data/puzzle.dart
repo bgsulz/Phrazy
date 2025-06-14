@@ -2,25 +2,31 @@ import 'dart:math';
 
 import '../data/load.dart';
 import '../data/tail.dart';
+import '../core/puzzle_interface.dart';
 
 enum TileData { empty, filled, wallRight, wallDown, wallBoth }
 
-class Puzzle {
+class Puzzle implements PuzzleInterface {
   Puzzle(
       {required this.words,
       required this.columns,
       required this.grid,
+      this.remoteId,
       this.author,
-      this.bundledInteractions});
+      this.bundledInteractions,
+      this.connectors});
 
   final List<String> words;
   final int columns;
   final List<TileData> grid;
 
+  final int? remoteId;
   final String? author;
   final PhraseMap? bundledInteractions;
+  final List<String>? connectors;
 
   bool get isEmpty => words.isEmpty;
+  bool get isRemote => remoteId != null;
 
   factory Puzzle.empty() => Puzzle(
         words: [],
@@ -40,16 +46,21 @@ class Puzzle {
         'field': [Tail.from('day')],
       },
       author: "The Tutorializer",
+      // connectors: ['to', 'to'],
     );
   }
 
-  factory Puzzle.fromFirebase(Map<String, dynamic> data) {
+  factory Puzzle.fromFirebase(Map<String, dynamic> data, int? id) {
     final gridData = data['grid'].split(',');
     return Puzzle(
       words: List<String>.from(data['words']),
       columns: int.parse(gridData[0]),
       grid: _parseGrid(gridData[1]),
       author: data.containsKey('author') ? data['author'] : null,
+      connectors: data.containsKey('connectors')
+          ? List<String>.from(data['connectors'])
+          : null,
+      remoteId: id,
     );
   }
 
@@ -73,7 +84,7 @@ class Puzzle {
 
   @override
   String toString() {
-    return 'Puzzle{words: $words, columns: $columns}';
+    return 'Puzzle{words: $words, columns: $columns, connectors: $connectors}';
   }
 
   bool isBlocked(int index) {

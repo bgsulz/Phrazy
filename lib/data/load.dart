@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../core/puzzle_loader.dart';
 import '../data/tail.dart';
 import '../utility/debug.dart';
 import '../data/puzzle.dart';
@@ -15,6 +17,14 @@ class Load {
 
   static String path = 'phrases.yaml';
   static PhraseMap _phrases = {};
+
+  final String dailiesCollectionName;
+  final String puzzlesCollectionName;
+
+  Load({
+    required this.dailiesCollectionName,
+    required this.puzzlesCollectionName,
+  });
 
   static Future<PhraseMap> _loadPhrasesForPuzzle(Puzzle puzzle) async {
     if (puzzle.bundledInteractions != null) {
@@ -35,7 +45,13 @@ class Load {
           continue;
         }
         final head = result.id;
-        final tails = data.entries.map((e) => Tail(e.value, e.key));
+        final tails = data.entries
+            .where((e) =>
+                (puzzle.connectors?.contains(e.value) ?? false) ||
+                e.value == "" ||
+                e.value == " " ||
+                e.value == "-")
+            .map((e) => Tail(e.value, e.key));
         phraseMap[head] = tails.toList();
       }
 
@@ -51,43 +67,38 @@ class Load {
     return puzzle;
   }
 
-  static Future<Puzzle> puzzleForDate(DateTime date) async {
-    final firestore = FirebaseFirestore.instance;
+  Future<Puzzle> puzzleForDate(DateTime date) async {
+    final puzzleLoader = PuzzleLoader<Puzzle>(
+      dailiesCollectionName: dailiesCollectionName,
+      puzzlesCollectionName: puzzlesCollectionName,
+      fromFirebase: Puzzle.fromFirebase,
+    );
 
     try {
-      final dailiesCollection = firestore.collection("dailies");
-      final dailyDocRef = dailiesCollection.doc(date.toYMD);
-      final dailyDocSnap = await dailyDocRef.get();
-      if (!dailyDocSnap.exists) {
-        throw Exception("Today's daily (${date.toYMD}) does not exist.");
+      final puzzleId = await puzzleLoader.getPuzzleIdForDate(date);
+
+      if (puzzleId == null) {
+        debug("Today's puzzle ID was not found. Returning an empty puzzle.");
+        return Puzzle.empty();
       }
 
-      final dailyData = dailyDocSnap.data() as Map<String, dynamic>;
-      final id = dailyData['id'] as int;
+      final puzzleData = await puzzleLoader.loadPuzzleForDate(date);
 
-      final docRef = await firestore
-          .collection("puzzles")
-          .where("id", isEqualTo: id)
-          .limit(1)
-          .get()
-          .then((snap) => snap.docs.first.reference);
-
-      final puzzleDocSnap = await docRef.get();
-      if (!puzzleDocSnap.exists) {
-        throw Exception("Today's puzzle does not exist.");
+      if (puzzleData == null) {
+        debug(
+            "Puzzle for ID $puzzleId was not found. Returning an empty puzzle.");
+        return Puzzle.empty();
       }
 
-      final puzzleData = puzzleDocSnap.data() as Map<String, dynamic>;
-      final puzzle = Puzzle.fromFirebase(puzzleData);
+      final puzzle = puzzleLoader.fromFirebase(puzzleData, puzzleId);
 
       _phrases = await _loadPhrasesForPuzzle(puzzle);
 
       return puzzle;
     } on FirebaseException catch (f) {
       debug(f);
+      return Puzzle.empty();
     }
-
-    return Puzzle.empty();
   }
 
   static Tail isValidPhrase(String a, String b) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/interactions/interaction_knob.dart';
+import 'package:phrazy/game_widgets/widget_connectorbank.dart';
 import '../data/tail.dart';
 import '../data/puzzle.dart';
 import '../game_widgets/grid/phrazy_grid.dart';
@@ -72,55 +73,68 @@ class Demo extends StatelessWidget {
     const gridSize = (width: 2, height: 2);
     final gridCount = gridSize.width * gridSize.height;
 
-    return SizedBox(
-      width: cardSize.width * gridSize.width,
-      child: Stack(children: [
-        PhrazyGrid(
-          itemCount: gridCount,
-          columnCount: gridSize.width,
-          itemHeight: cardSize.height,
-          responsiveHeight: false,
-          builder: (index) {
-            return WordCard(
-              word: ['bright', 'early', 'idea', 'bird'][index],
-            );
-          },
+    return Column(
+      children: [
+        SizedBox(
+          width: cardSize.width * gridSize.width,
+          child: const ConnectorBank(
+            shouldAnimateOverride: false,
+            allConnectorsOverride: ['and'],
+            activeConnectorsOverride: ['and'],
+          ),
         ),
-        PhrazyGrid(
-          itemCount: gridCount,
-          columnCount: gridSize.width,
-          itemHeight: cardSize.height,
-          responsiveHeight: false,
-          builder: (index) {
-            if (index == 2) {
-              return const OverlayWallGrid(data: TileData.wallRight);
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        PhrazyGrid(
-            itemCount: gridCount,
-            columnCount: gridSize.width,
-            itemHeight: cardSize.height,
-            responsiveHeight: false,
-            builder: (index) {
-              if (index == 0) {
-                return Stack(
-                  children: [
-                    InteractionKnob.right(
-                      Tail.from('and early'),
-                      cardSize,
-                    ),
-                    InteractionKnob.down(Tail.from(''), cardSize),
-                  ],
+        const SizedBox(height: 16),
+        SizedBox(
+          width: cardSize.width * gridSize.width,
+          child: Stack(children: [
+            PhrazyGrid(
+              itemCount: gridCount,
+              columnCount: gridSize.width,
+              itemHeight: cardSize.height,
+              responsiveHeight: false,
+              builder: (index) {
+                return WordCard(
+                  word: ['bright', 'early', 'idea', 'bird'][index],
                 );
-              }
-              if (index == 1) {
-                return InteractionKnob.down(Tail.from(''), cardSize);
-              }
-              return const SizedBox.shrink();
-            })
-      ]),
+              },
+            ),
+            PhrazyGrid(
+              itemCount: gridCount,
+              columnCount: gridSize.width,
+              itemHeight: cardSize.height,
+              responsiveHeight: false,
+              builder: (index) {
+                if (index == 2) {
+                  return const OverlayWallGrid(data: TileData.wallRight);
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+            PhrazyGrid(
+                itemCount: gridCount,
+                columnCount: gridSize.width,
+                itemHeight: cardSize.height,
+                responsiveHeight: false,
+                builder: (index) {
+                  if (index == 0) {
+                    return Stack(
+                      children: [
+                        InteractionKnob.right(
+                          Tail.from('and early'),
+                          cardSize,
+                        ),
+                        InteractionKnob.down(Tail.from(''), cardSize),
+                      ],
+                    );
+                  }
+                  if (index == 1) {
+                    return InteractionKnob.down(Tail.from(''), cardSize);
+                  }
+                  return const SizedBox.shrink();
+                })
+          ]),
+        ),
+      ],
     );
   }
 }

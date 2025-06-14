@@ -24,15 +24,20 @@ dependencies:
   stop_watch_timer: ^3.2.1
   assorted_layout_widgets: ^9.0.2
 
+  flavor_text: ^1.0.0
   hugeicons: ^0.0.7
   confetti: ^0.8.0
+  widget_and_text_animator: ^1.1.5
 
-  firebase_core: ^3.4.0
-  cloud_firestore: ^5.4.0
+  firebase_core: ^3.13.0
+  cloud_firestore: ^5.6.6
+  firebase_auth: ^5.5.3
   firebase_analytics: ^11.4.3
   vector_math: ^2.1.4
 
+  crypto: ^3.0.1
   flutter_launcher_icons: ^0.14.1
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:
