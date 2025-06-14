@@ -217,14 +217,13 @@ class GameState extends ChangeNotifier {
   void updateState(List<int> modifiedIndices) {
     recalculateInteractions(modifiedIndices);
 
-    if (!isSolved && checkWin()) {
-      if (currentState == GameLifecycleState.puzzle) {
-        currentState = GameLifecycleState.solved;
-        confetti.play();
-        shouldCelebrateWin = true;
-        playSound("win");
-        Events.logWin(date: loadedDate);
-      }
+    final bool wasPuzzleState = currentState == GameLifecycleState.puzzle;
+    if (wasPuzzleState && checkWin()) {
+      currentState = GameLifecycleState.solved;
+      confetti.play();
+      shouldCelebrateWin = true;
+      playSound("win");
+      Events.logWin(date: loadedDate);
     }
     debug("Saving time in response to updated state.");
     recordTime();
