@@ -1,4 +1,5 @@
 import 'package:flutter_soloud/flutter_soloud.dart';
+import 'package:phrazy/sound.dart';
 import 'package:phrazy/utility/events.dart';
 
 import '../utility/copy.dart';
@@ -27,6 +28,7 @@ void main() async {
     print("FATAL ERROR: Failed to initialize SoLoud: $e");
     return;
   }
+  await loadSounds();
   runApp(const Phrazy());
 }
 

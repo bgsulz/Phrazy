@@ -96,7 +96,6 @@ class GameState extends ChangeNotifier {
     timer.onStopTimer();
 
     currentState = GameLifecycleState.preparing;
-    await loadSounds();
 
     if (puzzle != null) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);

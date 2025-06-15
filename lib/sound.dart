@@ -37,16 +37,26 @@ Future<void> loadSounds() async {
 
     // Load sounds using SoLoud.instance.loadAsset
     // Note: asset paths usually don't start with a leading '/' when used with loadAsset
+    debug("Loading click sound...");
     soundIds['click'] =
-        await SoLoud.instance.loadAsset("audio/click_003.ogg", mode: loadMode);
+        await SoLoud.instance.loadUrl("audio/click_003.ogg", mode: loadMode);
+    debug("Click sound loaded.");
+    debug("Loading drop sound...");
     soundIds['drop'] =
-        await SoLoud.instance.loadAsset("audio/click1.ogg", mode: loadMode);
-    soundIds['win'] = await SoLoud.instance
-        .loadAsset("audio/phrazy_win_2.ogg", mode: loadMode);
+        await SoLoud.instance.loadUrl("audio/click1.ogg", mode: loadMode);
+    debug("Drop sound loaded.");
+    debug("Loading win sound...");
+    soundIds['win'] =
+        await SoLoud.instance.loadUrl("audio/phrazy_win_2.ogg", mode: loadMode);
+    debug("Win sound loaded.");
+    debug("Loading rollover sound...");
     soundIds['rollover'] =
-        await SoLoud.instance.loadAsset("audio/rollover4.ogg", mode: loadMode);
+        await SoLoud.instance.loadUrl("audio/rollover4.ogg", mode: loadMode);
+    debug("Rollover sound loaded.");
+    debug("Loading link sound...");
     soundIds['link'] =
-        await SoLoud.instance.loadAsset("audio/switch16.ogg", mode: loadMode);
+        await SoLoud.instance.loadUrl("audio/switch16.ogg", mode: loadMode);
+    debug("Link sound loaded.");
 
     // With flutter_soloud, volumes are set when the sound is played,
     // not when it's loaded. We've set up the _soundVolumes map for this.
