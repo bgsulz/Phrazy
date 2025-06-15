@@ -1,3 +1,4 @@
+import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:phrazy/utility/events.dart';
 
 import '../utility/copy.dart';
@@ -19,6 +20,13 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  try {
+    await SoLoud.instance.init();
+    print("SoLoud initialized successfully!");
+  } catch (e) {
+    print("FATAL ERROR: Failed to initialize SoLoud: $e");
+    return;
+  }
   runApp(const Phrazy());
 }
 

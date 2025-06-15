@@ -12,31 +12,32 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   
-  web: ^1.0.0
+  web: ^1.1.1
   url_launcher: ^6.3.0
-  go_router: ^14.2.7
-  provider: ^6.1.2
+  go_router: ^14.8.1
+  provider: ^6.1.5
 
-  soundpool: ^2.4.1
-  
-  yaml: ^3.1.2
-  flutter_layout_grid: ^2.0.7
+  # soundpool: ^2.4.1
+  flutter_soloud: ^3.1.10
+
+  yaml: ^3.1.3
+  flutter_layout_grid: ^2.0.8
   stop_watch_timer: ^3.2.1
   assorted_layout_widgets: ^9.0.2
 
   flavor_text: ^1.0.0
-  hugeicons: ^0.0.7
+  hugeicons: ^0.0.11
   confetti: ^0.8.0
   widget_and_text_animator: ^1.1.5
 
-  firebase_core: ^3.13.0
-  cloud_firestore: ^5.6.6
-  firebase_auth: ^5.5.3
-  firebase_analytics: ^11.4.3
+  firebase_core: ^3.14.0
+  cloud_firestore: ^5.6.9
+  firebase_auth: ^5.6.0
+  firebase_analytics: ^11.5.0
   vector_math: ^2.1.4
 
   crypto: ^3.0.1
-  flutter_launcher_icons: ^0.14.1
+  # flutter_launcher_icons: ^0.14.4
   scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
@@ -47,8 +48,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # assets:
-  #   - assets/
+  assets:
+    - assets/
 
   fonts:
     - family: Fraunces

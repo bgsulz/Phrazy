@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phrazy/utility/debug.dart';
 import '../game_widgets/grid_position.dart';
 import '../game_widgets/phrazy_box.dart';
 import '../game_widgets/grid/phrazy_tile.dart';
@@ -17,15 +18,13 @@ class WordbankGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int columns;
-    switch (MediaQuery.of(context).size.width) {
-      case int width when width > 450:
-        columns = 5;
-        break;
-      case int width when width > 375:
-        columns = 4;
-        break;
-      default:
-        columns = 3;
+    final width = MediaQuery.of(context).size.width;
+    if (width > 450) {
+      columns = 5;
+    } else if (width > 375) {
+      columns = 4;
+    } else {
+      columns = 3;
     }
 
     return PhrazyBox(
