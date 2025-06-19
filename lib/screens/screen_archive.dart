@@ -4,7 +4,6 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
 import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/utility/copy.dart';
-import 'package:phrazy/utility/debug.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../data/web_storage/web_storage.dart';
 import '../game_widgets/phrazy_box.dart';
@@ -103,6 +102,11 @@ class ArchiveScreen extends StatelessWidget {
               description:
                   'Submit your score to a lobby for you and your friends.\nAll the information you enter is encoded and completely anonymous!',
             ),
+            _buildFeatureItem(
+              title: 'Stats',
+              description:
+                  'See how your solve times stack up against other players.',
+            ),
           ],
         );
       },
@@ -157,8 +161,6 @@ class _PuzzlesListState extends State<PuzzlesList> {
     final initialScrollIndex = -loadedDate.difference(endDate).inDays - 4;
     final clampedInitialScrollIndex =
         initialScrollIndex.clamp(0, totalDailies - 1);
-
-    debug("Scrolling to index $initialScrollIndex");
 
     return ScrollablePositionedList.builder(
       itemScrollController: _itemScrollController,

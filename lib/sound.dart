@@ -12,11 +12,9 @@ import 'package:flutter/foundation.dart'; // Required for kIsWeb
 final soundIds = <String, AudioSource>{};
 bool soundsInitialized = false;
 
-// A map to store the desired volume for each sound key
-// SoLoud applies volume at the time of playing, not loading.
 final Map<String, double> _soundVolumes = {
-  'click': 1.0, // Default volume for click
-  'drop': 1.0, // Default volume for drop
+  'click': 1.0,
+  'drop': 1.0,
   'win': 0.75,
   'rollover': 0.125,
   'link': 0.5,
@@ -30,38 +28,35 @@ Future<void> loadSounds() async {
   }
 
   try {
-    // For web platforms, LoadMode.disk is generally recommended for performance
-    // as it streams directly from the web server. For other platforms, LoadMode.file
-    // is efficient.
     const loadMode = kIsWeb ? LoadMode.disk : LoadMode.memory;
 
-    // Load sounds using SoLoud.instance.loadAsset
-    // Note: asset paths usually don't start with a leading '/' when used with loadAsset
-    debug("Loading click sound...");
-    soundIds['click'] =
-        await SoLoud.instance.loadUrl("audio/click_003.ogg", mode: loadMode);
-    debug("Click sound loaded.");
-    debug("Loading drop sound...");
-    soundIds['drop'] =
-        await SoLoud.instance.loadUrl("audio/click1.ogg", mode: loadMode);
-    debug("Drop sound loaded.");
-    debug("Loading win sound...");
-    soundIds['win'] =
-        await SoLoud.instance.loadUrl("audio/phrazy_win_2.ogg", mode: loadMode);
-    debug("Win sound loaded.");
-    debug("Loading rollover sound...");
-    soundIds['rollover'] =
-        await SoLoud.instance.loadUrl("audio/rollover4.ogg", mode: loadMode);
-    debug("Rollover sound loaded.");
-    debug("Loading link sound...");
-    soundIds['link'] =
-        await SoLoud.instance.loadUrl("audio/switch16.ogg", mode: loadMode);
-    debug("Link sound loaded.");
-
-    // With flutter_soloud, volumes are set when the sound is played,
-    // not when it's loaded. We've set up the _soundVolumes map for this.
-    // The original `pool.setVolume` calls are replaced by passing volume
-    // directly to SoLoud.instance.play in playSoundAsync.
+    await Future.wait([
+      SoLoud.instance
+          .loadUrl("audio/click_003.ogg", mode: loadMode)
+          .then((source) {
+        soundIds['click'] = source;
+      }),
+      SoLoud.instance
+          .loadUrl("audio/click1.ogg", mode: loadMode)
+          .then((source) {
+        soundIds['drop'] = source;
+      }),
+      SoLoud.instance
+          .loadUrl("audio/phrazy_win_2.ogg", mode: loadMode)
+          .then((source) {
+        soundIds['win'] = source;
+      }),
+      SoLoud.instance
+          .loadUrl("audio/rollover4.ogg", mode: loadMode)
+          .then((source) {
+        soundIds['rollover'] = source;
+      }),
+      SoLoud.instance
+          .loadUrl("audio/switch16.ogg", mode: loadMode)
+          .then((source) {
+        soundIds['link'] = source;
+      }),
+    ]);
   } catch (e) {
     debug("Error loading sounds with flutter_soloud: $e");
     rethrow;
@@ -80,31 +75,17 @@ void playSound(String key) {
     return;
   }
 
-  // Await is not needed here as playSound is void and we just fire and forget.
-  // The actual playing happens in playSoundAsync.
   playSoundAsync(key);
 }
 
-// Change the return type from Future<int> to Future<PlayerHandle>
 Future<SoundHandle?> playSoundAsync(String key) async {
   final AudioSource? audioSource = soundIds[key];
 
   if (audioSource != null) {
-    // Retrieve the specific volume for this sound, or default to 1.0
     final double volume = _soundVolumes[key] ?? 1.0;
-    // Play the sound with the specified volume
     return await SoLoud.instance.play(audioSource, volume: volume);
   } else {
     debug("Sound key '$key' not found in soundIds map.");
   }
-  // Return an invalid handle if the sound key is not found
   return null;
 }
-
-// Optional: Add a dispose function if your sound manager has a clear lifecycle
-// to deinitialize SoLoud when no longer needed (e.g., app shutdown).
-// void disposeSoundManager() {
-//   SoLoud.instance.deinit();
-//   soundsInitialized = false;
-//   soundIds.clear();
-// }

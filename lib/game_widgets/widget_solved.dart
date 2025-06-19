@@ -71,6 +71,8 @@ class SolvedCelebrationSection extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             if (WebStorage.isDeveloperMode) const LobbyBox(),
+            if (WebStorage.isDeveloperMode)
+              StatsBox(statsBlock: state.statsBlock),
           ],
         );
       },

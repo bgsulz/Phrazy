@@ -48,8 +48,10 @@ class _GameScreenContent extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 48),
                 TitleText(),
                 SizedBox(height: 16),
                 PhrazyIcons(),
@@ -60,8 +62,8 @@ class _GameScreenContent extends StatelessWidget {
                 _SolveGridSection(),
                 SizedBox(height: 16),
                 _BylineAndTimerRow(),
-                SolvedCelebrationSection(),
                 NavigationArrows(),
+                SolvedCelebrationSection(),
                 SizedBox(height: 16),
               ],
             ),
@@ -213,7 +215,6 @@ class _BylineAndTimerRow extends StatelessWidget {
                       : state.loadedDate.toDisplayDateWithDay,
                   style: Style.bodyMedium,
                 ),
-                if (state.isSolved) Text(state.statsBlock.toString()),
                 _buildByline(state),
               ],
             ),

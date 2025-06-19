@@ -1,6 +1,9 @@
+import 'dart:math';
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart'; // Import for Uint8List
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/data/lobby.dart';
 import '../stats/t_digest.dart'; // Import TDigest
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -115,10 +118,11 @@ class Load {
       if (docSnapshot.exists) {
         final data = docSnapshot.data();
         if (data != null && data.containsKey('digest')) {
-          final bytes = data['digest'] as Uint8List?;
-          if (bytes != null) {
+          final list = data['digest'] as List<dynamic>?;
+          if (list != null) {
+            final listInts = list.cast<int>();
             debug('Loading T-Digest from Firebase for $dateString');
-            return TDigest.fromBytes(bytes);
+            return TDigest.fromBytes(Uint8List.fromList(listInts));
           }
         }
       }
@@ -127,6 +131,15 @@ class Load {
       debug('Creating new T-Digest for $dateString');
       final newDigest =
           TDigest.merging(compression: 100); // Default compression
+      if (kDebugMode) {
+        debug("ADDING RANDOM TIMES!");
+        final random = Random(DateTime.now().millisecondsSinceEpoch % 1234567);
+        for (var i = 0; i < 25; i++) {
+          final time = random.nextInt(60) + 5;
+          debug("ADDING: $time");
+          newDigest.add(time as double);
+        }
+      }
       final bytesToSave = newDigest.asBytes();
 
       await docRef.set({
@@ -143,6 +156,16 @@ class Load {
 
   static Future<void> saveDigest(TDigest digest, DateTime date) async {
     final firestore = FirebaseFirestore.instance;
+
+    final AuthService auth = AuthService();
+
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      user = await auth.signInAnonymously();
+      if (user == null) {
+        throw Exception('Failed to authenticate');
+      }
+    }
 
     final bytesToSave = digest.asBytes();
     final dateString = date.toYMD;

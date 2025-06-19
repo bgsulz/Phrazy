@@ -47,18 +47,18 @@ class WebStorage {
   }
 
   static BoardSave? loadBoardForDate(String date) {
-    debug("Loading state for $date");
+    // debug("Loading state for $date");
     final historyString = _localStorage.getItem(date);
 
     if (historyString == null) {
-      debug("No saved state for $date");
+      // debug("No saved state for $date");
       return null;
     } else {
       try {
         Map<String, dynamic> history = jsonDecode(historyString);
         return BoardSave.fromJson(history);
-      } on Exception catch (e) {
-        debug('Failed to load state from $date: $e');
+      } on Exception {
+        // debug('Failed to load state from $date: $e');
         _localStorage.setItem(date, '');
         return null;
       }
@@ -68,7 +68,7 @@ class WebStorage {
   static void saveTimeForDate(TimerSave state, String date) {
     final stateString = state.toJson();
     _localStorage.setItem("$date$_timeSuffix", stateString);
-    debug("Saved time ${state.time}, ${state.isSolved} for date $date");
+    // debug("Saved time ${state.time}, ${state.isSolved} for date $date");
   }
 
   static TimerSave? loadTimeForDate(String date) {

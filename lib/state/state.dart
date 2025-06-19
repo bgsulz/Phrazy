@@ -22,22 +22,27 @@ enum SolutionState { unsolved, solved, failed }
 enum GameLifecycleState { preparing, error, puzzle, solved }
 
 class StatsBlock {
+  bool isInitialized = false;
   double cdf;
 
   StatsBlock({required this.cdf});
 
   factory StatsBlock.empty() {
-    return StatsBlock(cdf: 0.0);
+    return StatsBlock(cdf: -1);
   }
 
   void initialize(TDigest digest, double timeSeconds) {
     cdf = digest.size > 5 ? digest.cdf(timeSeconds) : -1;
+    debug("CDF tested against $timeSeconds, set to $cdf");
+    isInitialized = true;
   }
 
   @override
   String toString() {
+    if (!isInitialized) return "";
+
     final cdfString = cdf >= 0
-        ? "Faster than ${cdf.toStringAsFixed(1)} % of players!"
+        ? "Faster than ${((1 - cdf) * 100).toStringAsFixed(1)} % of players!"
         : "You're one of the first to solve this Phrazy!";
     return cdfString;
   }
@@ -111,6 +116,7 @@ class GameState extends ChangeNotifier {
     notifyListeners();
 
     if (shouldAdd) {
+      debug("ADDING TO T-DIGEST!");
       digest.add(timeSeconds);
       Load.saveDigest(digest, loadedDate);
     }
@@ -130,7 +136,7 @@ class GameState extends ChangeNotifier {
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
     if (!loadedPuzzle.isEmpty && !isSolved) {
-      debug("Saving time on the way out.");
+      // debug("Saving time on the way out.");
       recordTime();
     }
     timer.onStopTimer();
@@ -148,7 +154,7 @@ class GameState extends ChangeNotifier {
       loadedPuzzle = await load.puzzleForDate(loadedDate);
     }
 
-    debug("Loaded puzzle");
+    // debug("Loaded puzzle");
 
     if (loadedPuzzle.isEmpty) {
       debug("It's empty...!");
@@ -178,7 +184,10 @@ class GameState extends ChangeNotifier {
     var time = WebStorage.loadTimeForDate(loadedDate.toYMD);
     if (time != null && !wordsChanged) {
       timer.setPresetTime(mSec: time.time, add: false);
-      if (time.isSolved) currentState = GameLifecycleState.solved;
+      if (time.isSolved) {
+        currentState = GameLifecycleState.solved;
+        loadStats(overrideTime: time.time);
+      }
     } else {
       timer.setPresetTime(mSec: 0, add: false);
     }
@@ -191,9 +200,9 @@ class GameState extends ChangeNotifier {
       currentState = GameLifecycleState.solved;
     }
     if (time != null && isSolved && !time.isSolved) {
+      _handleWinAchieved();
       timer.setPresetTime(mSec: time.time, add: false);
       recordTime(overrideTime: time.time);
-      loadStats(shouldAdd: true);
     }
     if (!isSolved) timer.onStartTimer();
 
@@ -259,14 +268,10 @@ class GameState extends ChangeNotifier {
 
     final bool wasPuzzleState = currentState == GameLifecycleState.puzzle;
     if (wasPuzzleState && checkWin()) {
-      currentState = GameLifecycleState.solved;
-      confetti.play();
-      shouldCelebrateWin = true;
-      playSound("win");
-      Events.logWin(date: loadedDate);
-      loadStats(shouldAdd: true);
+      _handleWinAchieved();
+      _playWinEffects();
     }
-    debug("Saving time in response to updated state.");
+    // debug("Saving time in response to updated state.");
     recordTime();
     WebStorage.saveBoardForDate(
       BoardSave(wordBank: _wordBankState, grid: _gridState),
@@ -339,5 +344,17 @@ class GameState extends ChangeNotifier {
 
     timer.onStopTimer();
     return true;
+  }
+
+  void _playWinEffects() {
+    confetti.play();
+    shouldCelebrateWin = true;
+    playSound("win");
+  }
+
+  void _handleWinAchieved() {
+    currentState = GameLifecycleState.solved;
+    Events.logWin(date: loadedDate);
+    loadStats(shouldAdd: true);
   }
 }

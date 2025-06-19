@@ -421,7 +421,7 @@ class _MergingDigest extends TDigest {
   Uint8List asBytes() {
     compress();
 
-    final sizeInBytes = 2 + 2 + 4 + 8 + 8 + 4 + (_lastUsedCell * 8);
+    final sizeInBytes = 4 + 8 + 8 + 4 + 2 + 2 + 2 + (_lastUsedCell * 8);
     final buffer = ByteData(sizeInBytes);
     int offset = 0;
 
@@ -481,52 +481,3 @@ double _weightedAverage(double x1, double w1, double x2, double w2) {
     return _weightedAverage(x2, w2, x1, w1);
   }
 }
-
-// SAMPLE USAGE
-// import 'dart:typed_data';
-// import 'package:your_project_name/t_digest.dart';
-
-// void main() {
-//   // 1. Create a new T-Digest for today's puzzle
-//   // This might be done once per day on your server.
-//   // A higher compression gives more accuracy. 100 is a good default.
-//   var dailyDigest = TDigest.merging(compression: 100);
-
-//   // 2. As players solve the puzzle, add their times (in seconds, for example)
-//   // This would happen on your backend whenever a solve is recorded.
-//   dailyDigest.add(12.5);
-//   dailyDigest.add(30.2);
-//   dailyDigest.add(8.1);
-//   dailyDigest.add(25.0);
-//   dailyDigest.add(15.7);
-//   // ... add many more solve times
-
-//   // 3. A new player solves the puzzle in 14.2 seconds.
-//   double mySolveTime = 14.2;
-
-//   // 4. Calculate the percentile rank
-//   // cdf() gives a fraction from 0.0 to 1.0. Multiply by 100 for percentage.
-//   double percentile = dailyDigest.cdf(mySolveTime) * 100;
-
-//   print('Your solve time: $mySolveTime seconds.');
-//   print('You were faster than ${percentile.toStringAsFixed(1)}% of players!');
-//   // Example Output: You were faster than 60.0% of players!
-
-//   // --- Storing and Loading from Firestore ---
-
-//   // 5. Serialize the digest to bytes to store it.
-//   // This gives you a compact representation to save in a Firestore document.
-//   Uint8List bytesToStore = dailyDigest.asBytes();
-//   print('Serialized size: ${bytesToStore.lengthInBytes} bytes');
-//   // Now, you would upload `bytesToStore` to a 'blob' or 'bytes' field in Firestore.
-
-
-//   // 6. Later, load the digest back from Firestore to add more data.
-//   // Pretend `bytesFromDb` is what you downloaded from Firestore.
-//   Uint8List bytesFromDb = bytesToStore;
-//   TDigest loadedDigest = TDigest.fromBytes(bytesFromDb);
-
-//   // Now you can add more data to the loaded digest
-//   loadedDigest.add(19.3);
-//   print('Total players after loading and adding: ${loadedDigest.size}');
-// }
