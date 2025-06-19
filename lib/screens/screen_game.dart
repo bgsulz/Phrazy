@@ -213,6 +213,7 @@ class _BylineAndTimerRow extends StatelessWidget {
                       : state.loadedDate.toDisplayDateWithDay,
                   style: Style.bodyMedium,
                 ),
+                if (state.isSolved) Text(state.statsBlock.toString()),
                 _buildByline(state),
               ],
             ),

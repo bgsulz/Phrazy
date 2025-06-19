@@ -1,4 +1,5 @@
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/stats/t_digest.dart';
 import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/events.dart';
 
@@ -19,6 +20,28 @@ import 'package:confetti/confetti.dart';
 enum SolutionState { unsolved, solved, failed }
 
 enum GameLifecycleState { preparing, error, puzzle, solved }
+
+class StatsBlock {
+  double cdf;
+
+  StatsBlock({required this.cdf});
+
+  factory StatsBlock.empty() {
+    return StatsBlock(cdf: 0.0);
+  }
+
+  void initialize(TDigest digest, double timeSeconds) {
+    cdf = digest.size > 5 ? digest.cdf(timeSeconds) : -1;
+  }
+
+  @override
+  String toString() {
+    final cdfString = cdf >= 0
+        ? "Faster than ${cdf.toStringAsFixed(1)} % of players!"
+        : "You're one of the first to solve this Phrazy!";
+    return cdfString;
+  }
+}
 
 class Interaction {
   Interaction({
@@ -45,6 +68,7 @@ class GameState extends ChangeNotifier {
 
   DateTime loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
   Puzzle loadedPuzzle = Puzzle.empty();
+  StatsBlock statsBlock = StatsBlock.empty();
 
   List<String> _wordBankState = [];
   List<String> _gridState = [];
@@ -66,14 +90,30 @@ class GameState extends ChangeNotifier {
   int get time => timer.rawTime.value;
 
   void recordTime({int? overrideTime}) {
-    final time = overrideTime ?? timer.rawTime.value;
+    final currentTime = overrideTime ?? timer.rawTime.value;
+
     WebStorage.saveTimeForDate(
       TimerSave(
-        time: time,
+        time: currentTime,
         isSolved: isSolved,
       ),
       loadedDate.toYMD,
     );
+  }
+
+  Future<void> loadStats({int? overrideTime, bool shouldAdd = false}) async {
+    final currentTime = overrideTime ?? timer.rawTime.value;
+    final timeSeconds = currentTime / 1000.0;
+
+    var digest = await Load.digest(loadedDate);
+
+    statsBlock.initialize(digest, timeSeconds);
+    notifyListeners();
+
+    if (shouldAdd) {
+      digest.add(timeSeconds);
+      Load.saveDigest(digest, loadedDate);
+    }
   }
 
   String wordAtPosition(GridPosition position) {
@@ -153,6 +193,7 @@ class GameState extends ChangeNotifier {
     if (time != null && isSolved && !time.isSolved) {
       timer.setPresetTime(mSec: time.time, add: false);
       recordTime(overrideTime: time.time);
+      loadStats(shouldAdd: true);
     }
     if (!isSolved) timer.onStartTimer();
 
@@ -223,12 +264,13 @@ class GameState extends ChangeNotifier {
       shouldCelebrateWin = true;
       playSound("win");
       Events.logWin(date: loadedDate);
+      loadStats(shouldAdd: true);
     }
     debug("Saving time in response to updated state.");
     recordTime();
     WebStorage.saveBoardForDate(
       BoardSave(wordBank: _wordBankState, grid: _gridState),
-      loadedDate.toYMD,
+      loadedDate.toYMD, // This line still has the toYMD error in load.dart
     );
     notifyListeners();
   }

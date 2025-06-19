@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart'; // Import for Uint8List
+import 'package:phrazy/core/ext_ymd.dart';
+import '../stats/t_digest.dart'; // Import TDigest
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../core/puzzle_loader.dart';
 import '../data/tail.dart';
 import '../utility/debug.dart';
 import '../data/puzzle.dart';
-import '../utility/ext.dart';
+import '../utility/ext.dart'; // Explicitly ensuring this import is present and correctly placed
 
 typedef PhraseMap = Map<String, List<Tail>>;
 
@@ -93,11 +97,64 @@ class Load {
       final puzzle = puzzleLoader.fromFirebase(puzzleData, puzzleId);
 
       _phrases = await _loadPhrasesForPuzzle(puzzle);
-
       return puzzle;
     } on FirebaseException catch (f) {
       debug(f);
       return Puzzle.empty();
+    }
+  }
+
+  static Future<TDigest> digest(DateTime date) async {
+    final firestore = FirebaseFirestore.instance;
+    final dateString = date.toYMD;
+    final docRef = firestore.collection('stats').doc(dateString);
+
+    try {
+      final docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        if (data != null && data.containsKey('digest')) {
+          final bytes = data['digest'] as Uint8List?;
+          if (bytes != null) {
+            debug('Loading T-Digest from Firebase for $dateString');
+            return TDigest.fromBytes(bytes);
+          }
+        }
+      }
+
+      // If document doesn't exist or data is missing/invalid, create a new one.
+      debug('Creating new T-Digest for $dateString');
+      final newDigest =
+          TDigest.merging(compression: 100); // Default compression
+      final bytesToSave = newDigest.asBytes();
+
+      await docRef.set({
+        'digest': bytesToSave,
+        'created_at': FieldValue.serverTimestamp(),
+      });
+
+      return newDigest;
+    } on FirebaseException catch (e) {
+      debug('Error accessing T-Digest from Firebase: $e');
+      return TDigest.merging(compression: 100);
+    }
+  }
+
+  static Future<void> saveDigest(TDigest digest, DateTime date) async {
+    final firestore = FirebaseFirestore.instance;
+
+    final bytesToSave = digest.asBytes();
+    final dateString = date.toYMD;
+    final docRef = firestore.collection('stats').doc(dateString);
+
+    try {
+      await docRef.set({
+        'digest': bytesToSave,
+        'updated_at': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true)); // Use merge to not overwrite other fields
+    } on FirebaseException catch (e) {
+      debug('Error saving T-Digest to Firebase: $e');
     }
   }
 
