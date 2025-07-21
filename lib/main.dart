@@ -38,7 +38,6 @@ class Phrazy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Events.logVisit();
-    // REFACTORED: Set up the dependency injection for the new architecture.
     return ChangeNotifierProvider(
       create: (context) => GameController(
         repository: GameRepository(

@@ -66,7 +66,6 @@ class GameController extends ChangeNotifier {
     currentState = GameLifecycleState.preparing;
     notifyListeners();
 
-    // DELEGATED: All loading logic is now in the repository
     final LoadedGameData data;
     if (puzzle != null) {
       // Handle demo/special puzzles
@@ -149,7 +148,6 @@ class GameController extends ChangeNotifier {
     for (var index in modifiedIndices) {
       var (up, left, right, down) = loadedPuzzle.getSurrounding(index);
 
-      // REFACTORED: Uses the injected validator instance
       Tail doesInteract(int a, int b) =>
           _validator.validate(_gridState[a], _gridState[b]);
 
