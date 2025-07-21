@@ -13,6 +13,8 @@ class NavigationArrows extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<GameState>(
       builder: (context, state, child) {
+        if (state.isPreparing) return const SizedBox.shrink();
+
         final loadedDate = state.loadedDate;
 
         if (loadedDate.isBefore(DateTime.fromMillisecondsSinceEpoch(1))) {
