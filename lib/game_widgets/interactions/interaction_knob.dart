@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:phrazy/data/interaction.dart';
 import 'package:phrazy/data/tail.dart';
 import 'package:phrazy/game_widgets/interactions/interaction_direction.dart';
-import 'package:phrazy/game/state.dart';
 import 'package:phrazy/utility/style.dart';
 
 class InteractionKnob extends StatelessWidget {

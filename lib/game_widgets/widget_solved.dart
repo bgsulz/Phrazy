@@ -6,14 +6,14 @@ import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 
-import '../game/state.dart';
+import '../game/game_controller.dart';
 import '../utility/ext.dart';
 import '../utility/style.dart';
 
 class SolvedCelebrationSection extends StatelessWidget {
   const SolvedCelebrationSection({super.key});
 
-  void _copyResults(BuildContext context, GameState value) {
+  void _copyResults(BuildContext context, GameController value) {
     final time = value.time;
     final text = Copy.shareString(value.loadedDate, time.toDisplayTime, time);
     Clipboard.setData(ClipboardData(text: text));
@@ -22,7 +22,7 @@ class SolvedCelebrationSection extends StatelessWidget {
     );
   }
 
-  Widget _buildCelebrationText(BuildContext context, GameState value) {
+  Widget _buildCelebrationText(BuildContext context, GameController value) {
     return Text(
       Copy.summaryString(value.loadedDate, value.time.toDisplayTime),
       style: Style.bodyMedium,
@@ -31,7 +31,7 @@ class SolvedCelebrationSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.currentState != GameLifecycleState.solved) {
           return const SizedBox.shrink();

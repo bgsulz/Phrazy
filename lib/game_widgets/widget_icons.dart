@@ -8,7 +8,7 @@ import '../data/web_storage/web_storage.dart';
 import '../utility/copy.dart';
 import '../utility/style.dart';
 import '../game_widgets/demo.dart';
-import '../game/state.dart';
+import '../game/game_controller.dart';
 import 'package:provider/provider.dart';
 import 'phrazy_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -127,7 +127,7 @@ class ClearIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, value, child) {
         if (!value.isPreparing && !value.isSolved) {
           return Tooltip(
@@ -151,7 +151,7 @@ class PauseIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, value, child) {
         if (!value.isPreparing && !value.isSolved) {
           return Tooltip(
@@ -170,7 +170,7 @@ class PauseIcon extends StatelessWidget {
   }
 
   void _showPause(BuildContext context) {
-    final gameState = Provider.of<GameState>(context, listen: false);
+    final gameState = Provider.of<GameController>(context, listen: false);
     gameState.togglePause(true);
 
     showDialogSuper(

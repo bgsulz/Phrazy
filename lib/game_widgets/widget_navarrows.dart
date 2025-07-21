@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
-import 'package:phrazy/data/load.dart';
-import 'package:phrazy/game/state.dart';
+import 'package:phrazy/game/config.dart';
+import 'package:phrazy/game/game_controller.dart';
 import 'package:provider/provider.dart';
 
 class NavigationArrows extends StatelessWidget {
@@ -11,7 +11,7 @@ class NavigationArrows extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.isPreparing) return const SizedBox.shrink();
 
@@ -21,9 +21,9 @@ class NavigationArrows extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        final bool canGoBack = state.loadedDate.isAfter(Load.startDate);
+        final bool canGoBack = state.loadedDate.isAfter(AppConfig.startDate);
         final bool canGoForward =
-            state.loadedDate.isBefore(Load.endDate.copyWith(hour: 2));
+            state.loadedDate.isBefore(AppConfig.endDate.copyWith(hour: 2));
 
         if (!canGoBack && !canGoForward) {
           return const SizedBox.shrink();

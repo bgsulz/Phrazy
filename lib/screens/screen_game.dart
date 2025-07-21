@@ -10,7 +10,7 @@ import '../game_widgets/widget_connectorbank.dart';
 import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 
-import '../game/state.dart';
+import '../game/game_controller.dart';
 import '../game_widgets/widget_timer.dart';
 import '../game_widgets/widget_icons.dart';
 import '../game_widgets/widget_solvegrid.dart';
@@ -26,7 +26,7 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = Provider.of<GameState>(context, listen: false);
+    final state = Provider.of<GameController>(context, listen: false);
     state.prepare(date: date, puzzle: puzzle);
 
     return const SelectionArea(
@@ -48,7 +48,7 @@ class _GameScreenContentState extends State<_GameScreenContent> {
   @override
   void initState() {
     super.initState();
-    final state = Provider.of<GameState>(context, listen: false);
+    final state = Provider.of<GameController>(context, listen: false);
     _winSubscription = state.onWin.listen((_) {
       state.confetti.play();
     });
@@ -62,7 +62,7 @@ class _GameScreenContentState extends State<_GameScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    final state = Provider.of<GameState>(context, listen: false);
+    final state = Provider.of<GameController>(context, listen: false);
 
     return Stack(
       alignment: Alignment.center,
@@ -104,7 +104,7 @@ class _LoadingErrorIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.isPreparing) {
           return SizedBox(
@@ -141,7 +141,7 @@ class _WordBankSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.currentState == GameLifecycleState.puzzle) {
           return Column(
@@ -162,7 +162,7 @@ class _ConnectorBankSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.currentState == GameLifecycleState.puzzle &&
             state.loadedPuzzle.connectors != null) {
@@ -184,7 +184,7 @@ class _SolveGridSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.currentState == GameLifecycleState.puzzle ||
             state.currentState == GameLifecycleState.solved) {
@@ -203,7 +203,7 @@ class _BylineAndTimerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, state, child) {
         if (state.currentState == GameLifecycleState.error ||
             state.currentState == GameLifecycleState.preparing) {
@@ -237,7 +237,7 @@ class _BylineAndTimerRow extends StatelessWidget {
     );
   }
 
-  Widget _buildByline(GameState state) {
+  Widget _buildByline(GameController state) {
     if (state.loadedPuzzle.author case var author?) {
       return Text(
         "by $author",

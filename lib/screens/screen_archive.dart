@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
+import 'package:phrazy/game/config.dart';
 import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../data/web_storage/web_storage.dart';
 import '../game_widgets/phrazy_box.dart';
 import '../utility/style.dart';
-import '../data/load.dart';
 import '../utility/hover.dart';
-import '../game/state.dart';
+import '../game/game_controller.dart';
 import 'package:provider/provider.dart';
 import '../utility/ext.dart';
 
@@ -19,7 +19,7 @@ class ArchiveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameState = Provider.of<GameState>(context, listen: false);
+    final gameState = Provider.of<GameController>(context, listen: false);
     final loadedDate = gameState.loadedPuzzle.isEmpty
         ? DateTime.now().copyWith(hour: 12)
         : gameState.loadedDate;
@@ -49,7 +49,7 @@ class ArchiveScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
             onPressed: () {
-              final state = Provider.of<GameState>(context, listen: false);
+              final state = Provider.of<GameController>(context, listen: false);
               if (state.loadedPuzzle.isEmpty) {
                 context.pushReplacement('/');
               } else {
@@ -155,8 +155,8 @@ class _PuzzlesListState extends State<PuzzlesList> {
   @override
   Widget build(BuildContext context) {
     final loadedDate = widget.loadedDate;
-    final totalDailies = Load.totalDailies;
-    final endDate = Load.endDate;
+    final totalDailies = AppConfig.totalDailies;
+    final endDate = AppConfig.endDate;
 
     final initialScrollIndex = -loadedDate.difference(endDate).inDays - 4;
     final clampedInitialScrollIndex =
@@ -165,10 +165,10 @@ class _PuzzlesListState extends State<PuzzlesList> {
     return ScrollablePositionedList.builder(
       itemScrollController: _itemScrollController,
       initialScrollIndex: clampedInitialScrollIndex,
-      itemCount: Load.totalDailies,
+      itemCount: AppConfig.totalDailies,
       reverse: true,
       itemBuilder: (context, index) {
-        final date = Load.endDate.subtract(Duration(days: index));
+        final date = AppConfig.endDate.subtract(Duration(days: index));
         return PuzzleCard(
           date: date,
           isLoaded: date.isSameDayAs(widget.loadedDate),

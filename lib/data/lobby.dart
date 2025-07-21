@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:phrazy/game/state.dart';
+import 'package:phrazy/game/game_controller.dart';
 import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/security.dart';
 
@@ -20,7 +20,7 @@ class AuthService {
 
 class Lobby {
   static Future<void> saveToLobby(
-      GameState state, String lobbyName, String myName) async {
+      GameController state, String lobbyName, String myName) async {
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
     final AuthService auth = AuthService();
 

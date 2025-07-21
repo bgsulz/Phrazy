@@ -97,25 +97,25 @@ enum ScaleFunction {
 }
 
 class _MergingDigest extends TDigest {
-  // --- Configuration ---
+  // Configuration
   final double _publicCompression;
   late final double _internalCompression;
   final ScaleFunction _scale = ScaleFunction.k2;
 
-  // --- State for Merged Centroids ---
+  // State for Merged Centroids
   int _lastUsedCell = 0;
   double _totalWeight = 0;
   late Float64List _weight;
   late Float64List _mean;
 
-  // --- State for Unmerged (pending) Centroids ---
+  // State for Unmerged (pending) Centroids
   int _tempUsed = 0;
   double _unmergedWeight = 0;
   late Float64List _tempWeight;
   late Float64List _tempMean;
   late Int32List _order;
 
-  // --- Internal Flags ---
+  // Internal Flags
   int _mergeCount = 0;
   final bool _useAlternatingSort = true;
   final bool _useTwoLevelCompression = true;
@@ -452,7 +452,7 @@ class _MergingDigest extends TDigest {
   }
 }
 
-// ---- Helper Functions ----
+// -Helper Functions-
 
 /// Sorts an index array `order` based on the values in `values`.
 void _stableSort(int n, Float64List values, Int32List order) {

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phrazy/data/lobby.dart';
+import 'package:phrazy/game/stats_block.dart';
 import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/game_widgets/widget_scoreboard.dart';
-import 'package:phrazy/game/state.dart';
+import 'package:phrazy/game/game_controller.dart';
 import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/ext.dart';
 import 'package:phrazy/utility/style.dart';
@@ -169,7 +170,7 @@ class _LobbyBoxState extends State<LobbyBox> {
   }
 
   void _viewLobby(BuildContext context) async {
-    final state = Provider.of<GameState>(context, listen: false);
+    final state = Provider.of<GameController>(context, listen: false);
     final data =
         await Lobby.getScoreboard(_lobbyCode, state.loadedPuzzle.remoteId!);
     if (!context.mounted) {
@@ -197,7 +198,7 @@ class _LobbyBoxState extends State<LobbyBox> {
 
   void _saveToLobbyAsync(
       BuildContext context, String lobbyCode, String playerName) async {
-    final state = Provider.of<GameState>(context, listen: false);
+    final state = Provider.of<GameController>(context, listen: false);
     await Lobby.saveToLobby(state, lobbyCode, playerName);
     if (!context.mounted) {
       debug("context not mounted after saving lobby, early return");
@@ -230,7 +231,7 @@ class _LobbyBoxState extends State<LobbyBox> {
 
   void _copyLobby(
       BuildContext context, String lobbyCode, Map<String, int>? data) {
-    final state = Provider.of<GameState>(context, listen: false);
+    final state = Provider.of<GameController>(context, listen: false);
     final buffer = StringBuffer();
     if (data == null) return;
 

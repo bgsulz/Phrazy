@@ -4,7 +4,7 @@ import '../widget_wordcard.dart';
 import '../grid/card_drop_data.dart';
 import '../../data/puzzle.dart';
 import '../../sound.dart';
-import '../../game/state.dart';
+import '../../game/game_controller.dart';
 import '../../utility/style.dart';
 
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class _PhrazyTileState extends State<PhrazyTile> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      return Consumer<GameState>(
+      return Consumer<GameController>(
         builder: (context, state, child) {
           final word = state.wordAtPosition(widget.position);
           return DragTarget(
@@ -89,8 +89,8 @@ class _PhrazyTileState extends State<PhrazyTile> {
                           _buildEmptyCard(context, widget.position.index),
                       child: GestureDetector(
                         onTap: () {
-                          final gameState =
-                              Provider.of<GameState>(context, listen: false);
+                          final gameState = Provider.of<GameController>(context,
+                              listen: false);
                           gameState.reportClicked(widget.position);
                         },
                         child: WordCard(

@@ -1,19 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
-import 'package:phrazy/sound.dart';
-import 'package:phrazy/utility/events.dart';
-
-import '../utility/copy.dart';
-
-import 'firebase_options.dart';
+import 'package:go_router/go_router.dart';
+import 'package:phrazy/game/game_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'game/state.dart';
-import 'utility/style.dart';
-import 'routes.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
+import 'package:phrazy/data/game_repository.dart';
+import 'package:phrazy/data/local_data_source.dart';
+import 'package:phrazy/data/remote_data_source.dart';
+import 'package:phrazy/firebase_options.dart';
+import 'package:phrazy/routes.dart';
+import 'package:phrazy/sound.dart';
+import 'package:phrazy/utility/copy.dart';
+import 'package:phrazy/utility/events.dart';
+import 'package:phrazy/utility/style.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +38,14 @@ class Phrazy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Events.logVisit();
+    // REFACTORED: Set up the dependency injection for the new architecture.
     return ChangeNotifierProvider(
-      create: (context) => GameState(),
+      create: (context) => GameController(
+        repository: GameRepository(
+          remote: RemoteDataSource(),
+          local: LocalDataSource(),
+        ),
+      ),
       child: MaterialApp.router(
         title: Copy.title,
         theme: PhrazyTheme.instance,

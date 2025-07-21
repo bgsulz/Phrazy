@@ -1,6 +1,7 @@
 import 'dart:math';
 
-import '../data/load.dart';
+import 'package:phrazy/game/phrase_validator.dart';
+
 import '../data/tail.dart';
 import '../core/puzzle_interface.dart';
 

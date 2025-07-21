@@ -5,7 +5,7 @@ import '../game_widgets/widget_overlayinteractions.dart';
 import '../utility/style.dart';
 
 import 'widget_overlaywalls.dart';
-import '../game/state.dart';
+import '../game/game_controller.dart';
 import '../data/puzzle.dart';
 import 'grid/phrazy_grid.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class SolveGrid extends StatelessWidget {
                   position: GridPosition(index: index, isWordBank: false));
             },
           ),
-          Consumer<GameState>(
+          Consumer<GameController>(
             builder: (context, gameState, child) {
               if (!gameState.isPaused) {
                 return PhrazyGrid(

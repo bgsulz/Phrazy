@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/game/state.dart';
+import 'package:phrazy/game/game_controller.dart';
 import 'package:phrazy/utility/style.dart';
 import 'package:provider/provider.dart';
 
@@ -86,7 +86,7 @@ class _ConnectorBankContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(
+    return Consumer<GameController>(
       builder: (context, value, child) {
         final List<String> allConnectors =
             allConnectorsOverride ?? value.loadedPuzzle.connectors!;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utility/style.dart';
-import '../game/state.dart';
+import '../game/game_controller.dart';
 import '../utility/ext.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +9,7 @@ class SolveTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameState>(builder: (context, gameState, child) {
+    return Consumer<GameController>(builder: (context, gameState, child) {
       return StreamBuilder<int>(
         stream: gameState.timer.secondTime,
         initialData: 0,
@@ -27,7 +27,8 @@ class SolveTimer extends StatelessWidget {
     });
   }
 
-  void _recordTimeIfCurrentRoute(GameState gameState, BuildContext context) {
+  void _recordTimeIfCurrentRoute(
+      GameController gameState, BuildContext context) {
     if (gameState.isPreparing || gameState.isSolved) return;
 
     final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
