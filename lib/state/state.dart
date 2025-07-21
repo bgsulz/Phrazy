@@ -135,13 +135,15 @@ class GameState extends ChangeNotifier {
   }
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
+    if (isPreparing) return;
+    currentState = GameLifecycleState.preparing;
+    notifyListeners();
+
     if (!loadedPuzzle.isEmpty && !isSolved) {
       // debug("Saving time on the way out.");
       recordTime();
     }
     timer.onStopTimer();
-
-    currentState = GameLifecycleState.preparing;
 
     if (puzzle != null) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);

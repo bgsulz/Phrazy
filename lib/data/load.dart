@@ -1,16 +1,16 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart'; // Import for Uint8List
+import 'package:flutter/foundation.dart';
 import 'package:phrazy/core/ext_ymd.dart';
 import 'package:phrazy/data/lobby.dart';
-import '../stats/t_digest.dart'; // Import TDigest
+import '../stats/t_digest.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../core/puzzle_loader.dart';
 import '../data/tail.dart';
 import '../utility/debug.dart';
 import '../data/puzzle.dart';
-import '../utility/ext.dart'; // Explicitly ensuring this import is present and correctly placed
+import '../utility/ext.dart';
 
 typedef PhraseMap = Map<String, List<Tail>>;
 
