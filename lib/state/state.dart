@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:phrazy/core/ext_ymd.dart';
 import 'package:phrazy/stats/t_digest.dart';
 import 'package:phrazy/utility/debug.dart';
@@ -19,7 +21,7 @@ import 'package:confetti/confetti.dart';
 
 enum SolutionState { unsolved, solved, failed }
 
-enum GameLifecycleState { none, preparing, error, puzzle, solved }
+enum GameLifecycleState { preparing, error, puzzle, solved }
 
 class StatsBlock {
   bool isInitialized = false;
@@ -70,6 +72,9 @@ class Interaction {
 class GameState extends ChangeNotifier {
   final ConfettiController confetti =
       ConfettiController(duration: Durations.long1);
+  final _winEventController = StreamController<void>.broadcast();
+
+  Stream<void> get onWin => _winEventController.stream;
 
   DateTime loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
   Puzzle loadedPuzzle = Puzzle.empty();
@@ -80,10 +85,9 @@ class GameState extends ChangeNotifier {
   List<String> activeConnections = [];
   List<Interaction> interactionState = [];
 
-  GameLifecycleState currentState = GameLifecycleState.none;
+  GameLifecycleState currentState = GameLifecycleState.preparing;
 
   bool get isSolved => currentState == GameLifecycleState.solved;
-  bool shouldCelebrateWin = false;
 
   bool _isPaused = false;
   bool get isPaused => _isPaused;
@@ -135,15 +139,13 @@ class GameState extends ChangeNotifier {
   }
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
-    if (isPreparing) return;
-    currentState = GameLifecycleState.preparing;
-    notifyListeners();
-
     if (!loadedPuzzle.isEmpty && !isSolved) {
       // debug("Saving time on the way out.");
       recordTime();
     }
     timer.onStopTimer();
+
+    currentState = GameLifecycleState.preparing;
 
     if (puzzle != null) {
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
@@ -197,7 +199,6 @@ class GameState extends ChangeNotifier {
     recalculateInteractions(List.generate(_gridState.length, (i) => i),
         isFirstTime: true);
 
-    shouldCelebrateWin = false;
     if (!isSolved && checkWin()) {
       currentState = GameLifecycleState.solved;
     }
@@ -209,10 +210,6 @@ class GameState extends ChangeNotifier {
     if (!isSolved) timer.onStartTimer();
 
     notifyListeners();
-  }
-
-  void acknowledgeWinCelebration() {
-    shouldCelebrateWin = false;
   }
 
   void clearBoard() {
@@ -270,6 +267,7 @@ class GameState extends ChangeNotifier {
 
     final bool wasPuzzleState = currentState == GameLifecycleState.puzzle;
     if (wasPuzzleState && checkWin()) {
+      debug("looks like a new win!");
       _handleWinAchieved();
       _playWinEffects();
     }
@@ -349,8 +347,7 @@ class GameState extends ChangeNotifier {
   }
 
   void _playWinEffects() {
-    confetti.play();
-    shouldCelebrateWin = true;
+    _winEventController.add(null);
     playSound("win");
   }
 

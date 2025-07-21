@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/widget_overlayconfetti.dart';
 import 'package:phrazy/game_widgets/widget_solved.dart';
@@ -27,18 +29,40 @@ class GameScreen extends StatelessWidget {
     final state = Provider.of<GameState>(context, listen: false);
     state.prepare(date: date, puzzle: puzzle);
 
-    return SelectionArea(
+    return const SelectionArea(
       child: _GameScreenContent(),
     );
   }
 }
 
-class _GameScreenContent extends StatelessWidget {
+class _GameScreenContent extends StatefulWidget {
+  const _GameScreenContent();
+
+  @override
+  State<_GameScreenContent> createState() => _GameScreenContentState();
+}
+
+class _GameScreenContentState extends State<_GameScreenContent> {
+  StreamSubscription<void>? _winSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    final state = Provider.of<GameState>(context, listen: false);
+    _winSubscription = state.onWin.listen((_) {
+      state.confetti.play();
+    });
+  }
+
+  @override
+  void dispose() {
+    _winSubscription?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = Provider.of<GameState>(context, listen: false);
-
-    _conditionallyShowCelebrationDialog(context);
 
     return Stack(
       alignment: Alignment.center,
@@ -72,17 +96,6 @@ class _GameScreenContent extends StatelessWidget {
         ConfettiOverlay(controller: state.confetti),
       ],
     );
-  }
-
-  void _conditionallyShowCelebrationDialog(BuildContext context) {
-    final state = Provider.of<GameState>(context);
-    if (state.shouldCelebrateWin) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (context.mounted && state.shouldCelebrateWin) {
-          state.acknowledgeWinCelebration();
-        }
-      });
-    }
   }
 }
 
