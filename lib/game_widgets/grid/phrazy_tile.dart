@@ -4,7 +4,7 @@ import '../widget_wordcard.dart';
 import '../grid/card_drop_data.dart';
 import '../../data/puzzle.dart';
 import '../../sound.dart';
-import '../../state/state.dart';
+import '../../game/state.dart';
 import '../../utility/style.dart';
 
 import 'package:flutter/material.dart';

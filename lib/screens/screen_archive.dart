@@ -10,7 +10,7 @@ import '../game_widgets/phrazy_box.dart';
 import '../utility/style.dart';
 import '../data/load.dart';
 import '../utility/hover.dart';
-import '../state/state.dart';
+import '../game/state.dart';
 import 'package:provider/provider.dart';
 import '../utility/ext.dart';
 

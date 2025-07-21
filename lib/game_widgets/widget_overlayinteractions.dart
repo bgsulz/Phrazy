@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/interactions/interaction_direction.dart';
 import 'package:phrazy/game_widgets/interactions/interaction_knob.dart';
 import 'package:phrazy/game_widgets/interactions/interaction_x.dart';
-import '../state/state.dart';
+import '../game/state.dart';
 
 class OverlayInteractionGrid extends StatelessWidget {
   const OverlayInteractionGrid({super.key, required this.interaction});

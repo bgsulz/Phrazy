@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:phrazy/state/state.dart';
+import 'package:phrazy/game/state.dart';
 import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/security.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/game_widgets/phrazy_box.dart';
-import 'package:phrazy/state/state.dart';
+import 'package:phrazy/game/state.dart';
 import 'package:phrazy/utility/style.dart';
 import 'package:provider/provider.dart';
 

@@ -10,7 +10,7 @@ import '../game_widgets/widget_connectorbank.dart';
 import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 
-import '../state/state.dart';
+import '../game/state.dart';
 import '../game_widgets/widget_timer.dart';
 import '../game_widgets/widget_icons.dart';
 import '../game_widgets/widget_solvegrid.dart';

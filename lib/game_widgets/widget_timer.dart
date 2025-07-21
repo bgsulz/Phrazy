@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utility/style.dart';
-import '../state/state.dart';
+import '../game/state.dart';
 import '../utility/ext.dart';
 import 'package:provider/provider.dart';
 

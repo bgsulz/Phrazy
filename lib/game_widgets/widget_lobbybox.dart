@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:phrazy/data/lobby.dart';
 import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/game_widgets/widget_scoreboard.dart';
-import 'package:phrazy/state/state.dart';
+import 'package:phrazy/game/state.dart';
 import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/ext.dart';
 import 'package:phrazy/utility/style.dart';

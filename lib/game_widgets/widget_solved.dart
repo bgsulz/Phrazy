@@ -6,7 +6,7 @@ import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../utility/copy.dart';
 import 'package:provider/provider.dart';
 
-import '../state/state.dart';
+import '../game/state.dart';
 import '../utility/ext.dart';
 import '../utility/style.dart';
 

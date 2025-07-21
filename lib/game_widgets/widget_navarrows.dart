@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
 import 'package:phrazy/data/load.dart';
-import 'package:phrazy/state/state.dart';
+import 'package:phrazy/game/state.dart';
 import 'package:provider/provider.dart';
 
 class NavigationArrows extends StatelessWidget {

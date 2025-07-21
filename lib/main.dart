@@ -7,7 +7,7 @@ import '../utility/copy.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'state/state.dart';
+import 'game/state.dart';
 import 'utility/style.dart';
 import 'routes.dart';
 

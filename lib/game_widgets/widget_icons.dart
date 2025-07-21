@@ -8,7 +8,7 @@ import '../data/web_storage/web_storage.dart';
 import '../utility/copy.dart';
 import '../utility/style.dart';
 import '../game_widgets/demo.dart';
-import '../state/state.dart';
+import '../game/state.dart';
 import 'package:provider/provider.dart';
 import 'phrazy_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
