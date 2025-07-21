@@ -32,7 +32,7 @@ class OverlayWallGrid extends StatelessWidget {
           wallColor: highlightColor,
           wallWidth: 6.0,
         ),
-        child: SizedBox.expand(),
+        child: const SizedBox.expand(),
       ),
     );
   }
