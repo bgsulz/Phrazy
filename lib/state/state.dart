@@ -139,6 +139,8 @@ class GameState extends ChangeNotifier {
   }
 
   Future prepare({DateTime? date, Puzzle? puzzle}) async {
+    confetti.stop();
+
     if (!loadedPuzzle.isEmpty && !isSolved) {
       // debug("Saving time on the way out.");
       recordTime();
