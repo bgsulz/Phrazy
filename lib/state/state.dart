@@ -19,7 +19,7 @@ import 'package:confetti/confetti.dart';
 
 enum SolutionState { unsolved, solved, failed }
 
-enum GameLifecycleState { preparing, error, puzzle, solved }
+enum GameLifecycleState { none, preparing, error, puzzle, solved }
 
 class StatsBlock {
   bool isInitialized = false;
@@ -80,7 +80,7 @@ class GameState extends ChangeNotifier {
   List<String> activeConnections = [];
   List<Interaction> interactionState = [];
 
-  GameLifecycleState currentState = GameLifecycleState.preparing;
+  GameLifecycleState currentState = GameLifecycleState.none;
 
   bool get isSolved => currentState == GameLifecycleState.solved;
   bool shouldCelebrateWin = false;
