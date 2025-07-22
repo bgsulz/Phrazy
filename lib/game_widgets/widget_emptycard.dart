@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'phrazy_box.dart';
-import '../utility/style.dart';
 
 class EmptyCard extends StatelessWidget {
   final Color color;

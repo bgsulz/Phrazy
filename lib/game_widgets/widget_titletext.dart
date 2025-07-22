@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:phrazy/utility/copy.dart';
-import 'package:phrazy/utility/style.dart';
 import 'package:vector_math/vector_math_64.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 

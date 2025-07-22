@@ -13,7 +13,6 @@ import 'package:phrazy/routes.dart';
 import 'package:phrazy/sound.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:phrazy/utility/events.dart';
-import 'package:phrazy/utility/style.dart';
 import 'package:phrazy/utility/theme_notifier.dart';
 
 void main() async {
