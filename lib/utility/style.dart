@@ -1,16 +1,71 @@
 import 'package:flutter/material.dart';
 
+class PhrazyColors {
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final Color backgroundColorLight;
+  final Color foregroundColorLight;
+  final Color onBackgroundColor;
+  final Color cardColor;
+  final Color onCardColor;
+  final Color textColor;
+  final Color borderColor;
+  final Color dialogColor;
+  final Color yesColor;
+  final Color noColor;
+  final Color iconBackgroundColor;
+
+  const PhrazyColors({
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.backgroundColorLight,
+    required this.foregroundColorLight,
+    required this.onBackgroundColor,
+    required this.cardColor,
+    required this.onCardColor,
+    required this.textColor,
+    required this.borderColor,
+    required this.dialogColor,
+    required this.yesColor,
+    required this.noColor,
+    required this.iconBackgroundColor,
+  });
+}
+
+const PhrazyColors defaultColors = PhrazyColors(
+  backgroundColor: Color(0xFF5828D2),
+  foregroundColor: Color(0xFF330697),
+  backgroundColorLight: Color(0xFFA382FF),
+  foregroundColorLight: Color(0xFFB4A7FF),
+  onBackgroundColor: Colors.white,
+  cardColor: Colors.white,
+  onCardColor: Colors.black,
+  textColor: Colors.white,
+  borderColor: Colors.black,
+  dialogColor: Colors.black,
+  yesColor: Color(0xFF00FFC4),
+  noColor: Color(0xFFFF007F),
+  iconBackgroundColor: Colors.transparent,
+);
+
+const PhrazyColors highContrastColors = PhrazyColors(
+  backgroundColor: Colors.white,
+  foregroundColor: Colors.black,
+  backgroundColorLight: Color(0xFF666666),
+  foregroundColorLight: Color(0xFFAAAAAA),
+  onBackgroundColor: Colors.black,
+  cardColor: Colors.white,
+  onCardColor: Colors.black,
+  textColor: Colors.black,
+  borderColor: Colors.black,
+  dialogColor: Colors.white,
+  yesColor: Color(0xFF00FFC4),
+  noColor: Color(0xFFFF007F),
+  iconBackgroundColor: Colors.white,
+);
+
 class Style {
   static const fontFamily = 'BioRhyme';
-
-  static const Color backgroundColor = Color(0xFF5828D2);
-  static const Color foregroundColor = Color(0xFF330697);
-  static const Color backgroundColorLight = Color(0xFFA382FF);
-  static const Color foregroundColorLight = Color(0xFFB4A7FF);
-  static const Color cardColor = Colors.white;
-  static const Color textColor = Colors.black;
-  static const Color yesColor = Color(0xFF00FFC4);
-  static const Color noColor = Color(0xFFFF007F);
 
   static TextStyle get displayLarge {
     return const TextStyle(
@@ -111,38 +166,52 @@ class Style {
         if (states.contains(WidgetState.disabled)) {
           return Colors.grey.shade800;
         }
-        return Style.yesColor;
+        // This will be updated to use Theme.of(context) in the refactoring step
+        return Colors.green; // Placeholder, will be replaced
       }),
     );
   }
 }
 
 class PhrazyTheme {
-  static ThemeData get instance => ThemeData(
-        iconTheme: const IconThemeData(color: Style.cardColor),
-        shadowColor: Colors.transparent,
-        colorScheme: ColorScheme.fromSeed(
-          brightness: Brightness.dark,
-          dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
-          seedColor: Style.backgroundColor,
-        ),
-        useMaterial3: true,
-        textTheme: TextTheme(
-          displayLarge: Style.displayLarge,
-          displayMedium: Style.displayMedium,
-          displaySmall: Style.displaySmall,
-          headlineLarge: Style.headlineLarge,
-          headlineMedium: Style.headlineMedium,
-          headlineSmall: Style.headlineSmall,
-          titleLarge: Style.titleLarge,
-          titleMedium: Style.titleMedium,
-          titleSmall: Style.titleSmall,
-          bodyLarge: Style.bodyLarge,
-          bodyMedium: Style.bodyMedium,
-          bodySmall: Style.bodySmall,
-          labelLarge: Style.labelLarge,
-          labelMedium: Style.labelMedium,
-          labelSmall: Style.labelSmall,
-        ),
-      );
+  static ThemeData getTheme(PhrazyColors colors) {
+    return ThemeData(
+      iconTheme: IconThemeData(color: colors.textColor),
+      shadowColor: Colors.transparent,
+      colorScheme: ColorScheme.fromSeed(
+        brightness: Brightness.light,
+        seedColor: colors.backgroundColor,
+        surface: colors.backgroundColor,
+        onSurface: colors.textColor,
+        outline: colors.borderColor,
+        surfaceContainer: colors.cardColor,
+        onInverseSurface: colors.onCardColor,
+        surfaceContainerLow: colors.foregroundColorLight,
+        surfaceContainerLowest: colors.foregroundColor,
+        surfaceBright: colors.backgroundColorLight,
+        surfaceContainerHigh: colors.dialogColor,
+        tertiary: colors.yesColor,
+        error: colors.noColor,
+        secondaryContainer: colors.iconBackgroundColor,
+      ),
+      useMaterial3: true,
+      textTheme: TextTheme(
+        displayLarge: Style.displayLarge,
+        displayMedium: Style.displayMedium,
+        displaySmall: Style.displaySmall,
+        headlineLarge: Style.headlineLarge,
+        headlineMedium: Style.headlineMedium,
+        headlineSmall: Style.headlineSmall,
+        titleLarge: Style.titleLarge,
+        titleMedium: Style.titleMedium,
+        titleSmall: Style.titleSmall,
+        bodyLarge: Style.bodyLarge,
+        bodyMedium: Style.bodyMedium,
+        bodySmall: Style.bodySmall,
+        labelLarge: Style.labelLarge,
+        labelMedium: Style.labelMedium,
+        labelSmall: Style.labelSmall,
+      ),
+    );
+  }
 }

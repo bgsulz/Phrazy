@@ -14,6 +14,7 @@ import 'package:phrazy/sound.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:phrazy/utility/events.dart';
 import 'package:phrazy/utility/style.dart';
+import 'package:phrazy/utility/theme_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,17 +39,28 @@ class Phrazy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Events.logVisit();
-    return ChangeNotifierProvider(
-      create: (context) => GameController(
-        repository: GameRepository(
-          remote: RemoteDataSource(),
-          local: LocalDataSource(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => GameController(
+            repository: GameRepository(
+              remote: RemoteDataSource(),
+              local: LocalDataSource(),
+            ),
+          ),
         ),
-      ),
-      child: MaterialApp.router(
-        title: Copy.title,
-        theme: PhrazyTheme.instance,
-        routerConfig: router,
+        ChangeNotifierProvider(
+          create: (context) => PhrazyThemeNotifier(),
+        ),
+      ],
+      child: Consumer<PhrazyThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          return MaterialApp.router(
+            title: Copy.title,
+            theme: themeNotifier.currentTheme,
+            routerConfig: router,
+          );
+        },
       ),
     );
   }

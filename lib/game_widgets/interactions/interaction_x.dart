@@ -27,12 +27,12 @@ class InteractionX extends StatelessWidget {
       child: SizedBox(
         width: width,
         height: height,
-        child: const FittedBox(
+        child: FittedBox(
           child: Padding(
-            padding: EdgeInsets.all(4),
+            padding: const EdgeInsets.all(4),
             child: Icon(
               HugeIcons.strokeRoundedCancel02,
-              color: Style.noColor,
+              color: Theme.of(context).colorScheme.error,
             ),
           ),
         ),

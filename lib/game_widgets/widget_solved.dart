@@ -44,7 +44,8 @@ class SolvedCelebrationSection extends StatelessWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Copy.congratsIcon(state.time), color: Style.yesColor),
+                Icon(Copy.congratsIcon(state.time),
+                    color: Theme.of(context).colorScheme.tertiary),
                 const SizedBox(width: 8),
                 TextAnimator(Copy.congratsString(state.time),
                     style: Style.displayMedium),
@@ -61,8 +62,8 @@ class SolvedCelebrationSection extends StatelessWidget {
                     _copyResults(context, state);
                   },
                   style: TextButton.styleFrom(
-                    backgroundColor: Style.yesColor,
-                    foregroundColor: Style.textColor,
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    foregroundColor: Theme.of(context).colorScheme.onSurface,
                   ),
                   child: const Text('Copy Results'),
                 ),

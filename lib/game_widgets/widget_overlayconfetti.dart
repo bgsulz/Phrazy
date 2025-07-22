@@ -1,6 +1,5 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:phrazy/utility/style.dart';
 
 class ConfettiOverlay extends StatelessWidget {
   final ConfettiController controller;
@@ -17,13 +16,13 @@ class ConfettiOverlay extends StatelessWidget {
           maxBlastForce: 150,
           blastDirectionality: BlastDirectionality.explosive,
           confettiController: controller,
-          colors: const [
-            Style.yesColor,
-            Style.noColor,
-            Style.cardColor,
-            Style.backgroundColor,
-            Style.textColor,
-            Style.backgroundColorLight,
+          colors: [
+            Theme.of(context).colorScheme.tertiary,
+            Theme.of(context).colorScheme.error,
+            Theme.of(context).colorScheme.surfaceContainerLow,
+            Theme.of(context).colorScheme.surface,
+            Theme.of(context).colorScheme.onSurface,
+            Theme.of(context).colorScheme.surfaceBright,
           ],
         ),
       ),

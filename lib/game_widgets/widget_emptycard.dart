@@ -17,7 +17,7 @@ class EmptyCard extends StatelessWidget {
     return PhrazyBox(
       rounded: false,
       outlineWidth: 1,
-      outlineColor: Style.backgroundColorLight,
+      outlineColor: Theme.of(context).colorScheme.surfaceBright,
       color: color,
       child: const SizedBox.expand(),
     );

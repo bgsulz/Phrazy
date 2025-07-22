@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utility/style.dart';
 
 class PhrazyScreen extends StatelessWidget {
   const PhrazyScreen({
@@ -12,13 +11,13 @@ class PhrazyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [_buildScaffold()],
+      children: [_buildScaffold(context)],
     );
   }
 
-  Scaffold _buildScaffold() {
+  Scaffold _buildScaffold(BuildContext context) {
     return Scaffold(
-      backgroundColor: Style.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 540),

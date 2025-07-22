@@ -8,7 +8,6 @@ import 'package:phrazy/utility/copy.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../data/web_storage/web_storage.dart';
 import '../game_widgets/phrazy_box.dart';
-import '../utility/style.dart';
 import '../utility/hover.dart';
 import '../game/game_controller.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +46,9 @@ class ArchiveScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
+            icon: Icon(
+              HugeIcons.strokeRoundedArrowLeft01,
+            ),
             onPressed: () {
               final state = Provider.of<GameController>(context, listen: false);
               if (state.loadedPuzzle.isEmpty) {
@@ -58,9 +59,9 @@ class ArchiveScreen extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               HugeIcons.strokeRoundedTestTube01,
-              color: Style.foregroundColor,
+              color: Theme.of(context).colorScheme.surfaceContainerLowest,
             ),
             onPressed: () {
               _openDevModeWindow(context);
@@ -196,10 +197,10 @@ class PuzzleCard extends StatelessWidget {
     var isStarted = loadedTime != null;
     var isSolved = isStarted && !loadedTime.toString().endsWith('+');
     var color = isSolved
-        ? Style.yesColor
+        ? Theme.of(context).colorScheme.tertiary
         : isStarted
             ? Colors.amber
-            : Style.cardColor;
+            : Theme.of(context).colorScheme.surfaceContainer;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
@@ -210,7 +211,9 @@ class PuzzleCard extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: PhrazyBox(
               color: color,
-              outlineColor: isLoaded ? Style.cardColor : Style.textColor,
+              outlineColor: isLoaded
+                  ? Theme.of(context).colorScheme.onSurface
+                  : Theme.of(context).colorScheme.outline,
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
@@ -223,20 +226,25 @@ class PuzzleCard extends StatelessWidget {
                     child: Row(
                       children: [
                         if (date.weekday == 7)
-                          const Row(
+                          Row(
                             children: [
                               HugeIcon(
                                 icon: HugeIcons.strokeRoundedEvil,
-                                color: Style.textColor,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                             ],
                           ),
                         Text(
                           date.toDisplayDateWithDay,
                           maxLines: null,
                           textAlign: TextAlign.left,
-                          style: const TextStyle(color: Style.textColor),
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onInverseSurface),
                         ),
                         const Spacer(),
                         Row(
@@ -244,7 +252,9 @@ class PuzzleCard extends StatelessWidget {
                             if (isSolved)
                               Icon(
                                 Copy.congratsIcon(loadedTime.time),
-                                color: Style.textColor,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onInverseSurface,
                                 size: 16,
                               ),
                             const SizedBox(width: 4),
@@ -252,7 +262,10 @@ class PuzzleCard extends StatelessWidget {
                               displayTime,
                               maxLines: null,
                               textAlign: TextAlign.right,
-                              style: const TextStyle(color: Style.textColor),
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onInverseSurface),
                             )
                           ],
                         ),

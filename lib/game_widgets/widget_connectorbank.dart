@@ -16,14 +16,17 @@ class Connector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color backgroundColor =
-        isCheckedOff ? Style.yesColor : Style.foregroundColorLight;
-    final Color textColor = isCheckedOff ? Style.textColor : Style.textColor;
+    final Color backgroundColor = isCheckedOff
+        ? Theme.of(context).colorScheme.tertiary
+        : Theme.of(context).colorScheme.surfaceContainerLow;
+    final Color textColor = isCheckedOff
+        ? Theme.of(context).colorScheme.onInverseSurface
+        : Theme.of(context).colorScheme.onInverseSurface;
 
     return PhrazyBox(
       elevation: 0,
       outlineWidth: 2,
-      outlineColor: isCheckedOff ? Style.yesColor : Style.foregroundColorLight,
+      outlineColor: backgroundColor,
       borderRadius: BorderRadius.circular(10),
       color: backgroundColor,
       child: Padding(
@@ -56,11 +59,17 @@ class ConnectorBank extends StatelessWidget {
             'Both allConnectorsOverride and activeConnectorsOverride must be provided together or not at all.');
   @override
   Widget build(BuildContext context) {
+    final Color currentOutlineColor =
+        Theme.of(context).colorScheme.surfaceContainerLow;
+
+    print("PASSING $currentOutlineColor TO CONNECTOR BANK");
+
     return PhrazyBox(
+      shouldDebug: true,
       shouldAnimate: shouldAnimateOverride,
       elevation: 0,
       color: Colors.transparent,
-      outlineColor: Style.backgroundColorLight,
+      outlineColor: currentOutlineColor,
       child: SizedBox(
         width: double.infinity,
         child: Padding(

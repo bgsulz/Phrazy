@@ -6,10 +6,10 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
 import '../data/web_storage/web_storage.dart';
 import '../utility/copy.dart';
-import '../utility/style.dart';
 import '../game_widgets/demo.dart';
 import '../game/game_controller.dart';
 import 'package:provider/provider.dart';
+import '../utility/theme_notifier.dart';
 import 'phrazy_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,33 +24,45 @@ class PhrazyIcons extends StatelessWidget {
       });
     }
 
+    final backgroundColor = Theme.of(context).colorScheme.secondaryContainer;
+
     return WidgetAnimator(
+      key: ValueKey(backgroundColor),
       incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
         curve: Curves.easeOutCirc,
       ),
       child: Container(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const MuteIcon(),
-            Tooltip(
-              message: 'Help',
-              child: IconButton(
-                icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
-                onPressed: () => _showHelp(context),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: const BorderRadius.all(
+            Radius.circular(25),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const MuteIcon(),
+              const HighContrastIcon(),
+              Tooltip(
+                message: 'Help',
+                child: IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
+                  onPressed: () => _showHelp(context),
+                ),
               ),
-            ),
-            Tooltip(
-              message: 'Archive',
-              child: IconButton(
-                icon: const Icon(HugeIcons.strokeRoundedArchive),
-                onPressed: () => context.pushReplacement('/games'),
+              Tooltip(
+                message: 'Archive',
+                child: IconButton(
+                  icon: const Icon(HugeIcons.strokeRoundedArchive),
+                  onPressed: () => context.pushReplacement('/games'),
+                ),
               ),
-            ),
-            const ClearIcon(),
-            const PauseIcon(),
-          ],
+              const ClearIcon(),
+              const PauseIcon(),
+            ],
+          ),
         ),
       ),
     );
@@ -99,7 +111,6 @@ class PhrazyIcons extends StatelessWidget {
         return PhrazyDialog(title: "Credits", buttons: [
           ButtonData(
             text: "Back to game",
-            color: Style.cardColor,
             onPressed: () => context.pop(),
           ),
           ButtonData(
@@ -219,6 +230,36 @@ class _MuteIconState extends State<MuteIcon> {
           setState(() {});
         },
       ),
+    );
+  }
+}
+
+class HighContrastIcon extends StatefulWidget {
+  const HighContrastIcon({super.key});
+
+  @override
+  State<HighContrastIcon> createState() => _HighContrastIconState();
+}
+
+class _HighContrastIconState extends State<HighContrastIcon> {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<PhrazyThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return Tooltip(
+          message: WebStorage.isHighContrast
+              ? 'Disable high contrast'
+              : 'Enable high contrast',
+          child: IconButton(
+            icon: Icon(WebStorage.isHighContrast
+                ? HugeIcons.strokeRoundedGlasses
+                : HugeIcons.strokeRoundedCookie),
+            onPressed: () {
+              themeNotifier.toggleTheme();
+            },
+          ),
+        );
+      },
     );
   }
 }

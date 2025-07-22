@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../game_widgets/phrazy_box.dart';
-import '../utility/style.dart';
 
 class WordCard extends StatelessWidget {
   final String word;
@@ -23,7 +22,7 @@ class WordCard extends StatelessWidget {
         outlineWidth: 1,
         outlineColor: Colors.grey.shade200,
         rounded: false,
-        color: Style.cardColor,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         child: Center(
           child: Padding(
             padding: hasMargins
@@ -34,8 +33,8 @@ class WordCard extends StatelessWidget {
                 child: Text(
                   word,
                   maxLines: 1,
-                  style: const TextStyle(
-                    color: Style.textColor,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onInverseSurface,
                   ),
                 ),
               ),

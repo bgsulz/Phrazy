@@ -2,7 +2,6 @@ import '../game_widgets/grid_position.dart';
 import '../game_widgets/phrazy_box.dart';
 import '../game_widgets/grid/phrazy_tile.dart';
 import '../game_widgets/widget_overlayinteractions.dart';
-import '../utility/style.dart';
 
 import 'widget_overlaywalls.dart';
 import '../game/game_controller.dart';
@@ -22,7 +21,7 @@ class SolveGrid extends StatelessWidget {
 
     return PhrazyBox(
       shouldAnimate: true,
-      color: Style.textColor,
+      color: Theme.of(context).colorScheme.onSurface,
       rounded: true,
       child: Stack(
         children: [

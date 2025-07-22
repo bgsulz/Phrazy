@@ -10,6 +10,7 @@ class WebStorage {
   static const String _developerModeKey = "developerMode";
   static const String _firstTimeKey = "firstTime";
   static const String _timeSuffix = "_time";
+  static const String _highContrastKey = "highContrast";
 
   static final _localStorage = web.window.localStorage;
 
@@ -20,6 +21,8 @@ class WebStorage {
   static bool get isMuted => _localStorage.getItem(_muteSoundsKey) == "true";
   static bool get isDeveloperMode =>
       _localStorage.getItem(_developerModeKey) == "true";
+  static bool get isHighContrast =>
+      _localStorage.getItem(_highContrastKey) == "true";
 
   static void toggleMute() {
     final isMuted = _localStorage.getItem(_muteSoundsKey);
@@ -30,6 +33,12 @@ class WebStorage {
     final isDevMode = _localStorage.getItem(_developerModeKey);
     _localStorage.setItem(
         _developerModeKey, isDevMode == "true" ? "false" : "true");
+  }
+
+  static void toggleHighContrast() {
+    final isHighContrast = _localStorage.getItem(_highContrastKey);
+    _localStorage.setItem(
+        _highContrastKey, isHighContrast == "true" ? "false" : "true");
   }
 
   static bool get isFirstTime {

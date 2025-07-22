@@ -5,8 +5,6 @@ import '../grid/card_drop_data.dart';
 import '../../data/puzzle.dart';
 import '../../sound.dart';
 import '../../game/game_controller.dart';
-import '../../utility/style.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -109,9 +107,9 @@ class _PhrazyTileState extends State<PhrazyTile> {
   Widget _buildEmptyCard(BuildContext context, int index) {
     return EmptyCard(
       color: _aboutToAcceptDrop
-          ? Style.backgroundColorLight
-          : Style.foregroundColorLight,
-      outlineColor: Style.backgroundColorLight,
+          ? Theme.of(context).colorScheme.surfaceBright
+          : Theme.of(context).colorScheme.surfaceContainerLow,
+      outlineColor: Theme.of(context).colorScheme.surfaceBright,
     );
   }
 }

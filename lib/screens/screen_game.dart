@@ -112,9 +112,15 @@ class _LoadingErrorIndicator extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(Copy.downloading),
+                Text(
+                  Copy.downloading,
+                ),
                 const SizedBox(height: 32),
-                const Center(child: CircularProgressIndicator()),
+                Center(
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                  ),
+                ),
               ],
             ),
           );
@@ -223,12 +229,11 @@ class _BylineAndTimerRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  state.loadedDate.year < 1980
-                      ? "Tutorial"
-                      : state.loadedDate.toDisplayDateWithDay,
-                  style: Style.bodyMedium,
-                ),
-                _buildByline(state),
+                    state.loadedDate.year < 1980
+                        ? "Tutorial"
+                        : state.loadedDate.toDisplayDateWithDay,
+                    style: Style.bodyMedium),
+                _buildByline(context, state),
               ],
             ),
           ],
@@ -237,11 +242,13 @@ class _BylineAndTimerRow extends StatelessWidget {
     );
   }
 
-  Widget _buildByline(GameController state) {
+  Widget _buildByline(BuildContext context, GameController state) {
     if (state.loadedPuzzle.author case var author?) {
       return Text(
         "by $author",
-        style: Style.titleSmall.copyWith(fontSize: 14),
+        style: Style.titleSmall.copyWith(
+          fontSize: 14,
+        ),
       );
     }
     return const SizedBox.shrink();

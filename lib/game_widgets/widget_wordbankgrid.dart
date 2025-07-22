@@ -28,7 +28,7 @@ class WordbankGrid extends StatelessWidget {
 
     return PhrazyBox(
       shouldAnimate: true,
-      color: Style.textColor,
+      color: Theme.of(context).colorScheme.outline,
       child: PhrazyGrid(
         itemCount: bank.length,
         columnCount: columns,

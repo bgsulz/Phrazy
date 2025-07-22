@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:widget_and_text_animator/widget_and_text_animator.dart';
-import '../utility/style.dart';
 
 class PhrazyBox extends StatelessWidget {
   const PhrazyBox({
@@ -11,6 +10,7 @@ class PhrazyBox extends StatelessWidget {
     this.outlineWidth,
     this.outlineColor,
     this.shouldAnimate = false,
+    this.shouldDebug = false,
     required this.child,
     required this.color,
   });
@@ -23,11 +23,15 @@ class PhrazyBox extends StatelessWidget {
   final Color color;
   final BorderRadius? borderRadius;
   final bool shouldAnimate;
+  final bool shouldDebug;
 
   @override
   Widget build(BuildContext context) {
     var radius =
         borderRadius ?? BorderRadius.circular((rounded ?? true) ? 16 : 1);
+    final outlineColor =
+        this.outlineColor ?? Theme.of(context).colorScheme.outline;
+    if (shouldDebug) print("CONNECTOR BANK RECEIVED ${outlineColor}");
 
     var material = Material(
       type:
@@ -40,12 +44,13 @@ class PhrazyBox extends StatelessWidget {
               ? null
               : Border.all(
                   width: outlineWidth ?? 4,
-                  color: outlineColor ?? Style.textColor,
+                  color: outlineColor,
                 ),
           borderRadius: radius,
           boxShadow: null,
         ),
         decoration: BoxDecoration(
+          border: null,
           color: color,
           boxShadow: elevation == 0
               ? null
@@ -64,6 +69,7 @@ class PhrazyBox extends StatelessWidget {
 
     if (shouldAnimate) {
       return WidgetAnimator(
+          key: ValueKey(outlineColor),
           incomingEffect: WidgetTransitionEffects.incomingSlideInFromBottom(
             curve: Curves.easeOutCirc,
           ),

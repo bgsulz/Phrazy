@@ -25,7 +25,7 @@ class PhrazyDialog extends StatelessWidget {
         ),
         shadowColor: Colors.transparent,
         insetPadding: const EdgeInsets.all(4),
-        backgroundColor: Style.textColor,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
         elevation: 0,
         child: SizedBox(
           width: 540,
@@ -54,9 +54,13 @@ class PhrazyDialog extends StatelessWidget {
                             style: TextButton.styleFrom(
                               backgroundColor: button.color ??
                                   (index == buttons.length - 1
-                                      ? Style.yesColor
-                                      : Style.cardColor),
-                              foregroundColor: Style.textColor,
+                                      ? Theme.of(context).colorScheme.tertiary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .surfaceContainerLow),
+                              foregroundColor: Theme.of(context)
+                                  .colorScheme
+                                  .onInverseSurface,
                             ),
                             child: Text(button.text),
                           );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utility/style.dart';
 import '../data/puzzle.dart';
 
 class OverlayWallGrid extends StatelessWidget {
@@ -12,7 +11,7 @@ class OverlayWallGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const highlightColor = Style.textColor;
+    var highlightColor = Theme.of(context).colorScheme.onInverseSurface;
 
     // For filled cells, use a simple colored container
     if (data == TileData.filled) {

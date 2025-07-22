@@ -28,7 +28,7 @@ class _StatsBoxState extends State<StatsBox> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: PhrazyBox(
-        color: Style.textColor,
+        color: Theme.of(context).colorScheme.onSurface,
         child: ExpansionTile(
           expansionAnimationStyle: _isCollapsed
               ? AnimationStyle(curve: Curves.easeInCirc)
@@ -75,7 +75,7 @@ class _LobbyBoxState extends State<LobbyBox> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: PhrazyBox(
-        color: Style.textColor,
+        color: Theme.of(context).colorScheme.onSurface,
         child: ExpansionTile(
           expansionAnimationStyle: _isCollapsed
               ? AnimationStyle(curve: Curves.easeInCirc)

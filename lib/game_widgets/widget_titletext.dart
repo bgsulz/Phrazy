@@ -32,12 +32,12 @@ class TitleText extends StatelessWidget {
                     effectStrength: 5,
                     curve: Curves.easeInOutCirc,
                   ),
-                  style: const TextStyle(
-                    color: Style.textColor,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onInverseSurface,
                     fontSize: 999,
                     fontWeight: FontWeight.w800,
                     letterSpacing: -48,
-                    fontVariations: [FontVariation.weight(800)],
+                    fontVariations: const [FontVariation.weight(800)],
                   ),
                   textAlign: TextAlign.center,
                 ),

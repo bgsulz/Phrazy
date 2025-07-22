@@ -52,6 +52,7 @@ class InteractionKnob extends StatelessWidget {
       children: [
         CustomPaint(
           painter: LinePainter(
+            context: context,
             direction: direction,
             cardSize: cardSize,
           ),
@@ -69,17 +70,19 @@ class InteractionKnob extends StatelessWidget {
                   Radius.circular(4),
                 ),
               ),
-              color: Style.yesColor,
+              color: Theme.of(context).colorScheme.tertiary,
               child: Center(
                 child: SelectionContainer.disabled(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 2),
                     child: shouldUseIcon
-                        ? const Padding(
-                            padding: EdgeInsets.all(4),
+                        ? Padding(
+                            padding: const EdgeInsets.all(4),
                             child: Icon(
                               HugeIcons.strokeRoundedLink05,
-                              color: Style.textColor,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onInverseSurface,
                             ),
                           )
                         : Padding(
@@ -93,7 +96,10 @@ class InteractionKnob extends StatelessWidget {
                                     ? connector.replaceAll(" ", "\n")
                                     : connector,
                                 style: Style.bodySmall.copyWith(
-                                    color: Style.textColor, height: 1.1),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onInverseSurface,
+                                    height: 1.1),
                                 textAlign: TextAlign.center,
                                 softWrap: true,
                               ),
@@ -113,8 +119,10 @@ class InteractionKnob extends StatelessWidget {
 class LinePainter extends CustomPainter {
   final InteractionDirection direction;
   final BoxConstraints cardSize;
+  final BuildContext context;
 
-  LinePainter({required this.direction, required this.cardSize});
+  LinePainter(
+      {required this.context, required this.direction, required this.cardSize});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -129,7 +137,7 @@ class LinePainter extends CustomPainter {
         : Offset(cardSize.maxWidth, cardSize.maxHeight - lineThickness / 2);
 
     final paint = Paint()
-      ..color = Style.yesColor
+      ..color = Theme.of(context).colorScheme.tertiary
       ..strokeWidth = lineThickness
       ..strokeCap = StrokeCap.round;
 
