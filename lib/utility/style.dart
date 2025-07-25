@@ -194,6 +194,14 @@ class PhrazyTheme {
         error: colors.noColor,
         secondaryContainer: colors.iconBackgroundColor,
       ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: colors.onCardColor,
+        contentTextStyle: Style.bodyMedium.copyWith(color: colors.cardColor),
+        behavior: SnackBarBehavior.floating,
+        width: 540,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8))),
+      ),
       useMaterial3: true,
       textTheme: TextTheme(
         displayLarge: Style.displayLarge,

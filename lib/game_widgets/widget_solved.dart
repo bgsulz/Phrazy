@@ -63,7 +63,8 @@ class SolvedCelebrationSection extends StatelessWidget {
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    foregroundColor: Theme.of(context).colorScheme.onSurface,
+                    foregroundColor:
+                        Theme.of(context).colorScheme.onInverseSurface,
                   ),
                   child: const Text('Copy Results'),
                 ),
