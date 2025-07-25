@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_soloud/flutter_soloud.dart';
 import 'package:go_router/go_router.dart';
 import 'package:phrazy/game/game_controller.dart';
+import 'package:phrazy/utility/settings_notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -37,20 +38,18 @@ class Phrazy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Events.logVisit();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => GameController(
+          create: (_) => GameController(
             repository: GameRepository(
               remote: RemoteDataSource(),
               local: LocalDataSource(),
             ),
           ),
         ),
-        ChangeNotifierProvider(
-          create: (context) => PhrazyThemeNotifier(),
-        ),
+        ChangeNotifierProvider(create: (_) => PhrazyThemeNotifier()),
+        ChangeNotifierProvider(create: (_) => SettingsNotifier()), // ← NEW
       ],
       child: Consumer<PhrazyThemeNotifier>(
         builder: (context, themeNotifier, child) {

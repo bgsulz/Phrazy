@@ -24,21 +24,22 @@ class WebStorage {
   static bool get isHighContrast =>
       _localStorage.getItem(_highContrastKey) == "true";
 
-  static void toggleMute() {
+  static void toggleMute([bool? value]) {
     final isMuted = _localStorage.getItem(_muteSoundsKey);
-    _localStorage.setItem(_muteSoundsKey, isMuted == "true" ? "false" : "true");
+    _localStorage.setItem(_muteSoundsKey,
+        value?.toString() ?? (isMuted == "true" ? "false" : "true"));
   }
 
-  static void toggleDeveloperMode() {
+  static void toggleDeveloperMode([bool? value]) {
     final isDevMode = _localStorage.getItem(_developerModeKey);
-    _localStorage.setItem(
-        _developerModeKey, isDevMode == "true" ? "false" : "true");
+    _localStorage.setItem(_developerModeKey,
+        value?.toString() ?? (isDevMode == "true" ? "false" : "true"));
   }
 
-  static void toggleHighContrast() {
+  static void toggleHighContrast([bool? value]) {
     final isHighContrast = _localStorage.getItem(_highContrastKey);
-    _localStorage.setItem(
-        _highContrastKey, isHighContrast == "true" ? "false" : "true");
+    _localStorage.setItem(_highContrastKey,
+        value?.toString() ?? (isHighContrast == "true" ? "false" : "true"));
   }
 
   static bool get isFirstTime {

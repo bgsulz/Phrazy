@@ -1,29 +1,22 @@
-import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flavor_text/flavor_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:widget_and_text_animator/widget_and_text_animator.dart';
-import '../data/web_storage/web_storage.dart';
-import '../utility/copy.dart';
-import '../game_widgets/demo.dart';
-import '../game/game_controller.dart';
+import 'package:phrazy/utility/copy.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:widget_and_text_animator/widget_and_text_animator.dart';
+
+import '../game/game_controller.dart';
 import '../utility/theme_notifier.dart';
 import 'phrazy_dialog.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'settings_dialog.dart';
 
 class PhrazyIcons extends StatelessWidget {
   const PhrazyIcons({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (WebStorage.isFirstTime) {
-      Future.delayed(Duration.zero, () {
-        if (context.mounted) _showHelp(context);
-      });
-    }
-
     final backgroundColor = Theme.of(context).colorScheme.secondaryContainer;
 
     return WidgetAnimator(
@@ -43,15 +36,7 @@ class PhrazyIcons extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              const MuteIcon(),
-              const HighContrastIcon(),
-              Tooltip(
-                message: 'Help',
-                child: IconButton(
-                  icon: const Icon(HugeIcons.strokeRoundedHelpCircle),
-                  onPressed: () => _showHelp(context),
-                ),
-              ),
+              const SettingsIcon(),
               Tooltip(
                 message: 'Archive',
                 child: IconButton(
@@ -67,39 +52,30 @@ class PhrazyIcons extends StatelessWidget {
       ),
     );
   }
+}
 
-  void _showHelp(BuildContext context) {
+class SettingsIcon extends StatefulWidget {
+  const SettingsIcon({super.key});
+
+  @override
+  State<SettingsIcon> createState() => _SettingsIconState();
+}
+
+class _SettingsIconState extends State<SettingsIcon> {
+  void _showSettingsDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
-        return PhrazyDialog(title: "How to play", buttons: [
-          ButtonData(
-              text: "Try an easy one",
-              onPressed: () {
-                context.pop();
-                context.pushReplacement('/demo');
-              }),
-          ButtonData(
-              text: "About game",
-              onPressed: () {
-                context.pop();
+        return Consumer<PhrazyThemeNotifier>(
+          builder: (context, themeNotifier, child) {
+            return SettingsDialog(
+              onAboutPressed: () {
+                Navigator.of(context).pop(); // Close settings dialog
                 _showInfo(context);
-              }),
-          ButtonData(
-              text: "Let's play!",
-              onPressed: () {
-                context.pop();
-              })
-        ], children: [
-          FlavorText(Copy.rules1),
-          const SizedBox(height: 16),
-          const Demo(type: 1),
-          const SizedBox(height: 16),
-          FlavorText(Copy.rules2),
-          const SizedBox(height: 16),
-          const Demo(type: 2),
-          const SizedBox(height: 16),
-        ]);
+              },
+            );
+          },
+        );
       },
     );
   }
@@ -130,6 +106,17 @@ class PhrazyIcons extends StatelessWidget {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: 'Settings',
+      child: IconButton(
+        icon: const Icon(HugeIcons.strokeRoundedSettings01),
+        onPressed: () => _showSettingsDialog(context),
+      ),
+    );
   }
 }
 
@@ -184,80 +171,23 @@ class PauseIcon extends StatelessWidget {
     final gameState = Provider.of<GameController>(context, listen: false);
     gameState.togglePause(true);
 
-    showDialogSuper(
-      onDismissed: (e) {
-        gameState.togglePause(false);
-      },
+    showDialog(
       context: context,
       builder: (context) {
         return PhrazyDialog(
-          title: "Paused...",
+          title: 'Paused...',
           buttons: [
             ButtonData(
-                text: "Resume",
-                onPressed: () {
-                  context.pop();
-                })
+              text: 'Resume',
+              onPressed: () {
+                gameState.togglePause(false);
+                Navigator.of(context).pop();
+              },
+            )
           ],
-          children: [
-            Text(Copy.motivation),
-            const SizedBox(height: 16),
+          children: const [
+            Text('Game is paused.'),
           ],
-        );
-      },
-    );
-  }
-}
-
-class MuteIcon extends StatefulWidget {
-  const MuteIcon({super.key});
-
-  @override
-  State<MuteIcon> createState() => _MuteIconState();
-}
-
-class _MuteIconState extends State<MuteIcon> {
-  @override
-  Widget build(BuildContext context) {
-    return Tooltip(
-      message: WebStorage.isMuted ? 'Unmute' : 'Mute',
-      child: IconButton(
-        icon: WebStorage.isMuted
-            ? const Icon(HugeIcons.strokeRoundedVolumeMute02)
-            : const Icon(HugeIcons.strokeRoundedVolumeHigh),
-        onPressed: () {
-          WebStorage.toggleMute();
-          setState(() {});
-        },
-      ),
-    );
-  }
-}
-
-class HighContrastIcon extends StatefulWidget {
-  const HighContrastIcon({super.key});
-
-  @override
-  State<HighContrastIcon> createState() => _HighContrastIconState();
-}
-
-class _HighContrastIconState extends State<HighContrastIcon> {
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<PhrazyThemeNotifier>(
-      builder: (context, themeNotifier, child) {
-        return Tooltip(
-          message: WebStorage.isHighContrast
-              ? 'Disable high contrast'
-              : 'Enable high contrast',
-          child: IconButton(
-            icon: Icon(WebStorage.isHighContrast
-                ? HugeIcons.strokeRoundedGlasses
-                : HugeIcons.strokeRoundedCookie),
-            onPressed: () {
-              themeNotifier.toggleTheme();
-            },
-          ),
         );
       },
     );

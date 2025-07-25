@@ -11,6 +11,8 @@ class PhrazyThemeNotifier extends ChangeNotifier {
 
   ThemeData get currentTheme => _currentTheme;
 
+  bool get isHighContrast => WebStorage.isHighContrast;
+
   void _loadTheme() {
     if (WebStorage.isHighContrast) {
       _currentTheme = PhrazyTheme.getTheme(highContrastColors);
@@ -20,8 +22,8 @@ class PhrazyThemeNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleTheme() {
-    WebStorage.toggleHighContrast();
+  void toggleTheme([bool? value]) {
+    WebStorage.toggleHighContrast(value);
     _loadTheme();
   }
 }
