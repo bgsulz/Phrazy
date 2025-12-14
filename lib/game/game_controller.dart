@@ -36,6 +36,9 @@ class GameController extends ChangeNotifier {
   Stream<DateTime> get onFallbackLoad => _fallbackLoadController.stream;
   final StopWatchTimer timer = StopWatchTimer();
   List<DateTime>? _availableDatesCache;
+  Timer? _autosaveDebounce;
+  bool _pendingBoardSave = false;
+  bool _pendingTimeSave = false;
 
   // Game State
   GameLifecycleState currentState = GameLifecycleState.preparing;
@@ -64,7 +67,7 @@ class GameController extends ChangeNotifier {
   Future<void> prepare({DateTime? date, Puzzle? puzzle}) async {
     confetti.stop();
     if (!loadedPuzzle.isEmpty && !isSolved) {
-      recordTime();
+      _flushAutosave();
     }
     timer.onStopTimer();
     currentState = GameLifecycleState.preparing;
@@ -166,11 +169,7 @@ class GameController extends ChangeNotifier {
       _playWinEffects();
     }
 
-    recordTime();
-    _repository.saveBoard(
-      BoardSave(wordBank: _wordBankState, grid: _gridState),
-      loadedDate,
-    );
+    _scheduleAutosave();
     notifyListeners();
   }
 
@@ -307,6 +306,34 @@ class GameController extends ChangeNotifier {
     );
   }
 
+  void _scheduleAutosave() {
+    if (loadedDate.millisecondsSinceEpoch == 0) return;
+    _pendingBoardSave = true;
+    _pendingTimeSave = true;
+    _autosaveDebounce?.cancel();
+    _autosaveDebounce =
+        Timer(const Duration(milliseconds: 250), _flushAutosave);
+  }
+
+  void _flushAutosave() {
+    if (!(_pendingBoardSave || _pendingTimeSave)) return;
+    _autosaveDebounce?.cancel();
+    _autosaveDebounce = null;
+
+    if (_pendingTimeSave) {
+      recordTime();
+    }
+    if (_pendingBoardSave) {
+      _repository.saveBoard(
+        BoardSave(wordBank: _wordBankState, grid: _gridState),
+        loadedDate,
+      );
+    }
+
+    _pendingBoardSave = false;
+    _pendingTimeSave = false;
+  }
+
   Future<void> loadStats({int? overrideTime, bool shouldAdd = false}) async {
     final currentTime = overrideTime ?? timer.rawTime.value;
     final timeSeconds = currentTime / 1000.0;
@@ -394,6 +421,8 @@ class GameController extends ChangeNotifier {
 
   @override
   void dispose() {
+    _flushAutosave();
+    _autosaveDebounce?.cancel();
     _winEventController.close();
     _fallbackLoadController.close();
     timer.dispose();
