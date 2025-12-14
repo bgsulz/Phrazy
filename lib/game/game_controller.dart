@@ -177,29 +177,36 @@ class GameController extends ChangeNotifier {
   void recalculateInteractions(List<int> modifiedIndices,
       {bool isFirstTime = false}) {
     bool playLinkSound = false;
+    Tail computeInteraction(int a, int b) {
+      if (_gridState[a].isEmpty ||
+          _gridState[b].isEmpty ||
+          loadedPuzzle.grid[a] == TileData.filled ||
+          loadedPuzzle.grid[b] == TileData.filled) {
+        return Tail.empty;
+      }
+      return _validator.validate(_gridState[a], _gridState[b]);
+    }
+
     for (var index in modifiedIndices) {
       var (up, left, right, down) = loadedPuzzle.getSurrounding(index);
 
-      Tail doesInteract(int a, int b) =>
-          _validator.validate(_gridState[a], _gridState[b]);
-
       if (right >= 0) {
-        var interaction = doesInteract(index, right);
+        var interaction = computeInteraction(index, right);
         interactionState[index].tailRight = interaction;
         playLinkSound = playLinkSound || interaction.isValid;
       }
       if (down >= 0) {
-        var interaction = doesInteract(index, down);
+        var interaction = computeInteraction(index, down);
         interactionState[index].tailDown = interaction;
         playLinkSound = playLinkSound || interaction.isValid;
       }
       if (left >= 0) {
-        var interaction = doesInteract(left, index);
+        var interaction = computeInteraction(left, index);
         interactionState[left].tailRight = interaction;
         playLinkSound = playLinkSound || interaction.isValid;
       }
       if (up >= 0) {
-        var interaction = doesInteract(up, index);
+        var interaction = computeInteraction(up, index);
         interactionState[up].tailDown = interaction;
         playLinkSound = playLinkSound || interaction.isValid;
       }
@@ -338,7 +345,11 @@ class GameController extends ChangeNotifier {
     loadStats(shouldAdd: true);
   }
 
-  Future<List<DateTime>> getAvailableDailyDates() async {
+  Future<List<DateTime>> getAvailableDailyDates({bool forceRefresh = false}) async {
+    if (!forceRefresh && _availableDatesCache != null) {
+      return List.unmodifiable(_availableDatesCache!);
+    }
+
     final dates = await _repository.getAvailableDailyDates();
     dates.sort();
     _availableDatesCache = dates;
