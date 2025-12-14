@@ -18,17 +18,40 @@ import '../game_widgets/widget_wordbankgrid.dart';
 import '../utility/style.dart';
 import '../utility/ext.dart';
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
   final Puzzle? puzzle;
   final DateTime? date;
 
   const GameScreen({super.key, this.date, this.puzzle});
 
   @override
-  Widget build(BuildContext context) {
-    final state = Provider.of<GameController>(context, listen: false);
-    state.prepare(date: date, puzzle: puzzle);
+  State<GameScreen> createState() => _GameScreenState();
+}
 
+class _GameScreenState extends State<GameScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _schedulePrepare();
+  }
+
+  @override
+  void didUpdateWidget(covariant GameScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.date != oldWidget.date || widget.puzzle != oldWidget.puzzle) {
+      _schedulePrepare();
+    }
+  }
+
+  void _schedulePrepare() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final state = Provider.of<GameController>(context, listen: false);
+      state.prepare(date: widget.date, puzzle: widget.puzzle);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return const SelectionArea(
       child: _GameScreenContent(),
     );
