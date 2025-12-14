@@ -80,4 +80,8 @@ class GameRepository {
   Future<void> saveDigest(TDigest digest, DateTime date) {
     return _remote.saveDigest(digest, date);
   }
+
+  Future<List<DateTime>> getAvailableDailyDates() {
+    return _remote.fetchAvailableDailyDates();
+  }
 }

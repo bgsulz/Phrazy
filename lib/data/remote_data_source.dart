@@ -7,6 +7,7 @@ import 'package:phrazy/data/lobby.dart';
 import 'package:phrazy/data/puzzle.dart';
 import 'package:phrazy/data/tail.dart';
 import 'package:phrazy/game/phrase_validator.dart';
+import 'package:phrazy/game/config.dart';
 import 'package:phrazy/stats/t_digest.dart';
 import 'package:phrazy/utility/debug.dart';
 
@@ -107,6 +108,17 @@ class RemoteDataSource {
       debug('Error accessing T-Digest from Firebase: $e');
       return TDigest.merging(compression: 100);
     }
+  }
+
+  /// Fetches the available daily dates.
+  Future<List<DateTime>> fetchAvailableDailyDates() async {
+    final puzzleLoader = PuzzleLoader<Puzzle>(
+      dailiesCollectionName: "dailies",
+      puzzlesCollectionName: "puzzles",
+      fromFirebase: Puzzle.fromFirebase,
+    );
+
+    return puzzleLoader.getAvailableDailyDates(upTo: AppConfig.endDate);
   }
 
   /// Saves the T-Digest statistics object for a given date.

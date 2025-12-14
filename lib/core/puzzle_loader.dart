@@ -75,4 +75,33 @@ class PuzzleLoader<T extends PuzzleInterface> {
 
     return getPuzzleData(puzzleId);
   }
+
+  Future<List<DateTime>> getAvailableDailyDates({DateTime? upTo}) async {
+    try {
+      final firestore = FirebaseFirestore.instance;
+      final querySnapshot =
+          await firestore.collection(dailiesCollectionName).get();
+
+      final cutoff = (upTo ?? DateTime.now())
+          .copyWith(hour: 23, minute: 59, second: 59, millisecond: 999);
+
+      final dates = <DateTime>[];
+      for (final doc in querySnapshot.docs) {
+        try {
+          final date = doc.id.fromYMD.copyWith(hour: 12);
+          if (!date.isAfter(cutoff)) {
+            dates.add(date);
+          }
+        } catch (e) {
+          debug("Error parsing daily doc id ${doc.id}: $e");
+        }
+      }
+
+      dates.sort();
+      return dates;
+    } catch (e) {
+      debug("Error listing daily docs: $e");
+      return [];
+    }
+  }
 }

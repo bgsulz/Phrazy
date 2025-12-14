@@ -306,6 +306,10 @@ class GameController extends ChangeNotifier {
     loadStats(shouldAdd: true);
   }
 
+  Future<List<DateTime>> getAvailableDailyDates() {
+    return _repository.getAvailableDailyDates();
+  }
+
   @override
   void dispose() {
     _winEventController.close();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
-import 'package:phrazy/game/config.dart';
 import 'package:phrazy/game_widgets/phrazy_dialog.dart';
 import 'package:phrazy/utility/copy.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -152,29 +151,134 @@ class PuzzlesList extends StatefulWidget {
 
 class _PuzzlesListState extends State<PuzzlesList> {
   final ItemScrollController _itemScrollController = ItemScrollController();
+  List<DateTime> _availableDates = [];
+  bool _isLoading = true;
+  String? _errorMessage;
+  bool _hasScrolledToLoadedDate = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAvailableDates();
+  }
+
+  @override
+  void didUpdateWidget(covariant PuzzlesList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!widget.loadedDate.isSameDayAs(oldWidget.loadedDate)) {
+      _hasScrolledToLoadedDate = false;
+      _scrollToLoadedDate();
+    }
+  }
+
+  Future<void> _loadAvailableDates() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final fetchedDates =
+          await context.read<GameController>().getAvailableDailyDates();
+      if (!mounted) return;
+
+      final dates = [...fetchedDates]..sort((a, b) => b.compareTo(a));
+
+      setState(() {
+        _availableDates = dates;
+        _isLoading = false;
+        _errorMessage = null;
+      });
+
+      _scrollToLoadedDate();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Failed to load puzzles. Please try again.';
+      });
+    }
+  }
+
+  void _scrollToLoadedDate() {
+    if (_hasScrolledToLoadedDate || _availableDates.isEmpty) return;
+    final index = _availableDates
+        .indexWhere((date) => date.isSameDayAs(widget.loadedDate));
+    if (index == -1) return;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_itemScrollController.isAttached) return;
+      _itemScrollController.jumpTo(index: index);
+      _hasScrolledToLoadedDate = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final loadedDate = widget.loadedDate;
-    final totalDailies = AppConfig.totalDailies;
-    final endDate = AppConfig.endDate;
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-    final initialScrollIndex = -loadedDate.difference(endDate).inDays - 4;
-    final clampedInitialScrollIndex =
-        initialScrollIndex.clamp(0, totalDailies - 1);
+    if (_errorMessage != null) {
+      return _ArchiveMessage(
+        message: _errorMessage!,
+        actionLabel: 'Retry',
+        onAction: _loadAvailableDates,
+      );
+    }
+
+    if (_availableDates.isEmpty) {
+      return const _ArchiveMessage(
+        message: 'No puzzles are available yet.',
+      );
+    }
 
     return ScrollablePositionedList.builder(
+      key: ValueKey(_availableDates.length),
       itemScrollController: _itemScrollController,
-      initialScrollIndex: clampedInitialScrollIndex,
-      itemCount: AppConfig.totalDailies,
-      reverse: true,
+      itemCount: _availableDates.length,
       itemBuilder: (context, index) {
-        final date = AppConfig.endDate.subtract(Duration(days: index));
+        final date = _availableDates[index];
         return PuzzleCard(
           date: date,
           isLoaded: date.isSameDayAs(widget.loadedDate),
         );
       },
+    );
+  }
+}
+
+class _ArchiveMessage extends StatelessWidget {
+  const _ArchiveMessage({
+    required this.message,
+    this.actionLabel,
+    this.onAction,
+  });
+
+  final String message;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          if (actionLabel != null && onAction != null) ...[
+            const SizedBox(height: 12),
+            FilledButton(
+              onPressed: onAction,
+              child: Text(actionLabel!),
+            )
+          ],
+        ],
+      ),
     );
   }
 }
