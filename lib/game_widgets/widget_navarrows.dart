@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:phrazy/core/ext_ymd.dart';
-import 'package:phrazy/game/config.dart';
 import 'package:phrazy/game/game_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +20,11 @@ class NavigationArrows extends StatelessWidget {
           return const SizedBox.shrink();
         }
 
-        final bool canGoBack = state.loadedDate.isAfter(AppConfig.startDate);
-        final bool canGoForward =
-            state.loadedDate.isBefore(AppConfig.endDate.copyWith(hour: 2));
+        final previousDate = state.previousAvailableDate;
+        final nextDate = state.nextAvailableDate;
+
+        final bool canGoBack = previousDate != null;
+        final bool canGoForward = nextDate != null;
 
         if (!canGoBack && !canGoForward) {
           return const SizedBox.shrink();
@@ -37,13 +38,11 @@ class NavigationArrows extends StatelessWidget {
               children: [
                 if (canGoBack)
                   Tooltip(
-                    message: "Previous day's Phrazy",
+                    message: "Previous available Phrazy",
                     child: IconButton(
                       icon: const Icon(HugeIcons.strokeRoundedArrowLeft01),
                       onPressed: () {
-                        final prevDate = loadedDate
-                            .subtract(const Duration(days: 1, hours: 2));
-                        context.pushReplacement('/games/${prevDate.toYMD}');
+                        context.pushReplacement('/games/${previousDate.toYMD}');
                       },
                     ),
                   )
@@ -51,12 +50,10 @@ class NavigationArrows extends StatelessWidget {
                   const SizedBox(width: 48),
                 if (canGoForward)
                   Tooltip(
-                    message: "Next day's Phrazy",
+                    message: "Next available Phrazy",
                     child: IconButton(
                       icon: const Icon(HugeIcons.strokeRoundedArrowRight01),
                       onPressed: () {
-                        final nextDate =
-                            loadedDate.add(const Duration(days: 1, hours: 2));
                         context.pushReplacement('/games/${nextDate.toYMD}');
                       },
                     ),

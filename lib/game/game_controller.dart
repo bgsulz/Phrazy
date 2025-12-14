@@ -35,6 +35,7 @@ class GameController extends ChangeNotifier {
   final _fallbackLoadController = StreamController<DateTime>.broadcast();
   Stream<DateTime> get onFallbackLoad => _fallbackLoadController.stream;
   final StopWatchTimer timer = StopWatchTimer();
+  List<DateTime>? _availableDatesCache;
 
   // Game State
   GameLifecycleState currentState = GameLifecycleState.preparing;
@@ -104,6 +105,11 @@ class GameController extends ChangeNotifier {
       }
 
       loadedDate = activeDate;
+      try {
+        await _ensureAvailableDatesLoaded();
+      } catch (e) {
+        debug("Error preloading available dates: $e");
+      }
     }
 
     if (data.isError) {
@@ -332,15 +338,47 @@ class GameController extends ChangeNotifier {
     loadStats(shouldAdd: true);
   }
 
-  Future<List<DateTime>> getAvailableDailyDates() {
-    return _repository.getAvailableDailyDates();
+  Future<List<DateTime>> getAvailableDailyDates() async {
+    final dates = await _repository.getAvailableDailyDates();
+    dates.sort();
+    _availableDatesCache = dates;
+    return List.unmodifiable(dates);
   }
 
+  DateTime? get previousAvailableDate => _getAdjacentDate(forward: false);
+
+  DateTime? get nextAvailableDate => _getAdjacentDate(forward: true);
+
   Future<DateTime?> _getMostRecentAvailableDate() async {
+    await _ensureAvailableDatesLoaded();
+    if (_availableDatesCache == null || _availableDatesCache!.isEmpty) {
+      return null;
+    }
+    return _availableDatesCache!.last;
+  }
+
+  Future<void> _ensureAvailableDatesLoaded() async {
+    if (_availableDatesCache != null) return;
     final dates = await _repository.getAvailableDailyDates();
-    if (dates.isEmpty) return null;
     dates.sort();
-    return dates.last;
+    _availableDatesCache = dates;
+  }
+
+  DateTime? _getAdjacentDate({required bool forward}) {
+    final dates = _availableDatesCache;
+    if (dates == null || dates.isEmpty) return null;
+
+    final normalized = loadedDate.copyWith(hour: 12, minute: 0, second: 0, millisecond: 0, microsecond: 0);
+    final index = dates.indexWhere((date) => date.isSameDayAs(normalized));
+    if (index == -1) return null;
+
+    if (forward) {
+      if (index >= dates.length - 1) return null;
+      return dates[index + 1];
+    } else {
+      if (index == 0) return null;
+      return dates[index - 1];
+    }
   }
 
   @override
