@@ -44,6 +44,7 @@ class _GameScreenContent extends StatefulWidget {
 
 class _GameScreenContentState extends State<_GameScreenContent> {
   StreamSubscription<void>? _winSubscription;
+  StreamSubscription<DateTime>? _fallbackSubscription;
 
   @override
   void initState() {
@@ -52,11 +53,22 @@ class _GameScreenContentState extends State<_GameScreenContent> {
     _winSubscription = state.onWin.listen((_) {
       state.confetti.play();
     });
+    _fallbackSubscription = state.onFallbackLoad.listen((date) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Today's puzzle isn't ready yet. Loaded ${date.toDisplayDateWithDay}.",
+          ),
+        ),
+      );
+    });
   }
 
   @override
   void dispose() {
     _winSubscription?.cancel();
+    _fallbackSubscription?.cancel();
     super.dispose();
   }
 

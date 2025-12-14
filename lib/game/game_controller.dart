@@ -16,6 +16,7 @@ import 'package:phrazy/game_widgets/grid_position.dart';
 import 'package:phrazy/sound.dart';
 import 'package:phrazy/utility/debug.dart';
 import 'package:phrazy/utility/events.dart';
+import 'package:phrazy/utility/ext.dart';
 
 enum GameLifecycleState { preparing, error, puzzle, solved }
 
@@ -31,6 +32,8 @@ class GameController extends ChangeNotifier {
       ConfettiController(duration: Durations.long1);
   final _winEventController = StreamController<void>.broadcast();
   Stream<void> get onWin => _winEventController.stream;
+  final _fallbackLoadController = StreamController<DateTime>.broadcast();
+  Stream<DateTime> get onFallbackLoad => _fallbackLoadController.stream;
   final StopWatchTimer timer = StopWatchTimer();
 
   // Game State
@@ -66,7 +69,7 @@ class GameController extends ChangeNotifier {
     currentState = GameLifecycleState.preparing;
     notifyListeners();
 
-    final LoadedGameData data;
+    LoadedGameData data;
     if (puzzle != null) {
       // Handle demo/special puzzles
       loadedDate = DateTime.fromMillisecondsSinceEpoch(0);
@@ -75,9 +78,32 @@ class GameController extends ChangeNotifier {
           .then((d) => d.validator);
       data = LoadedGameData(puzzle: puzzle, validator: _validator);
     } else {
-      loadedDate =
-          date?.copyWith(hour: 12) ?? DateTime.now().copyWith(hour: 12);
-      data = await _repository.loadGameDataByDate(loadedDate);
+      final today = DateTime.now().copyWith(hour: 12);
+      final requestedDate = date?.copyWith(hour: 12) ?? today;
+      var activeDate = requestedDate;
+
+      data = await _repository.loadGameDataByDate(activeDate);
+
+      if (data.isError && requestedDate.isSameDayAs(today)) {
+        final fallbackDate = await _getMostRecentAvailableDate();
+        if (fallbackDate != null && !fallbackDate.isSameDayAs(requestedDate)) {
+          final fallbackData =
+              await _repository.loadGameDataByDate(fallbackDate);
+          if (!fallbackData.isError) {
+            activeDate = fallbackDate;
+            data = fallbackData;
+            _fallbackLoadController.add(fallbackDate);
+          }
+        }
+      }
+
+      if (data.isError) {
+        currentState = GameLifecycleState.error;
+        notifyListeners();
+        return;
+      }
+
+      loadedDate = activeDate;
     }
 
     if (data.isError) {
@@ -310,9 +336,17 @@ class GameController extends ChangeNotifier {
     return _repository.getAvailableDailyDates();
   }
 
+  Future<DateTime?> _getMostRecentAvailableDate() async {
+    final dates = await _repository.getAvailableDailyDates();
+    if (dates.isEmpty) return null;
+    dates.sort();
+    return dates.last;
+  }
+
   @override
   void dispose() {
     _winEventController.close();
+    _fallbackLoadController.close();
     timer.dispose();
     confetti.dispose();
     super.dispose();
